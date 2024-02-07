@@ -1,5 +1,5 @@
 // controllers/conexionController.js
-import { SupabaseClientSingleton } from '../Data/dbContection.js';
+import { SupabaseClientSingleton } from '../data/dbContection.js';
 
 const supabase = SupabaseClientSingleton.getInstance();
 
@@ -13,7 +13,10 @@ const obtenerDatosConexion = async (req, res) => {
 
         res.json(users);
     } catch (error) {
-        res.status(500).send({ message: 'Error al obtener los usuarios', error });
+        res.status(500).send({ message: 'Error al obtener los multa', error });
     }
 };
 export { obtenerDatosConexion };
+
+
+

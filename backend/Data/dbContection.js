@@ -6,7 +6,7 @@ const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 class SupabaseClientSingleton {
     static instance = null;
 
-    static getInstance() {
+     static getInstance() {
         if (!this.instance) {
             this.instance = createClient(supabaseUrl, SUPABASE_KEY);
         }
