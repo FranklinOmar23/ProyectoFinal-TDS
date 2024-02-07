@@ -11,9 +11,10 @@ router.get("/conexion",  obtenerDatosConexion);
 
 router.get("/user",(rq, rs)=>{
     usuario.getAllUsers(rq,rs)
-   
 });
-console.log(newpassword);
 
-
+router.get("/newpassword",(rq,rs)=>{
+    usuario.updateUserByNewPassword(rq,rs)
+})
+  
 export default router;
