@@ -34,4 +34,4 @@ class UsuarioController {
   }
 }
 ;
-export { UsuarioController,nuevaContraseña};
+export { UsuarioController};
