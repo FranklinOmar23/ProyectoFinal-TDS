@@ -8,7 +8,8 @@ class UsuarioRepository {
     this.tableName = 'usuario';
   }
 
-  async mapToUserInstance(data) {
+  // Las funciones que convierten datos en los maps no deben ser asincronas.
+  mapToUserInstance(data) {
     return new Usuario(  
       data.id,
       data.nombre,
@@ -26,7 +27,6 @@ class UsuarioRepository {
   }
 
   async getAllUsers() {
-    console.log(this.tableName)
     try {
       const { data, error } = await this.supabase.from(this.tableName).select('*');
       if (error) console.log(error.message);

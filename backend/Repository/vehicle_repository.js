@@ -8,7 +8,7 @@ class VehiculoRepository {
       this.tableName = 'vehiculo';
     }
   
-    async mapToVehiculoInstance(data) {
+     mapToVehiculoInstance(data) {
       return new Vehiculo(
         data.id,
         data.id_usuario,

@@ -8,7 +8,7 @@ class ReporteRepository {
       this.tableName = 'reportes';
     }
   
-    async mapToReporteInstance(data) {
+    mapToReporteInstance(data) {
       return new Reporte(
         data.id,
         data.tipo,

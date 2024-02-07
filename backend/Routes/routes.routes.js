@@ -3,12 +3,11 @@ import { obtenerDatosConexion } from "../Controller/prueba.js";
 import {UsuarioController} from "../Controller/UsuarioController.js"
 
 const router = express.Router();
+const usuario = new UsuarioController();
 
+router.get("/conexion",  obtenerDatosConexion);
 
-
-
-router.get("/conexion",(rq, rs)=>{
-    const usuario = new UsuarioController();
+router.get("/user",(rq, rs)=>{
     usuario.getAllUsers(rq,rs)
 });
 

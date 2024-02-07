@@ -8,7 +8,7 @@ class MultaRepository {
       this.tableName = 'multa';
     }
   
-    async mapToMultaInstance(data) {
+    mapToMultaInstance(data) {
       return new Multa(
         data.id,
         data.cedula_usuario,

@@ -6,7 +6,7 @@ const supabase = SupabaseClientSingleton.getInstance();
 const obtenerDatosConexion = async (req, res) => {
     try {
         let { data: users, error } = await supabase
-            .from('usuario')
+            .from('prueba')
             .select('*');
 
         if (error) throw error;
