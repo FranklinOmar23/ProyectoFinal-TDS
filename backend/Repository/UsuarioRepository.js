@@ -84,6 +84,30 @@ class UsuarioRepository {
       throw error;
     }
   }
+  async updateUserPassword(userId, newPassword) {
+    try {
+      const usuarioActual = await this.getUserById(userId);
+
+      if (!usuarioActual) {
+        throw new Error('Usuario no encontrado');
+      }
+      usuarioActual.password = newPassword;
+      const { data, error } = await this.supabase.from(this.tableName).upsert([
+        {
+          id: userId,
+          ...usuarioActual, 
+        },
+      ]);
+
+      if (error) {
+        throw error;
+      }
+
+      return { mensaje: 'Contraseña actualizada correctamente' };
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 

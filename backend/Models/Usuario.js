@@ -1,5 +1,5 @@
 class Usuario{
-    constructor(id, nombre, apellido, cedula, role, estado, horario_entrada,horario_salida, salario, telefono, photo, photo_Vehiculo) {
+    constructor(id, nombre, apellido, cedula, role, estado,contrasena, horario_entrada,horario_salida, salario, telefono, photo, photo_Vehiculo) {
       this.id = id;
       this.nombre = nombre;
       this.apellido = apellido;
@@ -12,6 +12,7 @@ class Usuario{
       this.telefono = telefono;
       this.photo = photo;
       this.photo_Vehiculo = photo_Vehiculo;
+      this.contrasena =contrasena; // encryptarla 
     }
   }
   
