@@ -55,7 +55,7 @@ function Olvidocontrase() {
                                             <hr />
                                             <a className="link-body-emphasis small" href="registro.html">Crear una cuenta!</a>
                                         </div>
-                                        <div className="text-center">
+                                        <div className="text-center mt-3">
                                             <a className="link-body-emphasis small" href="login.html">Ya estás registrado? Inicia Sesión!</a>
                                         </div>
                                     </div>
