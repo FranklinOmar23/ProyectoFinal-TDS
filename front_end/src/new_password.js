@@ -1,12 +1,11 @@
 import emailjs from '@emailjs/browser'
-import { SuccessNotifications } from '../components/hooks/notification'
-import { ErrorNotifications } from '../components/hooks/notification'
+import toast from 'react-hot-toast'
 
-export const EnviarCorreo = async (email, codigo) => {
-  const ServerID = 'SidgotechServerid'
-  const TemplateID = 'template_u0b244e'
-  const PublicKey = 'iSr7Pd9VXatQCXVJZ'
-  const UserID = 'iSr7Pd9VXatQCXVJZ' // Reemplaza con tu User ID de EmailJS
+export const EnviarCorreo = async (email, newPassword) => {
+  const ServerID = 'service_n2isgmk'
+  const TemplateID = 'template_vyc3t7s'
+  const PublicKey = '8djVy-CUJiOVQd-Jw'
+  const UserID = '8djVy-CUJiOVQd-Jw' // Reemplaza con tu User ID de EmailJS
 
   emailjs.init(PublicKey)
 
@@ -14,32 +13,24 @@ export const EnviarCorreo = async (email, codigo) => {
     const params = {
       name: 'angel', // en futuro poner nombre del usuario logeado
       Email: email, // Reemplaza con el nombre del destinatario si es necesario
-      from_name: 'SIDGOTECH', // Reemplaza con tu nombre o nombre de la empresa
+      from_name: 'DIGESETT', // Reemplaza con tu nombre o nombre de la empresa
       recipient: email,
-      message: codigo
+      message: newPassword
     }
 
     const response = await emailjs.send(ServerID, TemplateID, params, UserID)
 
     if (response.text === 'OK') {
-      const notify = SuccessNotifications(
-        'El correo fue enviado correctamente a ' + email
-      )
-      notify()
+      toast.success(`El correo fue enviado correctamente a ${email}`);
     } else {
-      const notify = ErrorNotifications(
-        'Error al enviar el correo: ',
-        response.text
-      )
-      notify()
+      toast.error('Error al enviar el correo: ' + response.text);
     }
   } catch (error) {
-    const notify = ErrorNotifications('Error al enviar el correo: ', error)
-    notify()
+    toast.error('Error al enviar el correo: ' + error);
   }
 }
 
-export const Contacto = async (email, NombreUsuario, description) => {
+/*export const Contacto = async (email, NombreUsuario, description) => {
   const ServerID = 'SidgotechServerid'
   const TemplateID = 'template_ea98osq'
   const PublicKey = 'iSr7Pd9VXatQCXVJZ'
@@ -75,3 +66,4 @@ export const Contacto = async (email, NombreUsuario, description) => {
     notify() // Debes invocar la función interna para mostrar la notificación
   }
 }
+*/
