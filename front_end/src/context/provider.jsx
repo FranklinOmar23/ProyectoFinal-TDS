@@ -8,14 +8,14 @@ const provider = ({ children }) => {
 
     };
     return (
-        <provider.Provider value={data}>
+        <Context.Provider value={data}>
             {children}
-        </provider.Provider>
+        </Context.Provider>
     )
 }
 export default provider;
 
-//aqui voy a dejar un ejemplode como consumirlo
+//aqui voy a dejar un ejemplo de como consumirlo
 
 /*
 imagina que esta es otra vista xd
