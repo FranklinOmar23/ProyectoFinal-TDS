@@ -1,10 +1,12 @@
 
 import { SupabaseClientSingleton } from '../data/dbContection.js';
-import { Usuario } from '../Models/Usuario.js';  
+import { Usuario } from '../Models/Usuario.js'; 
+import bcrypt from 'bcryptjs';
 
 class UsuarioRepository {
   constructor() {
     this.supabase = SupabaseClientSingleton.getInstance();
+    this.usuario = "usuario"
     this.tableName = 'usuario';
   }
 
@@ -22,7 +24,8 @@ class UsuarioRepository {
       data.salario,
       data.telefono,
       data.photo,
-      data.photo_Vehiculo
+      data.photo_Vehiculo,
+      data.contrasena
     );
   }
 
@@ -108,7 +111,37 @@ class UsuarioRepository {
       throw error;
     }
   }
-}
+  //funsion para interactuar con la db
+  async loginUser(cedula, contrasena) {
+    try {
+      // Valida que la cédula tenga al menos 11 dígitos
+      if (cedula.length !== 11) {
+        throw new Error('La cédula debe tener al menos 11 dígitos');
+      }
+      if (typeof contrasena !== 'string' || contrasena.trim().length === 0) {
+        throw new Error('La contraseña no puede estar vacía');
+      }
+      //Consulta a la db
+      const { data, error } = await this.supabase
+        .from(this.usuario)
+        .select('*')
+        .eq('cedula', cedula);
 
+      if (error) throw error;
+      if (data.length === 0) throw new Error('Usuario no encontrado');
+
+      const user = this.mapToUserInstance(data[0]);
+
+      // Compara la contraseña proporcionada con la almacenada en la base de datos
+      if (contrasena ==! user.contrasena) {
+        throw new Error('Contraseña incorrecta');
+      }
+
+      return user;
+    } catch (error) {
+      throw error;
+    }
+  }
+}
 
 export {UsuarioRepository};

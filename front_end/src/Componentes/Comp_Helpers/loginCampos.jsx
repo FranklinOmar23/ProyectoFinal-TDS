@@ -14,7 +14,12 @@ const LoginCampos = ({ onLogin }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onLogin(e, cedula, password);
+    const userCredentials = {
+      cedula,
+      contrasena: password // Corrección aquí
+    };
+
+    onLogin(userCredentials); // Envía los datos al componente padre para el manejo del inicio de sesión
   };
 
   return (
@@ -34,7 +39,7 @@ const LoginCampos = ({ onLogin }) => {
           className="form-control form-control-user"
           type="password"
           placeholder="Introduzca su contraseña"
-          name="password"
+          name="contrasena" // Corrección aquí
           value={password}
           onChange={handleChangePassword}
         />
