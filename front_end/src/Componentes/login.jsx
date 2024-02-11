@@ -75,12 +75,12 @@ const Login = () => {
                       </div>
                       <LoginCampos onLogin={handleLogin} />
                       <div className="text-center">
-                        <Link to="/olvidoClave" className="link-body-emphasis small">
+                        <Link to="/Olvidocontra" className="link-body-emphasis small">
                           ¿Olvidaste tu contraseña?
                         </Link>
                       </div>
                       <div className="text-center">
-                        <Link to="/registro" className="link-body-emphasis small">
+                        <Link to="/Registro" className="link-body-emphasis small">
                           ¡Crea tu cuenta!
                         </Link>
                       </div>
