@@ -1,6 +1,6 @@
 
 import { UsuarioRepository } from '../Repository/UsuarioRepository.js';  // Ajusta la ruta según tu estructura
-import  {generarContraseñaTemporal} from '../logic/genrarContraseña.js'
+import { generarContraseñaTemporal } from '../logic/genrarContraseña.js';
 
 class UsuarioController {
   constructor() {
@@ -32,6 +32,19 @@ class UsuarioController {
       res.status(500).send('Error actualizando contraseña del usuario');
     }
   }
+  //optener los datos del front
+  async login(req, res) {
+    const { cedula, contrasena } = req.body;
+
+    try {
+      const user = await this.usuarioRepository.loginUser(cedula, contrasena);
+      res.json({ message: 'Inicio de sesión exitoso', user });
+    } catch (error) {
+      console.error(error);
+      res.status(401).send('Credenciales inválidas');
+    }
+  }
 }
 ;
 export { UsuarioController};
+    

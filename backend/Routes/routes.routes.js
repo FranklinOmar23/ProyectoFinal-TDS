@@ -15,5 +15,7 @@ router.get("/user",(rq, rs)=>{
 });
 console.log(newpassword);
 
+router.post('/login', (req, res) => usuario.login(req, res));
+
 
 export default router;
