@@ -11,11 +11,13 @@ router.get("/conexion",  obtenerDatosConexion);
 
 router.get("/user",(rq, rs)=>{
     usuario.getAllUsers(rq,rs)
-   
 });
 console.log(newpassword);
 
 router.post('/login', (req, res) => usuario.login(req, res));
 
-
+router.get("/newpassword",(rq,rs)=>{
+    usuario.updateUserByNewPassword(rq,rs)
+})
+  
 export default router;

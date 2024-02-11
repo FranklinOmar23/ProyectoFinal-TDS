@@ -3,6 +3,6 @@ export function generarContraseñaTemporal(longitud) {
     return Array.from({ length: longitud }, () => caracteres.charAt(Math.floor(Math.random() * caracteres.length))).join('');
   }
   
-  const contraseñaGenerada = generarContraseñaTemporal(8);
-  console.log(contraseñaGenerada);
+ /* const contraseñaGenerada = generarContraseñaTemporal(8);
+  console.log(contraseñaGenerada);*/
  

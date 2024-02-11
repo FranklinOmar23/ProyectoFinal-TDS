@@ -19,11 +19,10 @@ class UsuarioController {
     }
   }  
   async updateUserByNewPassword(req, res) {
-    const userId = req.params.userId; // Asegúrate de tener la ruta adecuada con el ID del usuario
-    const nuevaContraseña = generarContraseñaTemporal(8); // Cambia la longitud según tus necesidades
+    const userId = req.params.id; 
+    const nuevaContraseña = generarContraseñaTemporal(8); 
 
     try {
-      // Llama a la función en tu repositorio para actualizar la contraseña del usuario
       await this.usuarioRepository.updateUserPassword(userId, nuevaContraseña);
 
       res.json({ mensaje: 'Contraseña actualizada exitosamente' });
