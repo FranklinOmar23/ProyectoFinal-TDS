@@ -1,47 +1,30 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import LoginCampos from './Comp_Helpers/loginCampos';
 import '../Css/Footer-Dark-icons.css';
 import '../Css/sidebar-menu.css';
 import '../Css/animate.min.css';
 import '../Css/loginestilo.css';
+import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 
+
 const Login = () => {
-  const validateInputs = (cedula, password) => {
-    // Validar que no haya campos vacíos
-    if (!cedula || !password) {
-      toast.error('Por favor, completa todos los campos.');
-      return false;
+  const handleLogin = async (userData) => {
+    try {
+      // Validar que los campos no estén vacíos y que la cédula tenga al menos 11 caracteres
+      /*if (!userData.cedula || !userData.contrasena || userData.cedula.length < 11) {
+        throw new Error('Por favor, completa todos los campos y asegúrate de que la cédula tenga al menos 11 caracteres');
+      }*/
+
+      const response = await axios.post('http://localhost:4000/login', userData);
+      console.log(response.data);
+      toast.success('Inicio de sesión exitoso');
+    } catch (error) {
+      console.error('Error al iniciar sesión:', error);
+      // Mostrar el mensaje de error al usuario
+      toast.error(error.message);
     }
-
-    // Eliminar guiones de la cédula y validar que tenga 11 dígitos
-    const cedulaWithoutDashes = cedula.replace(/-/g, '');
-    if (cedulaWithoutDashes.length !== 11) {
-      toast.error('La cédula debe tener 11 dígitos.');
-      return false;
-    }
-
-    // Validar que la contraseña inicie con mayúscula y tenga al menos un carácter especial
-    const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]+$/;
-    if (!passwordRegex.test(password)) {
-      toast.error('La contraseña debe iniciar con mayúscula y contener al menos un carácter especial.');
-      return false;
-    }
-
-    return true;
-  };
-
-  const handleLogin = (e, cedula, password) => {
-    e.preventDefault();
-
-    // Validación de campos
-    if (!validateInputs(cedula, password)) {
-      return;
-    }
-
-    // Simulación de lógica de inicio de sesión exitoso
-    toast.success('Inicio de sesión exitoso.');
   };
 
   return (
