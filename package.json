@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "emailjs": "^4.0.3",
-    "emailjs-com": "^2.6.4"
-  }
-}
