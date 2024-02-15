@@ -3,6 +3,7 @@ import "../Css/Footer-Dark-icons.css";
 import "../Css/sidebar-menu.css";
 import "../Css/bootstrap.min.css";
 import "../Css/animate.min.css";
+import { IconoHistorial, IconoHome, IconoMultas, IconoXD, Icono, IconoTop } from "../Componentes/Comp_Helpers/Iconos.jsx"
 
 
 import toast, { Toaster } from 'react-hot-toast';
@@ -10,31 +11,42 @@ import toast, { Toaster } from 'react-hot-toast';
 
 function Navbar() {
     return (
-        <nav className="navbar align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0 navbar-dark" style={{ background: 'rgb(4, 131, 55)' }}>
-            <div className="container-fluid d-flex flex-column p-0">
-                <a className="navbar-brand d-flex flex-column justify-content-lg-center align-items-lg-center sidebar-brand m-4" href="#">
-                    <div className="sidebar-brand-icon rotate-n-15"></div>
-                    <div className="sidebar-brand-text mx-3"></div>
-                    <img className="img-fluid d-lg-flex" width="100" height="70" src="https://nizaero.com/wp-content/uploads/2018/07/Logo-DIGESETT-292x300.png" alt="Logo" />
-                </a>
-                <hr className="sidebar-divider my-0" />
-                <ul className="navbar-nav text-light" id="accordionSidebar">
-                    <li className="nav-item"><a className="nav-link active" href="index.html"></a></li>
-                    <hr className="sidebar-divider" />
-                    <div className="sidebar-heading">
-                        <p className="mb-0">Menú</p>
-                    </div>
-                    <li className="nav-item"><a className="btn btn-primary nav-link" role="button" href="index.html" data-bs-target="index.html" style={{ background: 'transparent' }}><i className="fas fa-th-large"></i><span id="spanInicio">Inicio</span></a></li>
-                    <li className="nav-item"><a className="btn btn-primary nav-link" role="button" data-bs-target="perfil.html" href="perfil.html" style={{ background: 'transparent' }}><i className="fas fa-user-circle"></i><span id="spanPerfil">Perfil</span></a></li>
-                    <li className="nav-item"><a className="btn btn-primary nav-link" role="button" data-bs-target="nuevaMulta.html" href="nuevaMulta.html" style={{ background: 'transparent' }}><i className="fas fa-folder"></i><span id="spanMultas">Nuevas Multas</span></a></li>
-                    <li className="nav-item"><a className="btn btn-primary nav-link" role="button" data-bs-target="historial.html" href="historial.html" style={{ background: 'transparent' }}><i className="fas fa-chart-area"></i><span id="spanHistorial">&nbsp;Historial</span></a></li>
-                    <hr className="sidebar-divider" />
-                </ul>
-                <div className="text-center d-none d-md-inline"><button className="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
+      <nav className="navbar align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0 navbar-dark" style={{ background: 'rgb(4, 131, 55)', width: '300px' }}>
+        <div className="container-fluid d-flex flex-column p-0">
+          <div className="m-4 d-flex justify-content-center">
+            <a className="navbar-brand" href="#">
+              <img className="img-fluid" width="150" height="150" src="https://nizaero.com/wp-content/uploads/2018/07/Logo-DIGESETT-292x300.png" alt="Logo" />
+            </a>
+          </div>
+          <hr className="sidebar-divider my-0" />
+          <ul className="navbar-nav text-light justify-content-center" id="accordionSidebar">
+            <li className="nav-item"><a className="nav-link active" href="index.html"></a></li>
+            <hr className="sidebar-divider" />
+            <div className="sidebar-heading">
+              <p className="mb-0">Menú</p>
             </div>
-        </nav>
+            
+              {/* Icono del inicio/home */}      
+            <li className="nav-item"><a className="btn btn-primary nav-link btn-lg" role="button" href="index.html" data-bs-target="index.html" style={{ background: 'transparent' }}><IconoHome width={20} height={20} /><i className="fas fa-th-large"></i><span id="spanInicio">Inicio</span></a></li>
+              {/* Icono del perfil */}      
+            <li className="nav-item"><a className="btn btn-primary nav-link " role="button" href="perfil.html" data-bs-target="perfil.html"  style={{ background: 'transparent' }}><IconoXD width={20} height={20} /><i className="fas fa-user-circle"></i><span id="spanPerfil">Perfil</span></a></li>
+              {/* Icono de multa */}      
+            <li className="nav-item"><a className="btn btn-primary nav-link btn-lg" role="button" href="nuevaMulta.html" data-bs-target="nuevaMulta.html"  style={{ background: 'transparent' }}><IconoMultas width={20} height={20} /><i className="fas fa-folder"></i><span id="spanMultas">Nuevas Multas</span></a></li>
+              {/* Icono del historial */}      
+            <li className="nav-item"><a className="btn btn-primary nav-link btn-lg" role="button" href="historial.html" data-bs-target="historial.html"  style={{ background: 'transparent' }}><IconoHistorial width={20} height={20}/><i className="fas fa-chart-area"></i><span id="spanHistorial">&nbsp;Historial</span></a></li>
+            
+            <hr className="sidebar-divider" />
+          </ul>
+          <div className="text-center d-none d-md-inline">
+            <button className="btn rounded-circle border-0" id="sidebarToggle" type="button">
+             <Icono width={40} height={40} /> 
+            </button>
+        </div>
+        </div>
+      </nav>
     );
 }
+  
 
 function Topbar() {
     return (
@@ -59,51 +71,8 @@ function Topbar() {
                                 </form>
                             </div>
                         </li>
-                        <li className="nav-item dropdown no-arrow mx-1">
-                            <div className="nav-item dropdown no-arrow">
-                                <a className="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" id="linkNotificaciones" href="#">
-                                    <span className="badge bg-danger badge-counter"></span>
-                                    <i className="fas fa-bell fa-fw"></i>
-                                </a>
-                                <div className="dropdown-menu dropdown-menu-end dropdown-list animated--grow-in">
-                                    <h6 className="dropdown-header">alerts center</h6>
-                                    <a className="dropdown-item d-flex align-items-center" href="#">
-                                        <div className="me-3">
-                                            <div className="bg-primary icon-circle"><i className="fas fa-file-alt text-white"></i></div>
-                                        </div>
-                                        <div>
-                                            <span className="small text-gray-500">December 12, 2019</span>
-                                            <p>A new monthly report is ready to download!</p>
-                                        </div>
-                                    </a>
-                                    <a className="dropdown-item d-flex align-items-center" href="#">
-                                        <div className="me-3">
-                                            <div className="bg-success icon-circle"><i className="fas fa-donate text-white"></i></div>
-                                        </div>
-                                        <div>
-                                            <span className="small text-gray-500">December 7, 2019</span>
-                                            <p>$290.29 has been deposited into your account!</p>
-                                        </div>
-                                    </a>
-                                    <a className="dropdown-item d-flex align-items-center" href="#">
-                                        <div className="me-3">
-                                            <div className="bg-warning icon-circle"><i className="fas fa-exclamation-triangle text-white"></i></div>
-                                        </div>
-                                        <div>
-                                            <span className="small text-gray-500">December 2, 2019</span>
-                                            <p>Spending Alert: We've noticed unusually high spending for your account.</p>
-                                        </div>
-                                    </a>
-                                    <a className="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
-                                </div>
-                            </div>
-                        </li>
-                        <li className="nav-item dropdown no-arrow mx-1">
-                            <div className="shadow dropdown-list dropdown-menu dropdown-menu-end" aria-labelledby="alertsDropdown"></div>
-                        </li>
-                        <div className="d-none d-sm-block topbar-divider"></div>
                         <li className="nav-item dropdown no-arrow">
-                            <div className="nav-item dropdown no-arrow"><a className="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#"><span className="d-none d-lg-inline me-2 text-gray-600 small">John Doe</span><img className="border rounded-circle img-profile"  src="../../" /></a>
+                            <div className="nav-item dropdown no-arrow"><a className="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#"><span className="d-none d-lg-inline me-2 text-gray-600 small">John Doe</span><img className="border rounded-circle img-profile" src="../avatar1.jpeg" /></a>
                                 <div className="dropdown-menu shadow dropdown-menu-end animated--grow-in"><a className="dropdown-item" href="#"><i className="fas fa-user fa-sm fa-fw me-2 text-gray-400"></i>&nbsp;Perfil</a><a className="dropdown-item" href="#"><i className="fas fa-cogs fa-sm fa-fw me-2 text-gray-400"></i>Ajustes</a>
                                     <div className="dropdown-divider"></div><a className="dropdown-item" href="#"><strong><span style={{ color: 'rgb(209, 211, 226)' }}>Cerrar Sesión</span></strong></a>
                                 </div>
@@ -260,7 +229,7 @@ function Home() {
                 </div>
                 <Footer />
             </div>
-            <a className="border rounded d-inline scroll-to-top" href="#page-top"><i className="fas fa-angle-up"></i></a>
+            <a className="border rounded d-inline scroll-to-top" href="#page-top"> <IconoTop width={40} height={40} /><i className="fas fa-angle-up"> </i></a>
         </div>
     );
 }
