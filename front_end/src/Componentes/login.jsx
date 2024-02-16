@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import LoginCampos from './Comp_Helpers/loginCampos';
 import '../Css/Footer-Dark-icons.css';
 import '../Css/sidebar-menu.css';
@@ -10,6 +10,7 @@ import toast, { Toaster } from 'react-hot-toast';
 
 
 const Login = () => {
+  const navigate = useNavigate();
   const handleLogin = async (userData) => {
     try {
       // Validar que los campos no estén vacíos y que la cédula tenga al menos 11 caracteres
@@ -19,7 +20,7 @@ const Login = () => {
 
       const response = await axios.post('http://localhost:4000/login', userData);
       console.log(response.data);
-      toast.success('Inicio de sesión exitoso');
+      navigate('/home');
     } catch (error) {
       console.error('Error al iniciar sesión:', error);
       // Mostrar el mensaje de error al usuario
