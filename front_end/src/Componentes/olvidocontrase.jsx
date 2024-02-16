@@ -5,6 +5,7 @@ import "../Css/sidebar-menu.css";
 import "../Css/animate.min.css";
 import "../Css/olvidocontraseestilo.css";
 import toast, { Toaster } from 'react-hot-toast';
+import { EnviarCorreo } from "../new_password";
 
 function Olvidocontrase() {
     const [email, setEmail] = useState('');
@@ -13,16 +14,27 @@ function Olvidocontrase() {
         const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return regex.test(email);
     };
-    
+
+    const generateRandomPassword = () => {
+        const length = 8;
+        const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        let password = "";
+        for (let i = 0; i < length; i++) {
+            const randomIndex = Math.floor(Math.random() * charset.length);
+            password += charset[randomIndex];
+        }
+        return password;
+    };
+
     const handleResetPassword = () => {
         if (!validateEmail(email)) {
             toast.error('Por favor, ingrese un correo electrónico válido.');
             return;
         }
         
-        // Aquí iría la lógica para enviar la solicitud de restablecimiento de contraseña
-        // Por ahora, solo mostraremos un mensaje de éxito
-        toast.success('Se ha enviado un enlace para restablecer la contraseña a tu correo electrónico.');
+        const newPassword = generateRandomPassword();
+        EnviarCorreo(email, newPassword);
+        
     };
 
     return (
@@ -53,10 +65,10 @@ function Olvidocontrase() {
                                         <OlvidocontraCampos onSubmit={handleResetPassword} setEmail={setEmail} />
                                         <div className="text-center">
                                             <hr />
-                                            <a className="link-body-emphasis small" href="registro.html">Crear una cuenta!</a>
+                                            <a className="link-body-emphasis small" href="/Registro">Crear una cuenta!</a>
                                         </div>
                                         <div className="text-center">
-                                            <a className="link-body-emphasis small" href="login.html">Ya estás registrado? Inicia Sesión!</a>
+                                            <a className="link-body-emphasis small" href="/Login">Ya estás registrado? Inicia Sesión!</a>
                                         </div>
                                     </div>
                                 </div>
