@@ -646,3 +646,11 @@
     }
 }
 
+lord-icon {
+    position: relative;
+    top: 5px;
+}
+
+button::after{
+    display: none;
+}

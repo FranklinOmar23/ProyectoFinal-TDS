@@ -13,10 +13,10 @@ function App() {
     <div>
         <BrowserRouter>
           <Routes>
-            <Route path="/Olvidocontra" element={<Olvidocontrase />}/>
-            <Route path="/Registro" element={<Registro />}/>
-            <Route path="/Login" element={<Login />}/>
-            <Route path="/Home" element={<Home />}/>
+            <Route path="/olvidocontrasena" element={<Olvidocontrase />}/>
+            <Route path="/registro" element={<Registro />}/>
+            <Route path="/" element={<Login />}/>
+            <Route path="/home" element={<Home />}/>
           </Routes>
         </BrowserRouter>
     </div>

@@ -120,8 +120,8 @@ function Registro() {
                       {/* Campos para la redireccion de login y contraseña */}
 
                       <div className="text-center mt-3">
-                        <p>¿Ya tienes una cuenta? <a href="/login">Inicia sesión</a></p>
-                        <p>¿Olvidaste tu contraseña? <a href="/olvidocontra">Recupérala aquí</a></p>
+                        <p>¿Ya tienes una cuenta? <a href="/">Inicia sesión</a></p>
+                        <p>¿Olvidaste tu contraseña? <a href="/olvidocontrasena">Recupérala aquí</a></p>
                       </div>
                     </div>
                   </div>
