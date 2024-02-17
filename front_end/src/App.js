@@ -4,6 +4,8 @@ import {BrowserRouter, Route} from "react-router-dom";
 import Olvidocontrase from './Componentes/olvidocontrase';
 import Registro from './Componentes/Registro';
 import Login from './Componentes/login';
+import Home from './Componentes/Home';
+
 
 function App() {
 
@@ -14,6 +16,7 @@ function App() {
             <Route path="/Olvidocontra" element={<Olvidocontrase />}/>
             <Route path="/Registro" element={<Registro />}/>
             <Route path="/Login" element={<Login />}/>
+            <Route path="/Home" element={<Home />}/>
           </Routes>
         </BrowserRouter>
     </div>

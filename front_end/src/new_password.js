@@ -12,7 +12,7 @@ export const EnviarCorreo = async (email, newPassword) => {
   try {
     const params = {
       name: 'angel', // en futuro poner nombre del usuario logeado
-      Email: email, // Reemplaza con el nombre del destinatario si es necesario
+      email: email, // Reemplaza con el nombre del destinatario si es necesario
       from_name: 'DIGESETT', // Reemplaza con tu nombre o nombre de la empresa
       recipient: email,
       message: newPassword
@@ -26,7 +26,7 @@ export const EnviarCorreo = async (email, newPassword) => {
       toast.error('Error al enviar el correo: ' + response.text);
     }
   } catch (error) {
-    toast.error('Error al enviar el correo: ' + error);
+    toast.error('Error al enviar el correo: ' + JSON.stringify(error));
   }
 }
 

@@ -65,10 +65,10 @@ function Olvidocontrase() {
                                         <OlvidocontraCampos onSubmit={handleResetPassword} setEmail={setEmail} />
                                         <div className="text-center">
                                             <hr />
-                                            <a className="link-body-emphasis small" href="registro.html">Crear una cuenta!</a>
+                                            <a className="link-body-emphasis small" href="/Registro">Crear una cuenta!</a>
                                         </div>
-                                        <div className="text-center mt-3">
-                                            <a className="link-body-emphasis small" href="login.html">Ya estás registrado? Inicia Sesión!</a>
+                                        <div className="text-center">
+                                            <a className="link-body-emphasis small" href="/Login">Ya estás registrado? Inicia Sesión!</a>
                                         </div>
                                     </div>
                                 </div>
