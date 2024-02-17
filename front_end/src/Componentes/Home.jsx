@@ -3,6 +3,7 @@ import "../Css/Footer-Dark-icons.css";
 import "../Css/sidebar-menu.css";
 import "../Css/bootstrap.min.css";
 import "../Css/animate.min.css";
+import "../Css/adicciones.css"
 import { IconoHistorial, IconoHome, IconoMultas, IconoXD, Icono, IconoTop } from "../Componentes/Comp_Helpers/Iconos.jsx"
 
 
@@ -39,10 +40,11 @@ function Navbar() {
           </ul>
           <div className="text-center d-none d-md-inline">
             <button className="btn rounded-circle border-0" id="sidebarToggle" type="button">
-             <Icono width={40} height={40} /> 
+             <Icono className="cerrar-menu" width={40} height={40} /> 
             </button>
         </div>
         </div>
+        
       </nav>
     );
 }
