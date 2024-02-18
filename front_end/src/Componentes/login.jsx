@@ -49,7 +49,7 @@ const Login = () => {
                   <div className="row container3">
                     <div className="col-lg-6 d-none d-lg-flex flex-column align-items-center">
                       <img
-                        className="img-fluid m-auto justify-content-t"
+                        className="img-fluid m-auto justify-content-t ima"
                         src="https://nizaero.com/wp-content/uploads/2018/07/Logo-DIGESETT-292x300.png"
                         alt="Logo"
                       />

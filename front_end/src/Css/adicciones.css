@@ -576,7 +576,12 @@
     width: 200px;
 }
 
-.container1 img {
+.imagenolvidocontra{
+    position: relative;
+    top: -64px;
+    width: 200px;
+}
+.container1 .ima {
     position: relative;
     top: -70px;
     width: 200px;
@@ -629,6 +634,17 @@
     top: 320px;
     left: -250px;
 }
+.container4::before {
+    content: '';
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background: #468846;
+    top: 291px;
+    left: -207px;
+}
+
   
 @keyframes blink {
     50% {
@@ -653,4 +669,14 @@ lord-icon {
 
 button::after{
     display: none;
+}
+
+.container4 h2{
+    position: relative;
+    top: -122px;
+}
+
+.container4 h3{
+    position: relative;
+    top: -120px;
 }
