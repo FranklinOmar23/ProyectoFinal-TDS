@@ -5,6 +5,7 @@ import Olvidocontrase from './Componentes/olvidocontrase';
 import Registro from './Componentes/Registro';
 import Login from './Componentes/login';
 import Home from './Componentes/Home';
+import Nuevamulta from './Componentes/Nuevamulta';
 
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
             <Route path="/registro" element={<Registro />}/>
             <Route path="/" element={<Login />}/>
             <Route path="/home" element={<Home />}/>
+            <Route path="/nuevamulta" element={<Nuevamulta />}/>
           </Routes>
         </BrowserRouter>
     </div>
