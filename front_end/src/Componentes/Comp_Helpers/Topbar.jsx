@@ -1,7 +1,7 @@
 import React from "react";
 import { IconoHistorial, IconoHome, IconoMultas, IconoXD, Icono, IconoTop } from "./Iconos.jsx"
 
-function Topbar() {
+function Topbar({titulo}) {
     return (
         <nav className="navbar navbar-expand bg-white shadow mb-4 topbar static-top navbar-light">
             <div className="container-fluid">
@@ -13,7 +13,7 @@ function Topbar() {
                 </div>
                 <div></div>
                 <div className="collapse navbar-collapse" id="navbarResponsive">
-                    <h3 className="text-dark mb-0">Home</h3>
+                    <h3 className="text-dark mb-0">{titulo}</h3>
                     <ul className="navbar-nav flex-nowrap ms-auto">
                         <li className="nav-item dropdown d-sm-none no-arrow show"><a className="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#"><i className="fas fa-search"></i></a>
                             <div className="dropdown-menu dropdown-menu-end p-3 animated--grow-in" aria-labelledby="searchDropdown">

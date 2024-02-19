@@ -126,10 +126,12 @@ function MultasRecientesCard() {
 function Home() {
 
     return (
+        <>
+        <div id="page-top"></div>
         <div id="wrapper">
             <Navbar />
             <div className="d-flex flex-column" id="content-wrapper">
-                <Topbar />
+                <Topbar titulo="Home"/>
                 <div className="container">
                     <div className="row">
                         <Map />
@@ -146,6 +148,7 @@ function Home() {
             </div>
             <a className="border rounded d-inline scroll-to-top" href="#page-top"> <IconoTop width={40} height={40} /><i className="fas fa-angle-up"> </i></a>
         </div>
+        </>
     );
 }
 

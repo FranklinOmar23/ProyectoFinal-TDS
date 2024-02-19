@@ -12,20 +12,20 @@ function Navbar() {
           </div>
           <hr className="sidebar-divider my-0" />
           <ul className="navbar-nav text-light justify-content-center" id="accordionSidebar">
-            <li className="nav-item"><a className="nav-link active" href="index.html"></a></li>
+            <li className="nav-item"><a className="nav-link active" href="/home"></a></li>
             <hr className="sidebar-divider" />
             <div className="sidebar-heading">
               <p className="mb-0">Menú</p>
             </div>
             
               {/* Icono del inicio/home */}      
-            <li className="nav-item"><a className="btn btn-primary nav-link btn-lg" role="button" href="index.html" data-bs-target="index.html" style={{ background: 'transparent' }}><IconoHome width={20} height={20} /><i className="fas fa-th-large"></i><span id="spanInicio">Inicio</span></a></li>
+            <li className="nav-item"><a className="btn btn-primary nav-link btn-lg" role="button" href="/home" data-bs-target="index.html" style={{ background: 'transparent' }}><IconoHome width={20} height={20} /><i className="fas fa-th-large"></i><span id="spanInicio">Inicio</span></a></li>
               {/* Icono del perfil */}      
-            <li className="nav-item"><a className="btn btn-primary nav-link " role="button" href="perfil.html" data-bs-target="perfil.html"  style={{ background: 'transparent' }}><IconoXD width={20} height={20} /><i className="fas fa-user-circle"></i><span id="spanPerfil">Perfil</span></a></li>
+            <li className="nav-item"><a className="btn btn-primary nav-link " role="button" href="/perfil" data-bs-target="perfil.html"  style={{ background: 'transparent' }}><IconoXD width={20} height={20} /><i className="fas fa-user-circle"></i><span id="spanPerfil">Perfil</span></a></li>
               {/* Icono de multa */}      
-            <li className="nav-item"><a className="btn btn-primary nav-link btn-lg" role="button" href="nuevaMulta.html" data-bs-target="nuevaMulta.html"  style={{ background: 'transparent' }}><IconoMultas width={20} height={20} /><i className="fas fa-folder"></i><span id="spanMultas">Nuevas Multas</span></a></li>
+            <li className="nav-item"><a className="btn btn-primary nav-link btn-lg" role="button" href="/nuevamulta" data-bs-target="nuevaMulta.html"  style={{ background: 'transparent' }}><IconoMultas width={20} height={20} /><i className="fas fa-folder"></i><span id="spanMultas">Nuevas Multas</span></a></li>
               {/* Icono del historial */}      
-            <li className="nav-item"><a className="btn btn-primary nav-link btn-lg" role="button" href="historial.html" data-bs-target="historial.html"  style={{ background: 'transparent' }}><IconoHistorial width={20} height={20}/><i className="fas fa-chart-area"></i><span id="spanHistorial">&nbsp;Historial</span></a></li>
+            <li className="nav-item"><a className="btn btn-primary nav-link btn-lg" role="button" href="/historial" data-bs-target="historial.html"  style={{ background: 'transparent' }}><IconoHistorial width={20} height={20}/><i className="fas fa-chart-area"></i><span id="spanHistorial">&nbsp;Historial</span></a></li>
             
             <hr className="sidebar-divider" />
           </ul>
