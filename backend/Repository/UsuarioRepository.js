@@ -23,9 +23,10 @@ class UsuarioRepository {
       data.horario_salida,
       data.salario,
       data.telefono,
-      data.photo,
-      data.photo_Vehiculo,
-      data.contrasena
+      data.foto,
+      data.foto_Vehiculo,
+      data.contrasena,
+      data.correo
     );
   }
 
@@ -87,30 +88,53 @@ class UsuarioRepository {
       throw error;
     }
   }
-  async updateUserPassword(userId, newPassword) {
+  async updateUserPasswordByEmail(email, newPassword) {
     try {
-      const usuarioActual = await this.getUserById(userId);
+        const usuarioActual = await this.getUserByEmail(email);
 
-      if (!usuarioActual) {
-        throw new Error('Usuario no encontrado');
-      }
-      usuarioActual.password = newPassword;
-      const { data, error } = await this.supabase.from(this.tableName).upsert([
-        {
-          id: userId,
-          ...usuarioActual, 
-        },
-      ]);
+        if (!usuarioActual) {
+            throw new Error('Usuario no encontrado');
+        }
 
-      if (error) {
-        throw error;
-      }
+        // Actualizar la contraseña del usuario
+        const { data, error } = await this.supabase
+            .from(this.usuario)
+            .update({ contrasena: newPassword })
+            .eq('correo', email);
 
-      return { mensaje: 'Contraseña actualizada correctamente' };
+        if (error) {
+            throw error;
+        }
+
+        return { mensaje: 'Contraseña actualizada correctamente' };
     } catch (error) {
-      throw error;
+        throw error;
     }
-  }
+}
+
+async getUserByEmail(email) {
+    try {
+        const { data, error } = await this.supabase
+            .from(this.usuario)
+            .select('*')
+            .eq('correo', email);
+
+        if (error) {
+            throw error;
+        }
+        
+        if (!data || data.length === 0) {
+            return null;
+        }
+
+        return this.mapToUserInstance(data[0]);
+    } catch (error) {
+        throw error;
+    }
+}
+
+
+
   //funsion para interactuar con la db
   async loginUser(cedula, contrasena) {
     try {
@@ -142,6 +166,23 @@ class UsuarioRepository {
       throw error;
     }
   }
+  /*async updateUserByNewPassword(req, res) {
+    const userId = req.params.id; // Obtener el ID del usuario de la solicitud
+    const { newPassword } = req.body; // Obtener la nueva contraseña del cuerpo de la solicitud
+
+    try {
+        // Actualizar la contraseña del usuario con la nueva contraseña
+        await this.usuarioRepository.updateUserPassword(userId, newPassword);
+
+        // Enviar una respuesta de éxito al cliente
+        res.json({ mensaje: 'Contraseña actualizada exitosamente' });
+    } catch (error) {
+        // Manejar errores y enviar una respuesta de error al cliente
+        console.error(error);
+        res.status(500).send('Error actualizando contraseña del usuario');
+    }
+}*/
+
 }
 
 export {UsuarioRepository};

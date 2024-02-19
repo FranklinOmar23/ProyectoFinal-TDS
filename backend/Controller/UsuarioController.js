@@ -19,18 +19,39 @@ class UsuarioController {
     }
   }  
   async updateUserByNewPassword(req, res) {
-    const userId = req.params.id; 
-    const nuevaContraseña = generarContraseñaTemporal(8); 
+    const { email, newPassword } = req.body;
 
     try {
-      await this.usuarioRepository.updateUserPassword(userId, nuevaContraseña);
+        // Validar los datos de entrada
+        if (!email || typeof email !== 'string') {
+            return res.status(400).json({ error: 'El correo electrónico es requerido y debe ser una cadena de caracteres.' });
+        }
 
-      res.json({ mensaje: 'Contraseña actualizada exitosamente' });
+        if (!newPassword || typeof newPassword !== 'string') {
+            return res.status(400).json({ error: 'La nueva contraseña es requerida y debe ser una cadena de caracteres.' });
+        }
+
+        // Validar el formato del correo electrónico
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            return res.status(400).json({ error: 'El formato del correo electrónico no es válido.' });
+        }
+        
+        // Validar la longitud de la nueva contraseña
+        if (newPassword.length < 8) {
+            return res.status(400).json({ error: 'La nueva contraseña debe tener al menos 8 caracteres.' });
+        }
+
+        // Realizar la actualización de la contraseña
+        await this.usuarioRepository.updateUserPasswordByEmail(email, newPassword);
+
+        // Si todo está bien, enviar una respuesta exitosa
+        res.status(200).json({ mensaje: 'Contraseña actualizada exitosamente' });
     } catch (error) {
-      console.error(error);
-      res.status(500).send('Error actualizando contraseña del usuario');
+        console.error('Error al actualizar contraseña del usuario:', error);
+        res.status(500).json({ error: 'Error al actualizar contraseña del usuario' });
     }
-  }
+}
   //optener los datos del front
   async login(req, res) {
     const { cedula, contrasena } = req.body;
