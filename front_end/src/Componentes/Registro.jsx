@@ -72,7 +72,7 @@ function Registro() {
             },
           }}
         />
-        <div className=" container1 row justify-content-center">
+        <div className=" container1 row justify-content-center align-items-center" style={{ height: '100vh' }}>
           <div className="col-md-9 col-lg-12 col-xl-10 pulse animated">
             <div className="card shadow-lg o-hidden border-0 mt-5">
               <div className="card-body p-0">
