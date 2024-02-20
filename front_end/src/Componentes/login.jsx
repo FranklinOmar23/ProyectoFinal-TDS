@@ -9,10 +9,12 @@ import '../Css/adicciones.css';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 import BurbujasAnim from './Comp_Helpers/BurbujasAnim';
+import { useAuth } from '../context/provider';
 
 
 const Login = () => {
   const navigate = useNavigate();
+  const { loginUser } = useAuth();
   const handleLogin = async (userData) => {
     try {
       // Validar que los campos no estén vacíos y que la cédula tenga al menos 11 caracteres
@@ -22,6 +24,12 @@ const Login = () => {
 
       const response = await axios.post('http://localhost:4000/login', userData);
       console.log(response.data);
+
+//CARGARE EL CONTEXT
+      loginUser(response.data);
+      console.log('Usuario después de iniciar sesión:', response.data);
+
+
       navigate('/home');
     } catch (error) {
       console.error('Error al iniciar sesión:', error);
