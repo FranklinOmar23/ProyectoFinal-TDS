@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import RegistroCampos from "./Comp_Helpers/RegistroCampos";
 import "../Css/Footer-Dark-icons.css";
 import "../Css/sidebar-menu.css";
 import "../Css/animate.min.css";
 import "../Css/registroestilo.css";
+import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 
 function Registro() {
@@ -13,10 +13,10 @@ function Registro() {
     const [confirmarContrasena, setConfirmarContrasena] = useState('');
     const [cedula, setCedula] = useState('');
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         
-        if (!nombre || !email || !contrasena || !confirmarContrasena) {
+        if (!nombre || !email || !contrasena || !confirmarContrasena || !cedula) {
             toast.error('Por favor, complete todos los campos.');
             return;
         }
@@ -41,11 +41,24 @@ function Registro() {
         return;
     }
 
-          
-        // Aquí iría la lógica para enviar la solicitud de registro al backend
-        // Por ahora, solo mostraremos un mensaje de éxito
-        toast.success('¡Registro exitoso! Redirigiendo a la página de inicio de sesión...');
-    };
+    
+    try {
+
+      const userData = {
+      nombre, 
+      cedula,
+      email,
+      contrasena,
+      confirmarContrasena
+      }
+
+      const response = await axios.post('http://localhost:4000/register', userData);
+      toast.success('¡Registro exitoso! Redirigiendo a la página de inicio de sesión...');
+      console.log(response.data);
+    } catch (error) {
+      toast.error('Error al registrar el usuario');
+    }
+  };
 
     const validateEmail = (email) => {
         const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -128,7 +141,7 @@ function Registro() {
           </div>
         </div>
       );
-      
+    
 }
 
 export default Registro;

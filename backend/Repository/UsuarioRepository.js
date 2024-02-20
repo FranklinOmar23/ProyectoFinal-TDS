@@ -13,18 +13,18 @@ class UsuarioRepository {
   // Las funciones que convierten datos en los maps no deben ser asincronas.
   mapToUserInstance(data) {
     return new Usuario(  
-      data.id,
       data.nombre,
       data.apellido,
       data.cedula,
+      data.correo,
       data.role,
       data.estado,
       data.horario_entrada,
       data.horario_salida,
       data.salario,
       data.telefono,
-      data.photo,
-      data.photo_Vehiculo,
+      data.foto,
+      data.foto_Vehiculo,
       data.contrasena
     );
   }
@@ -50,16 +50,59 @@ class UsuarioRepository {
     }
   }
 
-  async createUser(userData) {
+  async getUserByCedula(cedula) {
     try {
-      const { data, error } = await this.supabase.from(this.tableName).upsert([userData]);
+      const { data, error } = await this.supabase.from(this.tableName).select('*').eq('cedula', cedula);
       if (error) throw error;
 
-      return this.mapToUserInstance(data[0]);
+      return data.length > 0 ? this.mapToUserInstance(data[0]) : null;
+    } catch (error) {
+      throw error;
+    }
+}
+
+  async getUserByEmail(email) {
+    try {
+      const { data, error } = await this.supabase.from(this.tableName).select('*').eq('correo', email);
+      if (error) throw error;
+
+      return data.length > 0 ? this.mapToUserInstance(data[0]) : null;
     } catch (error) {
       throw error;
     }
   }
+  
+  async createUser(userData) {
+    const { nombre, apellido, cedula, correo, role, telefono, contrasena } = userData;
+  
+    if (!nombre || !apellido || !cedula || !correo || !contrasena) {
+      throw new Error("Por favor, complete todos los campos");
+    }
+  
+    try {
+      const hashedPassword = await bcrypt.hash(contrasena, 10);
+  
+      const newUser = await this.supabase.from(this.tableName).upsert([{ 
+        nombre, 
+        apellido, 
+        cedula, 
+        correo,  
+        role: 'USUARIO',
+        telefono, 
+        contrasena: hashedPassword 
+      }]);
+  
+      if (!newUser || newUser.length === 0 || !newUser[0]) {
+        throw new Error("No se recibieron datos válidos del servidor al crear usuario");
+      }
+  
+      return this.mapToUserInstance(newUser[0]);
+    } catch (error) {
+      throw error;
+    }
+  }
+  
+  
 
   async updateUser(userId, updatedUserData) {
     try {
@@ -111,7 +154,7 @@ class UsuarioRepository {
       throw error;
     }
   }
-  //funsion para interactuar con la db
+  //funcion para interactuar con la db
   async loginUser(cedula, contrasena) {
     try {
       // Valida que la cédula tenga al menos 11 dígitos

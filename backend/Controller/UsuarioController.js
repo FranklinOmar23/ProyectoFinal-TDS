@@ -1,6 +1,7 @@
 
 import { UsuarioRepository } from '../Repository/UsuarioRepository.js';  // Ajusta la ruta según tu estructura
 import { generarContraseñaTemporal } from '../logic/genrarContraseña.js';
+import bcrypt from 'bcryptjs';
 
 class UsuarioController {
   constructor() {
@@ -31,7 +32,7 @@ class UsuarioController {
       res.status(500).send('Error actualizando contraseña del usuario');
     }
   }
-  //optener los datos del front
+  //obtener los datos del front
   async login(req, res) {
     const { cedula, contrasena } = req.body;
 
@@ -41,6 +42,44 @@ class UsuarioController {
     } catch (error) {
       console.error(error);
       res.status(401).send('Credenciales inválidas');
+    }
+  }
+
+  async registerUser(req, res) {
+    const {nombre, apellido, cedula, correo, role, telefono, contrasena, confirmarContrasena} = req.body;
+
+    try {
+      const existingUserByCedula = await this.usuarioRepository.getUserByCedula(cedula);
+      if (existingUserByCedula) {
+        return res.status(400).json({ message: "Ya existe un usuario con esta cédula" });
+      }
+      
+      const existingUser = await this.usuarioRepository.getUserByEmail(correo); 
+
+      if (existingUser) {
+        return res.status(400).json({ message: "El correo electrónico ya está en uso" });
+      }
+
+      if (contrasena !== confirmarContrasena) {
+        return res.status(400).json({ message: "Las contraseñas no coinciden" });
+      }
+
+      const hashedPassword = await bcrypt.hash(contrasena, 10);
+
+      const newUser = await this.usuarioRepository.createUser ({
+        nombre,
+        apellido,
+        cedula, 
+        correo,
+        role: 'USUARIO',
+        telefono,
+        contrasena: hashedPassword
+      });
+
+      return res.status(201).json({message:`Usuario ${newUser.nombre} registrado correctamente`, user: newUser}); 
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({message:"Error al registrar el usuario", error: error.message})
     }
   }
 }

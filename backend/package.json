@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "test": "set NODE_OPTIONS=--experimental-vm-modules && jest --detectOpenHandles",
-    "dev": "nodemon index.js --exec babel-node -e js"
+    "dev": "nodemon index.js --exec babel-node -e js",
+    "start": "node index.js"
   },
   "author": "",
   "license": "ISC",
