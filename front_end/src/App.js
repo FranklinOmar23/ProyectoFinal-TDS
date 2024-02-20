@@ -5,6 +5,7 @@ import Olvidocontrase from './Componentes/olvidocontrase';
 import Registro from './Componentes/Registro';
 import Login from './Componentes/login';
 import Home from './Componentes/Home';
+import Nuevamulta from './Componentes/Nuevamulta';
 
 
 function App() {
@@ -13,10 +14,11 @@ function App() {
     <div>
         <BrowserRouter>
           <Routes>
-            <Route path="/Olvidocontra" element={<Olvidocontrase />}/>
-            <Route path="/Registro" element={<Registro />}/>
-            <Route path="/Login" element={<Login />}/>
-            <Route path="/Home" element={<Home />}/>
+            <Route path="/olvidocontrasena" element={<Olvidocontrase />}/>
+            <Route path="/registro" element={<Registro />}/>
+            <Route path="/" element={<Login />}/>
+            <Route path="/home" element={<Home />}/>
+            <Route path="/nuevamulta" element={<Nuevamulta />}/>
           </Routes>
         </BrowserRouter>
     </div>

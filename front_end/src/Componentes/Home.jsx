@@ -3,87 +3,14 @@ import "../Css/Footer-Dark-icons.css";
 import "../Css/sidebar-menu.css";
 import "../Css/bootstrap.min.css";
 import "../Css/animate.min.css";
-import { IconoHistorial, IconoHome, IconoMultas, IconoXD, Icono, IconoTop } from "../Componentes/Comp_Helpers/Iconos.jsx"
-
+import "../Css/adicciones.css"
+import { IconoTop } from "../Componentes/Comp_Helpers/Iconos.jsx"
+import Footer from './Comp_Helpers/Footer.jsx';
+import Navbar from './Comp_Helpers/Navbar.jsx';
+import Topbar from './Comp_Helpers/Topbar.jsx';
 
 import toast, { Toaster } from 'react-hot-toast';
 
-
-function Navbar() {
-    return (
-      <nav className="navbar align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0 navbar-dark" style={{ background: 'rgb(4, 131, 55)', width: '300px' }}>
-        <div className="container-fluid d-flex flex-column p-0">
-          <div className="m-4 d-flex justify-content-center">
-            <a className="navbar-brand" href="#">
-              <img className="img-fluid" width="150" height="150" src="https://nizaero.com/wp-content/uploads/2018/07/Logo-DIGESETT-292x300.png" alt="Logo" />
-            </a>
-          </div>
-          <hr className="sidebar-divider my-0" />
-          <ul className="navbar-nav text-light justify-content-center" id="accordionSidebar">
-            <li className="nav-item"><a className="nav-link active" href="index.html"></a></li>
-            <hr className="sidebar-divider" />
-            <div className="sidebar-heading">
-              <p className="mb-0">Menú</p>
-            </div>
-            
-              {/* Icono del inicio/home */}      
-            <li className="nav-item"><a className="btn btn-primary nav-link btn-lg" role="button" href="index.html" data-bs-target="index.html" style={{ background: 'transparent' }}><IconoHome width={20} height={20} /><i className="fas fa-th-large"></i><span id="spanInicio">Inicio</span></a></li>
-              {/* Icono del perfil */}      
-            <li className="nav-item"><a className="btn btn-primary nav-link " role="button" href="perfil.html" data-bs-target="perfil.html"  style={{ background: 'transparent' }}><IconoXD width={20} height={20} /><i className="fas fa-user-circle"></i><span id="spanPerfil">Perfil</span></a></li>
-              {/* Icono de multa */}      
-            <li className="nav-item"><a className="btn btn-primary nav-link btn-lg" role="button" href="nuevaMulta.html" data-bs-target="nuevaMulta.html"  style={{ background: 'transparent' }}><IconoMultas width={20} height={20} /><i className="fas fa-folder"></i><span id="spanMultas">Nuevas Multas</span></a></li>
-              {/* Icono del historial */}      
-            <li className="nav-item"><a className="btn btn-primary nav-link btn-lg" role="button" href="historial.html" data-bs-target="historial.html"  style={{ background: 'transparent' }}><IconoHistorial width={20} height={20}/><i className="fas fa-chart-area"></i><span id="spanHistorial">&nbsp;Historial</span></a></li>
-            
-            <hr className="sidebar-divider" />
-          </ul>
-          <div className="text-center d-none d-md-inline">
-            <button className="btn rounded-circle border-0" id="sidebarToggle" type="button">
-             <Icono width={40} height={40} /> 
-            </button>
-        </div>
-        </div>
-      </nav>
-    );
-}
-  
-
-function Topbar() {
-    return (
-        <nav className="navbar navbar-expand bg-white shadow mb-4 topbar static-top navbar-light">
-            <div className="container-fluid">
-                <div href="#index.html"></div>
-                <div>
-                    <nav className="navbar navbar-expand navbar-light" id="sidebar-wrapper">
-                        <div className="container"><button data-bs-toggle="collapse" className="navbar-toggler d-none" data-bs-target="#navbarResponsive"></button></div>
-                    </nav>
-                </div>
-                <div></div>
-                <div className="collapse navbar-collapse" id="navbarResponsive">
-                    <h3 className="text-dark mb-0">Home</h3>
-                    <ul className="navbar-nav flex-nowrap ms-auto">
-                        <li className="nav-item dropdown d-sm-none no-arrow show"><a className="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#"><i className="fas fa-search"></i></a>
-                            <div className="dropdown-menu dropdown-menu-end p-3 animated--grow-in" aria-labelledby="searchDropdown">
-                                <form className="me-auto navbar-search w-100">
-                                    <div className="input-group"><input className="bg-light form-control border-0 small" type="text" placeholder="Search for ..." />
-                                        <div className="input-group-append"><button className="btn btn-primary py-0" type="button"><i className="fas fa-search"></i></button></div>
-                                    </div>
-                                </form>
-                            </div>
-                        </li>
-                        <li className="nav-item dropdown no-arrow">
-                            <div className="nav-item dropdown no-arrow"><a className="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#"><span className="d-none d-lg-inline me-2 text-gray-600 small">John Doe</span><img className="border rounded-circle img-profile" src="../avatar1.jpeg" /></a>
-                                <div className="dropdown-menu shadow dropdown-menu-end animated--grow-in"><a className="dropdown-item" href="#"><i className="fas fa-user fa-sm fa-fw me-2 text-gray-400"></i>&nbsp;Perfil</a><a className="dropdown-item" href="#"><i className="fas fa-cogs fa-sm fa-fw me-2 text-gray-400"></i>Ajustes</a>
-                                    <div className="dropdown-divider"></div><a className="dropdown-item" href="#"><strong><span style={{ color: 'rgb(209, 211, 226)' }}>Cerrar Sesión</span></strong></a>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    );
-}
 
 function Map() {
     return (
@@ -196,25 +123,15 @@ function MultasRecientesCard() {
     );
 }
 
-function Footer() {
-    return (
-        <footer className="text-center bg-dark">
-            {/* Contenido del pie de página */}
-            <div className="container text-white py-4 py-lg-5">
-                <p className="mb-0"><br />Dirección General de Seguridad de Tránsito y Transporte Terrestre | DIGESETT<br /><br />Ave. Expreso V Centenario esq. San Martín, Santo Domingo, R.D<br /><br />info@digesett.gob.do<br /><br /></p>
-                <p className="text-muted mb-0">Todos los Derechos Reservados © 2024&nbsp;</p>
-            </div>
-        </footer>
-    );
-}
-
 function Home() {
 
     return (
+        <>
+        <div id="page-top"></div>
         <div id="wrapper">
             <Navbar />
             <div className="d-flex flex-column" id="content-wrapper">
-                <Topbar />
+                <Topbar titulo="Home"/>
                 <div className="container">
                     <div className="row">
                         <Map />
@@ -231,6 +148,7 @@ function Home() {
             </div>
             <a className="border rounded d-inline scroll-to-top" href="#page-top"> <IconoTop width={40} height={40} /><i className="fas fa-angle-up"> </i></a>
         </div>
+        </>
     );
 }
 

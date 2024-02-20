@@ -1,0 +1,10 @@
+.multa-card .multas-wrapper {
+    max-height: 300px; /* Altura máxima del contenedor de las multas */
+    overflow-y: auto; /* Agregar una barra de desplazamiento vertical cuando sea necesario */
+    padding-bottom: 10px; /* Espacio entre el título y el scroll */
+}
+
+.multa-card .multas-scroll {
+    overflow-y: auto; /* Agregar una barra de desplazamiento vertical cuando sea necesario */
+    max-height: calc(100% - 25px); /* Ajustar la altura del scroll */
+}
