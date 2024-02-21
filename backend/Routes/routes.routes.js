@@ -20,5 +20,9 @@ router.post('/reset-password', (req, res) => usuario.updateUserByNewPassword(req
 /*router.get("/newpassword",(rq,rs)=>{
     usuario.updateUserByNewPassword(rq,rs)
 })*/
+
+router.post("/register", (req, res) => {
+    usuario.registerUser(req, res);
+});
   
 export default router;

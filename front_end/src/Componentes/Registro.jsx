@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import RegistroCampos from "./Comp_Helpers/RegistroCampos";
 import "../Css/Footer-Dark-icons.css";
 import "../Css/sidebar-menu.css";
 import "../Css/animate.min.css";
@@ -10,15 +9,16 @@ import BurbujasAnim from './Comp_Helpers/BurbujasAnim';
 
 function Registro() {
   const [nombre, setNombre] = useState('');
-  const [email, setEmail] = useState('');
+  const [apellido, setApellido] = useState('');
+  const [correo, setCorreo] = useState('');
   const [contrasena, setContrasena] = useState('');
   const [confirmarContrasena, setConfirmarContrasena] = useState('');
   const [cedula, setCedula] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!nombre || !email || !contrasena || !confirmarContrasena) {
+    if (!nombre || !apellido || !correo || !contrasena || !confirmarContrasena || !cedula) {
       toast.error('Por favor, complete todos los campos.');
       return;
     }
@@ -28,7 +28,7 @@ function Registro() {
       return;
     }
 
-    if (!validateEmail(email)) {
+    if (!validateEmail(correo)) {
       toast.error('Por favor, ingrese un correo electrónico válido.');
       return;
     }
@@ -44,9 +44,39 @@ function Registro() {
     }
 
 
-    // Aquí iría la lógica para enviar la solicitud de registro al backend
-    // Por ahora, solo mostraremos un mensaje de éxito
-    toast.success('¡Registro exitoso! Redirigiendo a la página de inicio de sesión...');
+    try {
+
+      const data = {
+        nombre,
+        apellido,
+        correo, // Asegúrate de tener el nombre correcto aquí
+        cedula,
+        contrasena,
+      };
+
+      const response = await fetch('http://localhost:4000/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          nombre,
+          apellido,
+          correo, // Asegúrate de tener el nombre correcto aquí
+          cedula,
+          contrasena
+        }),
+      })
+
+      if (response.ok) {
+        toast.success('¡Registro exitoso! ');
+        console.log(response.data);
+      }
+
+
+    } catch (error) {
+      toast.error('Error al registrar el usuario');
+    }
   };
 
   const validateEmail = (email) => {
@@ -81,7 +111,7 @@ function Registro() {
                   <div className="col-lg-5  d-lg-flex flex-column align-items-center">
                     <img className="image1 img-fluid m-auto" src="https://nizaero.com/wp-content/uploads/2018/07/Logo-DIGESETT-292x300.png" alt="Logo" />
                     <h2 className='h2'>DIGESETT</h2>
-                    <h3 className=" h3 text-center">Sistema de gestion de transito</h3>
+                    <h3 className=" h3 text-center">Sistema de Gestión de Tránsito</h3>
                   </div>
                   {/* Formulario de registro */}
                   <div className="col-lg-7">
@@ -96,13 +126,17 @@ function Registro() {
                             <input className="form-control form-control-user" type="text" id="nombre" placeholder="Nombre" value={nombre} onChange={(e) => setNombre(e.target.value)} />
                           </div>
                           <div className="col-sm-6">
-                            {/* Campo para la cédula */}
-                            <input className="form-control form-control-user" type="text" id="cedula" placeholder="Cédula" value={cedula} onChange={(e) => setCedula(e.target.value)} />
+                            {/* Campo para la Apellido */}
+                            <input className="form-control form-control-user" type="text" id="apellido" placeholder="Apellido" value={apellido} onChange={(e) => setApellido(e.target.value)} />
                           </div>
                         </div>
                         <div className="mb-3">
+                          {/* Campo para la Cédula */}
+                          <input className="form-control form-control-user" type="cedula" id="cedula" placeholder="Cédula" value={cedula} onChange={(e) => setCedula(e.target.value)} />
+                        </div>
+                        <div className="mb-3">
                           {/* Campo para el correo electrónico */}
-                          <input className="form-control form-control-user" type="email" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Correo electrónico" value={email} onChange={(e) => setEmail(e.target.value)} />
+                          <input className="form-control form-control-user" type="email" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Correo electrónico" value={correo} onChange={(e) => setCorreo(e.target.value)} />
                         </div>
                         <div className="mb-3 row">
                           {/* Campos para la contraseña*/}
@@ -124,7 +158,6 @@ function Registro() {
                         <p>¿Ya tienes una cuenta? <a href="/">Inicia sesión</a></p>
                         <p>¿Olvidaste tu contraseña? <a href="/olvidocontrasena">Recupérala aquí</a></p>
                       </div>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -134,8 +167,8 @@ function Registro() {
         <BurbujasAnim />
       </div>
     </div>
+  </div>
   );
-
 }
 
 export default Registro;

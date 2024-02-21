@@ -1,7 +1,6 @@
 
 import { SupabaseClientSingleton } from '../data/dbContection.js';
-import { Usuario } from '../Models/Usuario.js'; 
-import bcrypt from 'bcryptjs';
+import { Usuario } from '../Models/Usuario.js';
 
 class UsuarioRepository {
   constructor() {
@@ -23,10 +22,9 @@ class UsuarioRepository {
       data.horario_salida,
       data.salario,
       data.telefono,
-      data.foto,
-      data.foto_Vehiculo,
-      data.contrasena,
-      data.correo
+      data.photo,
+      data.photo_Vehiculo,
+      data.contrasena
     );
   }
 
@@ -51,12 +49,49 @@ class UsuarioRepository {
     }
   }
 
-  async createUser(userData) {
+  async getUserByCedula(cedula) {
     try {
-      const { data, error } = await this.supabase.from(this.tableName).upsert([userData]);
+      const { data, error } = await this.supabase.from(this.tableName).select('*').eq('cedula', cedula);
       if (error) throw error;
 
-      return this.mapToUserInstance(data[0]);
+      return data.length > 0 ? this.mapToUserInstance(data[0]) : null;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getUserByEmail(email) {
+    try {
+      const { data, error } = await this.supabase.from(this.tableName).select('*').eq('correo', email);
+      if (error) throw error;
+
+      return data.length > 0 ? this.mapToUserInstance(data[0]) : null;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async createUser({ nombre, apellido, cedula, correo, role, estado, horario_entrada, horario_salida, salario, telefono, contrasena}) {
+
+    try {
+
+      const newUser = await this.supabase.from(this.tableName).upsert([{
+        nombre,
+        apellido,
+        cedula,
+        correo,
+        estado,
+        horario_entrada,
+        horario_salida,
+        salario,
+        telefono,
+        role: 'USUARIO',
+        telefono,
+        contrasena
+      }]);
+
+
+      return this.mapToUserInstance(newUser[0]);
     } catch (error) {
       throw error;
     }
@@ -92,15 +127,16 @@ class UsuarioRepository {
     try {
         const usuarioActual = await this.getUserByEmail(email);
 
-        if (!usuarioActual) {
-            throw new Error('Usuario no encontrado');
-        }
-
-        // Actualizar la contraseña del usuario
-        const { data, error } = await this.supabase
-            .from(this.usuario)
-            .update({ contrasena: newPassword })
-            .eq('correo', email);
+      if (!usuarioActual) {
+        throw new Error('Usuario no encontrado');
+      }
+      usuarioActual.password = newPassword;
+      const { data, error } = await this.supabase.from(this.tableName).upsert([
+        {
+          id: userId,
+          ...usuarioActual, 
+        },
+      ]);
 
         if (error) {
             throw error;
@@ -110,32 +146,8 @@ class UsuarioRepository {
     } catch (error) {
         throw error;
     }
-}
-
-async getUserByEmail(email) {
-    try {
-        const { data, error } = await this.supabase
-            .from(this.usuario)
-            .select('*')
-            .eq('correo', email);
-
-        if (error) {
-            throw error;
-        }
-        
-        if (!data || data.length === 0) {
-            return null;
-        }
-
-        return this.mapToUserInstance(data[0]);
-    } catch (error) {
-        throw error;
-    }
-}
-
-
-
-  //funsion para interactuar con la db
+  }
+  //funcion para interactuar con la db
   async loginUser(cedula, contrasena) {
     try {
       // Valida que la cédula tenga al menos 11 dígitos
@@ -157,7 +169,7 @@ async getUserByEmail(email) {
       const user = this.mapToUserInstance(data[0]);
 
       // Compara la contraseña proporcionada con la almacenada en la base de datos
-      if (contrasena ==! user.contrasena) {
+      if (contrasena == !user.contrasena) {
         throw new Error('Contraseña incorrecta');
       }
 
@@ -185,4 +197,4 @@ async getUserByEmail(email) {
 
 }
 
-export {UsuarioRepository};
+export { UsuarioRepository };

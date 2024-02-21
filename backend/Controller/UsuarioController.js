@@ -1,6 +1,7 @@
 
 import { UsuarioRepository } from '../Repository/UsuarioRepository.js';  // Ajusta la ruta según tu estructura
 import { generarContraseñaTemporal } from '../logic/genrarContraseña.js';
+import bcrypt from 'bcryptjs';
 
 class UsuarioController {
   constructor() {
@@ -51,8 +52,8 @@ class UsuarioController {
         console.error('Error al actualizar contraseña del usuario:', error);
         res.status(500).json({ error: 'Error al actualizar contraseña del usuario' });
     }
-}
-  //optener los datos del front
+  }
+  //obtener los datos del front
   async login(req, res) {
     const { cedula, contrasena } = req.body;
 
@@ -62,6 +63,45 @@ class UsuarioController {
     } catch (error) {
       console.error(error);
       res.status(401).send('Credenciales inválidas');
+    }
+  }
+
+  async registerUser(req, res) {
+    const {nombre, apellido, cedula, correo, telefono, contrasena, estado, horario_entrada, horario_salida, salario} = req.body;
+    // console.log(nombre, apellido, cedula, correo, telefono, contrasena, estado, horario_entrada, horario_salida, salario)
+
+    try {
+      const existingUserByCedula = await this.usuarioRepository.getUserByCedula(cedula);
+      if (existingUserByCedula) {
+        return res.status(400).json({ message: "Ya existe un usuario con esta cédula" });
+      }
+      
+      const existingUser = await this.usuarioRepository.getUserByEmail(correo); 
+
+      if (existingUser) {
+        return res.status(400).json({ message: "El correo electrónico ya está en uso" });
+      }
+
+      const hashedPassword = await bcrypt.hash(contrasena, 10);
+
+      const newUser = await this.usuarioRepository.createUser ({
+        nombre,
+        apellido,
+        cedula, 
+        correo,
+        estado,
+        horario_entrada,
+        horario_salida,
+        salario,
+        role: 'USUARIO',
+        telefono,
+        contrasena: hashedPassword
+      });
+
+      return res.status(201).json({message:`Usuario ${newUser.nombre} registrado correctamente`, user: newUser}); 
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({message:"Error al registrar el usuario", error: error.message})
     }
   }
 }
