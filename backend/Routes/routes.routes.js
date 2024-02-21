@@ -16,6 +16,7 @@ router.get("/user",(rq, rs)=>{
 
 router.post('/login', (req, res) => usuario.login(req, res));
 router.post('/reset-password', (req, res) => usuario.updateUserByNewPassword(req, res));
+router.post('/getUserNameByCedula', (req, res) => usuario.getUserNameByCedula(req, res));
 
 /*router.get("/newpassword",(rq,rs)=>{
     usuario.updateUserByNewPassword(rq,rs)

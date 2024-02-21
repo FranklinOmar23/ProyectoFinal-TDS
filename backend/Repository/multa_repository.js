@@ -44,7 +44,7 @@ class MultaRepository {
   
     async createMulta(multaData) {
       try {
-        const { data, error } = await this.supabase.from(this.tableName).upsert([multaData]);
+        const { data, error } = await this.supabase.from(this.tableName).insert([multaData]);
         if (error) throw error;
   
         return this.mapToMultaInstance(data[0]);

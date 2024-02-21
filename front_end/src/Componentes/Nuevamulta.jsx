@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState} from "react";
 import "../Css/Footer-Dark-icons.css";
 import "../Css/sidebar-menu.css";
 import "../Css/bootstrap.min.css";
@@ -13,7 +13,8 @@ import NmDatosCon from "./Comp_Helpers/nuevamultaDatosContainer.jsx";
 import NmOtroCon from "./Comp_Helpers/nuevamultaOtrosDetallesContainer.jsx";
 
 function Nuevamulta () {
-
+    const [nombre, setNombre] = useState('');
+  
     return (
         <>
         <div id="page-top"></div>
@@ -22,16 +23,14 @@ function Nuevamulta () {
             <div className="d-flex flex-column" id="content-wrapper">
             <div id="content">
                 <Topbar titulo="Asignación de Multas"/>
-                <div class="container-fluid">
-                    <h3 class="text-dark mb-4">Nueva Multa</h3>
-                    <div class="row mb-3">
-                        <NmCedDes />
-                        <div class="col-lg-8">
-                            <NmDatosCon />
+                <div className="container-fluid">
+                    <h3 className="text-dark mb-4">Nueva Multa</h3>
+                    <div className="row mb-3">
+                        <NmCedDes setNombre={setNombre} />
+                        <div className="col-lg-8">
+                        <NmDatosCon nombre={nombre} />
                             <NmOtroCon />
                         </div>
-
-
                     </div>
 
                 </div>
