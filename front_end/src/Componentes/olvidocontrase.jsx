@@ -60,7 +60,7 @@ function Olvidocontrase() {
                                     <div className="p-5" style={{ background: 'var(--bs-card-border-color)' }}>
                                         <div className="text-center">
                                             <h4 className="text-dark mb-2">Se le olvidó la contraseña?</h4>
-                                            <p className="mb-4">Lo Entendemos, estas cosas pasan. Ingresa tu direccion de correo electrónico abajo y te enviaremos un enlace para restablecer la contraseña!</p>
+                                            <p className="mb-4">Lo entendemos, estas cosas pasan. Ingresa tu direccion de correo electrónico abajo y te enviaremos un enlace para restablecer la contraseña!</p>
                                         </div>
                                         <OlvidocontraCampos onSubmit={handleResetPassword} setEmail={setEmail} />
                                         <div className="text-center">

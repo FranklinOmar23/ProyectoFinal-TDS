@@ -46,7 +46,8 @@ class UsuarioController {
   }
 
   async registerUser(req, res) {
-    const {nombre, apellido, cedula, correo, role, telefono, contrasena, confirmarContrasena} = req.body;
+    const {nombre, apellido, cedula, correo, telefono, contrasena, estado, horario_entrada, horario_salida, salario} = req.body;
+    // console.log(nombre, apellido, cedula, correo, telefono, contrasena, estado, horario_entrada, horario_salida, salario)
 
     try {
       const existingUserByCedula = await this.usuarioRepository.getUserByCedula(cedula);
@@ -60,9 +61,9 @@ class UsuarioController {
         return res.status(400).json({ message: "El correo electrónico ya está en uso" });
       }
 
-      if (contrasena !== confirmarContrasena) {
-        return res.status(400).json({ message: "Las contraseñas no coinciden" });
-      }
+      // if (contrasena !== confirmarContrasena) {
+      //   return res.status(400).json({ message: "Las contraseñas" });
+      // }
 
       const hashedPassword = await bcrypt.hash(contrasena, 10);
 
@@ -71,6 +72,10 @@ class UsuarioController {
         apellido,
         cedula, 
         correo,
+        estado,
+        horario_entrada,
+        horario_salida,
+        salario,
         role: 'USUARIO',
         telefono,
         contrasena: hashedPassword

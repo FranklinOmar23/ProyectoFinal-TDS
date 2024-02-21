@@ -1,6 +1,6 @@
 
 import { SupabaseClientSingleton } from '../data/dbContection.js';
-import { Usuario } from '../Models/Usuario.js'; 
+import { Usuario } from '../Models/Usuario.js';
 import bcrypt from 'bcryptjs';
 
 class UsuarioRepository {
@@ -11,21 +11,21 @@ class UsuarioRepository {
   }
 
   // Las funciones que convierten datos en los maps no deben ser asincronas.
-  mapToUserInstance(data) {
-    return new Usuario(  
-      data.nombre,
-      data.apellido,
-      data.cedula,
-      data.correo,
-      data.role,
-      data.estado,
-      data.horario_entrada,
-      data.horario_salida,
-      data.salario,
-      data.telefono,
-      data.foto,
-      data.foto_Vehiculo,
-      data.contrasena
+  mapToUserInstance(nombre, apellido, cedula, correo, role, telefono, contrasena, estado, horario_entrada, horario_salida, salario) {
+    return new Usuario(
+      nombre,
+      apellido,
+      cedula,
+      correo,
+      role,
+      estado,
+      horario_entrada,
+      horario_salida,
+      salario,
+      telefono,
+      // foto,
+      // foto_Vehiculo,
+      contrasena
     );
   }
 
@@ -59,7 +59,7 @@ class UsuarioRepository {
     } catch (error) {
       throw error;
     }
-}
+  }
 
   async getUserByEmail(email) {
     try {
@@ -71,38 +71,57 @@ class UsuarioRepository {
       throw error;
     }
   }
-  
-  async createUser(userData) {
-    const { nombre, apellido, cedula, correo, role, telefono, contrasena } = userData;
-  
-    if (!nombre || !apellido || !cedula || !correo || !contrasena) {
-      throw new Error("Por favor, complete todos los campos");
-    }
-  
+
+  async createUser({ nombre, apellido, cedula, correo, role, estado, horario_entrada, horario_salida, salario, telefono, contrasena}) {
+
+    // const nombre = nombre;
+    // const apellido = apellido;
+    // const cedula = cedula;
+    // const correo = correo;
+    // const role = role;
+    // const telefono = telefono;
+    // const contrasena = contrasena;
+
+
+    console.log(nombre, apellido, cedula, correo, role, telefono, contrasena);
+
+    // if (!nombre || !apellido || !cedula || !correo || !contrasena) {
+    //   throw Error("Por favor, complete todos los campos o te mato");
+    // }
+
     try {
-      const hashedPassword = await bcrypt.hash(contrasena, 10);
-  
-      const newUser = await this.supabase.from(this.tableName).upsert([{ 
-        nombre, 
-        apellido, 
-        cedula, 
-        correo,  
+      // const hashedPassword = await bcrypt.hash(contrasena, 10);
+
+      // console.log(estado);
+
+      const newUser = await this.supabase.from(this.tableName).upsert([{
+        nombre,
+        apellido,
+        cedula,
+        correo,
+        estado,
+        horario_entrada,
+        horario_salida,
+        salario,
+        telefono,
         role: 'USUARIO',
-        telefono, 
-        contrasena: hashedPassword 
+        telefono,
+        contrasena
       }]);
-  
-      if (!newUser || newUser.length === 0 || !newUser[0]) {
-        throw new Error("No se recibieron datos válidos del servidor al crear usuario");
-      }
-  
+
+      console.log(newUser)
+
+      // if (!newUser || newUser.length === 0 || !newUser[0]) {
+      //   throw new Error("No se recibieron datos válidos del servidor al crear usuario");
+      // }
+
       return this.mapToUserInstance(newUser[0]);
     } catch (error) {
       throw error;
     }
   }
-  
-  
+
+
 
   async updateUser(userId, updatedUserData) {
     try {
@@ -141,7 +160,7 @@ class UsuarioRepository {
       const { data, error } = await this.supabase.from(this.tableName).upsert([
         {
           id: userId,
-          ...usuarioActual, 
+          ...usuarioActual,
         },
       ]);
 
@@ -176,7 +195,7 @@ class UsuarioRepository {
       const user = this.mapToUserInstance(data[0]);
 
       // Compara la contraseña proporcionada con la almacenada en la base de datos
-      if (contrasena ==! user.contrasena) {
+      if (contrasena == !user.contrasena) {
         throw new Error('Contraseña incorrecta');
       }
 
@@ -187,4 +206,4 @@ class UsuarioRepository {
   }
 }
 
-export {UsuarioRepository};
+export { UsuarioRepository };
