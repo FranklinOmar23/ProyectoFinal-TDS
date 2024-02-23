@@ -1,17 +1,24 @@
-import { MultaRepository } from "../Repository/multa_repository";
+import { MultaRepository } from "../Repository/multa_repository.js";
 
 class MultaController {
     constructor() {
-        this.MultaRepository = new MultaRepository();
-    }
-    async createMulta(req, res) {
-        const multaData = req.body; // Asumiendo que los datos de la multa están en el cuerpo de la solicitud
-        try {
-            const nuevaMulta = await multaRepository.createMulta(multaData);
-            res.status(201).json(nuevaMulta);
-        } catch (error) {
-            res.status(500).json({ message: 'Error al crear la multa', error: error.message });
-        }
+        this.multaRepository = new MultaRepository();
     }
 
+    async createMulta(req, res) {
+      const { cedula_usuario, nombre_multado, matricula, placa, razon, monto } = req.body;
+      const fecha = new Date(); // Obtener la fecha actual
+      const multaData = { cedula_usuario, nombre_multado, matricula, placa, razon, fecha, monto };
+
+      try {
+          const multa = await this.multaRepository.createMulta(multaData);
+          res.status(201).json({ message: 'Multa creada exitosamente', multa });
+      } catch (error) {
+          console.error('Error al crear la multa:', error);
+          res.status(500).json({ error: 'Error al crear la multa' });
+      }
+  }
+
 }
+
+export { MultaController };
