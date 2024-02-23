@@ -1,6 +1,6 @@
 
-import { SupabaseClientSingleton } from './dbconnection';
-import { Multa } from '../Models/Multa';
+import { SupabaseClientSingleton } from '../Data/dbContection.js';
+import { Multa } from '../Models/Multa.js';
 
 class MultaRepository {
     constructor() {
@@ -12,10 +12,11 @@ class MultaRepository {
       return new Multa(
         data.id,
         data.cedula_usuario,
+        data.nombre_multado,
         data.matricula,
         data.placa,
         data.razon,
-        data.fecha,
+        new Date().toISOString(),
         data.monto
       );
     }
@@ -44,15 +45,17 @@ class MultaRepository {
   
     async createMulta(multaData) {
       try {
-        const { data, error } = await this.supabase.from(this.tableName).upsert([multaData]);
-        if (error) throw error;
-  
-        return this.mapToMultaInstance(data[0]);
+          console.log('Intentando insertar multa:', multaData);
+          const { error } = await this.supabase.from(this.tableName).upsert([multaData]);
+          if (error) throw error;
+          console.log('Multa insertada exitosamente');
       } catch (error) {
-        throw error;
+          throw error;
       }
     }
-  
+    
+    
+    
     async updateMulta(multaId, updatedMultaData) {
       try {
         const { data, error } = await this.supabase.from(this.tableName).upsert([
