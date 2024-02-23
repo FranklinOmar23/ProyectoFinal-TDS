@@ -8,3 +8,22 @@
     overflow-y: auto; /* Agregar una barra de desplazamiento vertical cuando sea necesario */
     max-height: calc(100% - 25px); /* Ajustar la altura del scroll */
 }
+
+.imagencontainer {
+    width: 270px;
+    height: 200px;
+    border: 2px solid #ced4da;
+    overflow: hidden;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0; /* Asegura que no haya relleno */
+    border-radius: 8px;
+}
+
+.imagenfoto {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    margin: 0; /* Asegura que no haya márgenes */
+    padding: 0; /* Asegura que no haya relleno */
+}

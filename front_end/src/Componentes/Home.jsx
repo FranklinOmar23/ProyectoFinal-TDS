@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import "../Css/Footer-Dark-icons.css";
 import "../Css/sidebar-menu.css";
 import "../Css/bootstrap.min.css";
 import "../Css/animate.min.css";
 import "../Css/adicciones.css"
+import "../Css/relojestilo.css";
+import "../Css/graficopastel.css";
 import { IconoTop } from "../Componentes/Comp_Helpers/Iconos.jsx"
 import Footer from './Comp_Helpers/Footer.jsx';
 import Navbar from './Comp_Helpers/Navbar.jsx';
@@ -13,12 +15,21 @@ import toast, { Toaster } from 'react-hot-toast';
 
 
 function Map() {
+    const googleMapsUrl = "https://www.google.com/maps/embed/v1/place?key=AIzaSyBIwLAPjCguzhFQCiT4RuILjVdUVVp_dq4&q=Santo+Domingo,Republica+Dominicana";
+
     return (
         <div className="col-md-6">
-            <iframe allowFullScreen frameBorder="0" src="https://cdn.bootstrapstudio.io/placeholders/map.html" width="100%" height="400"></iframe>
+            <iframe 
+                allowFullScreen 
+                frameBorder="0" 
+                src={googleMapsUrl} 
+                width="100%" 
+                height="400">
+            </iframe>
         </div>
     );
 }
+
 
 function InformacionesCard() {
     return (
@@ -97,31 +108,107 @@ function InformacionesCard() {
 
 function MultasRecientesCard() {
     return (
-        <div className="col">
-            {/* Contenido de la tarjeta de Multas Recientes */}
+        <div className="col-md-6">
             <div className="card shadow mb-4">
                 <div className="card-header py-3">
                     <h6 className="text-success fw-bold m-0">Multas Recientes</h6>
                 </div>
-                <div className="card-body">
-                    <h4 className="small fw-bold">Customer Database<span className="float-end">60%</span></h4>
-                    <div className="progress mb-4">
-                        <div className="progress-bar bg-primary" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{ width: '60%' }}><span className="visually-hidden">60%</span></div>
+                <div className="card-body" style={{ minHeight: '250px', position: 'relative' }}>
+                    <div className="pie-chart" style={{ width: '200px', height: '200px', margin: '60px auto 20px' }}>
+                        <div className="slice" style={{ '--value': 45 }}>
+                            <span className="value-label">45%</span>
+                        </div>
+                        <div className="slice" style={{ '--value': 30 }}>
+                            <span className="value-label">30%</span>
+                        </div>
+                        <div className="slice" style={{ '--value': 15 }}>
+                            <span className="value-label">15%</span>
+                        </div>
+                        <div className="slice" style={{ '--value': 10 }}>
+                            <span className="value-label">10%</span>
+                        </div>
                     </div>
-                    <h4 className="small fw-bold">Payout Details<span className="float-end">80%</span></h4>
-                    <div className="progress mb-4">
-                        <div className="progress-bar bg-info" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style={{ width: '80%' }}><span className="visually-hidden">80%</span></div>
-                    </div>
-                    <h4 className="small fw-bold">Account setup<span className="float-end">Complete!</span></h4>
-                    <div className="progress mb-4">
-                        <div className="progress-bar bg-success" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style={{ width: '100%' }}><span className="visually-hidden">100%</span></div>
-                    </div>
+                    <ul className="legend" style={{  }}>
+                        <li>
+                            <span className="dot" style={{ background: 'rgb(122, 187, 139)' }}></span>
+                            Uso del Celular
+                        </li>
+                        <li>
+                            <span className="dot" style={{ background: 'rgb(147, 199, 89)' }}></span>
+                            Sin matrícula
+                        </li>
+                        <li>
+                            <span className="dot" style={{ background: 'rgb(180, 123, 91)' }}></span>
+                            Sin cinturón
+                        </li>
+                        <li>
+                            <span className="dot" style={{ background: 'rgb(199, 191, 115)' }}></span>
+                            Obstrución al peatón
+                        </li>
+                    </ul>
                 </div>
-
             </div>
         </div>
     );
 }
+
+
+
+
+
+function Reloj() {
+    const [tiempo, setTiempo] = useState({ horas: 0, minutos: 0, segundos: 0 });
+
+    useEffect(() => {
+        const horasAFuturo = 5; 
+        const fechaFinalizacion = new Date();
+        fechaFinalizacion.setHours(fechaFinalizacion.getHours() + horasAFuturo);
+
+        const intervalo = setInterval(() => {
+            const ahora = new Date().getTime();
+            const diferencia = fechaFinalizacion - ahora;
+
+            const horas = Math.floor((diferencia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutos = Math.floor((diferencia % (1000 * 60 * 60)) / (1000 * 60));
+            const segundos = Math.floor((diferencia % (1000 * 60)) / 1000);
+
+            setTiempo({ horas, minutos, segundos });
+
+            if (diferencia < 0) {
+                clearInterval(intervalo);
+            }
+        }, 1000);
+
+        return () => clearInterval(intervalo);
+    }, []);
+
+    return (
+        <div className="col-md-6">
+            <div className="card shadow mb-4">
+                <div className="card-header py-3">
+                    <h6 className="text-success fw-bold m-0">Tiempo de finalización</h6>
+                </div>
+                <div className="body-card">
+                    <div className='reloj-item'>
+                        <div className='horas'>{tiempo.horas}</div> 
+                        <p>Hora</p>
+                    </div>
+                    <div className='reloj-item'>
+                        <div className='minutos'>{tiempo.minutos}</div>
+                        <p>Minutos</p>
+                    </div>
+                    <div className='reloj-item'>
+                        <div className='segundos'>{tiempo.segundos}</div>
+                        <p>Segundos</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+
+
 
 function Home() {
 
@@ -142,6 +229,7 @@ function Home() {
                     <div className="d-sm-flex justify-content-between align-items-center mb-4"></div>
                     <div className="row">
                         <MultasRecientesCard />
+                        <Reloj />
                     </div>
                 </div>
                 <Footer />

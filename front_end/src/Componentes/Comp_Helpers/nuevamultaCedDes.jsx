@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import axios from 'axios';
 import NmDatosCon from "./nuevamultaDatosContainer.jsx";
+import carImage from "../../carroprovisionalMulta.jpg";
+import "../../Css/nuevamulta.css"
 
 function NmCedDes({ setNombre, setCedula }) {
     const [cedula, setCedulaState] = useState(""); // Estado para almacenar la cédula
@@ -38,6 +40,23 @@ function NmCedDes({ setNombre, setCedula }) {
                         />
                     </div>
                 </div>
+                <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="text-success fw-bold m-0">Vehículo</h6>
+                        </div>
+                        <div class="card-body">
+                        <div className="row">
+                            <div className="col-auto d-flex justify-content-center align-items-center imagencontainer" style={{ minHeight: '150px' }}>
+                                {/* Espacio reservado para la imagen */}
+                                {carImage ? (
+                                    <img src={carImage} alt="Carro" className="imagenfoto" />
+                                ) : (
+                                    <span>No hay foto disponible</span>
+                                )}
+                            </div>
+                        </div>
+                        </div>
+                    </div>
                 <div className="multa-card">
                     <div className="card">
                         <div className="card-body">

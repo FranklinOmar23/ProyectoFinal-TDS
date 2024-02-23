@@ -60,7 +60,7 @@ function Olvidocontrase() {
                         },
                     }}
                 />
-                <div className="row justify-content-center">
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
                     <div className="container1 col-md-9 col-lg-12 col-xl-10 pulse animated">
                         <div className="card shadow-lg o-hidden border-0 my-5">
                             <div className="card-body p-0">
@@ -82,7 +82,7 @@ function Olvidocontrase() {
                                                 <a className="link-body-emphasis small" href="/Registro">Crear una cuenta!</a>
                                             </div>
                                             <div className="text-center">
-                                                <a className="link-body-emphasis small" href="/Login">Ya estás registrado? Inicia Sesión!</a>
+                                                <a className="link-body-emphasis small" href="/">Ya estás registrado? Inicia Sesión!</a>
                                             </div>
                                         </div>
                                     </div>
