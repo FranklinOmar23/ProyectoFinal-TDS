@@ -1,4 +1,3 @@
-
 import { SupabaseClientSingleton } from '../data/dbContection.js';
 import { Usuario } from '../Models/Usuario.js';
 
@@ -173,6 +172,31 @@ class UsuarioRepository {
       throw error;
     }
   }
+  async getUserNameByCedula(cedula) {
+    try {
+      // Realizar la consulta a la base de datos para obtener el nombre del usuario
+      const { data, error } = await this.supabase
+        .from(this.usuario)
+        .select('nombre')
+        .eq('cedula', cedula);
+  
+      if (error) {
+        throw error;
+      }
+  
+      // Verificar si se encontraron datos
+      if (!data || data.length === 0) {
+        throw new Error('Usuario no encontrado');
+      }
+  
+      // Extraer el nombre del usuario de los datos devueltos por la consulta
+      const { nombre } = data[0];
+      return nombre;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   /*async updateUserByNewPassword(req, res) {
     const userId = req.params.id; // Obtener el ID del usuario de la solicitud
     const { newPassword } = req.body; // Obtener la nueva contraseña del cuerpo de la solicitud

@@ -6,7 +6,7 @@ class Multa {
       this.matricula = matricula;
       this.placa = placa;
       this.razon = razon;
-      this.fecha = fecha;
+      this.fecha = new Date().toISOString();
       this.monto = monto;
     }
   }

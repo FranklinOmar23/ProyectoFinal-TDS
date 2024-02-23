@@ -1,0 +1,69 @@
+.pie-chart {
+    position: relative;
+    width: 200px; /* Aumentamos el tamaño del gráfico */
+    height: 200px; /* Aumentamos el tamaño del gráfico */
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 40px auto 20px; /* Centrar horizontalmente y agregar espacio en la parte superior */
+}
+
+.slice {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    clip-path: polygon(50% 50%, 100% 0, 100% 100%);
+    transform-origin: 50% 50%;
+}
+
+.slice:nth-child(1) {
+    background: rgb(122, 187, 139);
+    transform: rotate(calc(var(--value) * 1deg));
+}
+
+.slice:nth-child(2) {
+    background: rgb(147, 199, 89);
+    transform: rotate(calc(var(--value) * 1deg + 90deg)); /* Modificamos el ángulo para ajustar el espacio */
+}
+
+.slice:nth-child(3) {
+    background: rgb(180, 123, 91);
+    transform: rotate(calc(var(--value) * 1deg + 180deg)); /* Modificamos el ángulo para ajustar el espacio */
+}
+
+.slice:nth-child(4) {
+    background: rgb(199, 191, 115);
+    transform: rotate(calc(var(--value) * 1deg + 270deg)); /* Modificamos el ángulo para ajustar el espacio */
+}
+
+.legend {
+    list-style-type: none;
+    padding: 0;
+    position: absolute;
+    top: 10px; /* Ajustamos la posición vertical para que esté arriba del gráfico */
+    left: 50%; /* Centrar horizontalmente */
+    transform: translateX(-50%); /* Centrar horizontalmente */
+    width: 100%; /* Ajuste para que las leyendas se extiendan horizontalmente */
+    text-align: center; /* Centrar texto horizontalmente */
+}
+
+.legend li {
+    display: inline-block; /* Para que las leyendas estén en línea */
+    margin: 0 10px; /* Espacio entre las leyendas */
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 5px;
+}
+
+/* Estilos para los indicadores de color */
+.color-indicator {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 5px;
+}

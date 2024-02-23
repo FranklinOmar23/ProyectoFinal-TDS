@@ -6,6 +6,7 @@ import Registro from './Componentes/Registro';
 import Login from './Componentes/login';
 import Home from './Componentes/Home';
 import Nuevamulta from './Componentes/Nuevamulta';
+import Perfil from './Componentes/perfil';
 
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
             <Route path="/" element={<Login />}/>
             <Route path="/home" element={<Home />}/>
             <Route path="/nuevamulta" element={<Nuevamulta />}/>
+            <Route path="/perfil" element={<Perfil />}/>
           </Routes>
         </BrowserRouter>
     </div>
