@@ -46,14 +46,6 @@ function Registro() {
 
     try {
 
-      const data = {
-        nombre,
-        apellido,
-        correo, // Asegúrate de tener el nombre correcto aquí
-        cedula,
-        contrasena,
-      };
-
       const response = await fetch('http://localhost:4000/register', {
         method: 'POST',
         headers: {
@@ -68,11 +60,16 @@ function Registro() {
         }),
       })
 
-      if (response.ok) {
-        toast.success('¡Registro exitoso! ');
-        console.log(response.data);
-      }
+      const responseData = await response.json();
 
+      if (response.ok) {
+        toast.success('¡Registro exitoso!');
+        setTimeout(() => {
+          window.location.href = 'http://localhost:3000/';
+        }, 1000); // 
+      } else {
+       toast.error(responseData.message)
+      }
 
     } catch (error) {
       toast.error('Error al registrar el usuario');
@@ -159,6 +156,7 @@ function Registro() {
                         <p>¿Olvidaste tu contraseña? <a href="/olvidocontrasena">Recupérala aquí</a></p>
                       </div>
                   </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -167,7 +165,6 @@ function Registro() {
         <BurbujasAnim />
       </div>
     </div>
-  </div>
   );
 }
 

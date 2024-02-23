@@ -620,7 +620,7 @@
     border-radius: 50%; /* Hace que el elemento sea circular */
     background: #5cb85c;
     /* Coloca el círculo en la esquina superior izquierda del contenedor */
-    top: 330px;
+    top: 430px;
     left: -80px;
   }
 

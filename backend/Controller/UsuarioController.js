@@ -19,6 +19,7 @@ class UsuarioController {
       res.status(500).send('Error obteniendo usuarios');
     }
   }  
+
   async updateUserByNewPassword(req, res) {
     const { email, newPassword } = req.body;
 
@@ -53,6 +54,7 @@ class UsuarioController {
         res.status(500).json({ error: 'Error al actualizar contraseña del usuario' });
     }
   }
+
   //obtener los datos del front
   async login(req, res) {
     const { cedula, contrasena } = req.body;
@@ -68,18 +70,17 @@ class UsuarioController {
 
   async registerUser(req, res) {
     const {nombre, apellido, cedula, correo, telefono, contrasena, estado, horario_entrada, horario_salida, salario} = req.body;
-    // console.log(nombre, apellido, cedula, correo, telefono, contrasena, estado, horario_entrada, horario_salida, salario)
 
     try {
+
       const existingUserByCedula = await this.usuarioRepository.getUserByCedula(cedula);
       if (existingUserByCedula) {
-        return res.status(400).json({ message: "Ya existe un usuario con esta cédula" });
+        return res.status(400).json({ message: "Ya existe un usuario con esta cédula." });
       }
       
       const existingUser = await this.usuarioRepository.getUserByEmail(correo); 
-
       if (existingUser) {
-        return res.status(400).json({ message: "El correo electrónico ya está en uso" });
+        return res.status(400).json({ message: "El correo electrónico ya está en uso." });
       }
 
       const hashedPassword = await bcrypt.hash(contrasena, 10);

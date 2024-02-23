@@ -10,21 +10,19 @@ class UsuarioRepository {
   }
 
   // Las funciones que convierten datos en los maps no deben ser asincronas.
-  mapToUserInstance(data) {
+  mapToUserInstance( nombre, apellido, cedula, role, estado, horario_entrada, horario_salida, salario, contrasena) {
     return new Usuario(  
-      data.id,
-      data.nombre,
-      data.apellido,
-      data.cedula,
-      data.role,
-      data.estado,
-      data.horario_entrada,
-      data.horario_salida,
-      data.salario,
-      data.telefono,
-      data.photo,
-      data.photo_Vehiculo,
-      data.contrasena
+       nombre,
+       apellido,
+       cedula,
+       role,
+       estado,
+       horario_entrada,
+       horario_salida,
+       salario,
+      //  foto,
+      //  foto_Vehiculo,
+       contrasena
     );
   }
 
@@ -71,7 +69,7 @@ class UsuarioRepository {
     }
   }
 
-  async createUser({ nombre, apellido, cedula, correo, role, estado, horario_entrada, horario_salida, salario, telefono, contrasena}) {
+  async createUser({ nombre, apellido, cedula, correo, role, estado, horario_entrada, horario_salida, salario, contrasena}) {
 
     try {
 
@@ -84,12 +82,9 @@ class UsuarioRepository {
         horario_entrada,
         horario_salida,
         salario,
-        telefono,
         role: 'USUARIO',
-        telefono,
         contrasena
       }]);
-
 
       return this.mapToUserInstance(newUser[0]);
     } catch (error) {

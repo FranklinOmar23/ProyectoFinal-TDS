@@ -56,7 +56,7 @@ const Login = () => {
                           alt="Logo"
                         />
                         <h2 >DIGESETT</h2>
-                        <h3 className="text-center">Sistema de gestion de transito</h3>
+                        <h3 className="text-center">Sistema de Gestión de Tránsito</h3>
                       </div>
                       <div className="col-lg-6">
                         <div className="p-5" style={{ background: 'var(--bs-card-border-color)' }}>
