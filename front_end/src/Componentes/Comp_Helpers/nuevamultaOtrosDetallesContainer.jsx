@@ -1,15 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import NmRazon from "./nuevamultaRazones";
+import useLocalStorage from "../../helpers/localStorage"; // Asegúrate de importar el Hook correctamente
 
-function NmOtroCon () {
-
-    const [monto, setMonto] = useState('RD$0.00');
+function NmOtroCon({ onFormDataChange }) {
+    const [selectedRazon, setSelectedRazon] = useLocalStorage('selectedRazon', '');
+    const [monto, setMonto] = useLocalStorage('monto', 'RD$0.00');
 
     const handleRazonChange = (event) => {
         const razonSeleccionada = event.target.value;
-        // Aquí puedes escribir la lógica para asignar el monto correspondiente a la razón seleccionada
-        // Por ejemplo:
-        switch (razonSeleccionada) {
+        setSelectedRazon(razonSeleccionada);
+    };
+
+    useEffect(() => {
+        switch (setSelectedRazon) {
             case 'Sin licencia (ART 29)':
                 setMonto('RD$1,000.00');
                 break;
@@ -147,37 +150,47 @@ function NmOtroCon () {
             default:
                 setMonto('RD$0.00');
         }
-    };
 
-    return(
+    }, [selectedRazon]);
+
+    const handleSaveToLocal = () => {
+        const formData = {
+            razon: selectedRazon,
+            monto: monto,
+        };
+        console.log("Guardando en local:", formData); // Depuración
+        onFormDataChange(formData);
+    };
+    
+    return (
         <>
-    <div class="card shadow">
-    <div class="card-header py-3">
-        <p class="text-success m-0 fw-bold">Otros detalles</p>
-    </div>
-    <div class="card-body">
-        <form>
-            <div class="mb-3">
-                <label class="form-label" for="reason"><strong>Razón</strong></label>
-                <select class="form-select" id="reason" name="reason" onChange={handleRazonChange}>
-                    <NmRazon />
-                </select>
-            </div>
-            <div class="row">
-                <div class="col">
-                    <div class="mb-3">
-                        <label class="form-label" for="city"><strong>Monto</strong></label>
-                        <input className="form-control" type="text" id="city" value={monto} disabled />
-                    </div>
+            <div className="card shadow">
+                <div className="card-header py-3">
+                    <p className="text-success m-0 fw-bold">Otros detalles</p>
                 </div>
-                <div class="col"></div>
+                <div className="card-body">
+                    <form>
+                        <div className="mb-3">
+                            <label className="form-label" htmlFor="reason"><strong>Razón</strong></label>
+                            <select className="form-select" id="reason" name="reason" onChange={handleRazonChange}>
+                                <NmRazon />
+                            </select>
+                        </div>
+                        <div className="row">
+                            <div className="col">
+                                <div className="mb-3">
+                                    <label className="form-label" htmlFor="city"><strong>Monto</strong></label>
+                                    <input className="form-control" type="text" id="city" value={monto} disabled />
+                                </div>
+                            </div>
+                            <div className="col"></div>
+                        </div>
+                        <div className="mb-3">
+                            <button className="btn btn-success btn-sm link-light" type="button" onClick={handleSaveToLocal}>Guardar en Local</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="mb-3">
-                <button class="btn btn-success btn-sm link-light" type="submit">Save&nbsp;Settings</button>
-            </div>
-        </form>
-    </div>
-</div>
         </>
     )
 }
