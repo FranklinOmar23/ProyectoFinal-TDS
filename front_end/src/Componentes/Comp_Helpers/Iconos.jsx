@@ -83,7 +83,7 @@ export const IconoTop = ({ width, height }) => {
             <lord-icon
                src="https://cdn.lordicon.com/dwoxxgps.json"
                trigger="hover"
-               style={{ width: `${width}px`, height: `${height}px`  }} 
+               style={{ width: `${width}px`, height: `${height}px` , top: '1px' }} 
             >
             </lord-icon>
         </>
