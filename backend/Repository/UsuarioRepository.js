@@ -1,7 +1,6 @@
 
 import { SupabaseClientSingleton } from '../Data/dbContection.js';
 import { Usuario } from '../Models/Usuario.js'; 
-import bcrypt from 'bcryptjs';
 
 class UsuarioRepository {
   constructor() {
@@ -11,22 +10,19 @@ class UsuarioRepository {
   }
 
   // Las funciones que convierten datos en los maps no deben ser asincronas.
-  mapToUserInstance(data) {
+  mapToUserInstance( nombre, apellido, cedula, role, estado, horario_entrada, horario_salida, salario, contrasena) {
     return new Usuario(  
-      data.id,
-      data.nombre,
-      data.apellido,
-      data.cedula,
-      data.role,
-      data.estado,
-      data.horario_entrada,
-      data.horario_salida,
-      data.salario,
-      data.telefono,
-      data.foto,
-      data.foto_Vehiculo,
-      data.contrasena,
-      data.correo
+       nombre,
+       apellido,
+       cedula,
+       role,
+       estado,
+       horario_entrada,
+       horario_salida,
+       salario,
+      //  foto,
+      //  foto_Vehiculo,
+       contrasena
     );
   }
 
@@ -39,24 +35,52 @@ class UsuarioRepository {
       console.log(error.message);
     }
   }
-
   async getUserById(userId) {
     try {
       const { data, error } = await this.supabase.from(this.tableName).select('*').eq('id', userId);
       if (error) throw error;
-
+      return data.length > 0 ? this.mapToUserInstance(data[0]) : null;
+    } catch (error) {
+      throw error;
+    }
+  }
+  async getUserByCedula(cedula) {
+    try {
+      const { data, error } = await this.supabase.from(this.tableName).select('*').eq('cedula', cedula);
+      if (error) throw error;
+      return data.length > 0 ? this.mapToUserInstance(data[0]) : null;
+    } catch (error) {
+      throw error;
+    }
+  }
+  async getUserByEmail(email) {
+    try {
+      const { data, error } = await this.supabase.from(this.tableName).select('*').eq('correo', email);
+      if (error) throw error;
       return data.length > 0 ? this.mapToUserInstance(data[0]) : null;
     } catch (error) {
       throw error;
     }
   }
 
-  async createUser(userData) {
-    try {
-      const { data, error } = await this.supabase.from(this.tableName).upsert([userData]);
-      if (error) throw error;
+  async createUser({ nombre, apellido, cedula, correo, role, estado, horario_entrada, horario_salida, salario, contrasena}) {
 
-      return this.mapToUserInstance(data[0]);
+    try {
+
+      const newUser = await this.supabase.from(this.tableName).upsert([{
+        nombre,
+        apellido,
+        cedula,
+        correo,
+        estado,
+        horario_entrada,
+        horario_salida,
+        salario,
+        role: 'USUARIO',
+        contrasena
+      }]);
+
+      return this.mapToUserInstance(newUser[0]);
     } catch (error) {
       throw error;
     }
@@ -71,7 +95,6 @@ class UsuarioRepository {
         },
       ]);
       if (error) throw error;
-
       return this.mapToUserInstance(data[0]);
     } catch (error) {
       throw error;
@@ -190,8 +213,9 @@ async getUserByEmail(email) {
       throw error;
     }
   }
+  
 
-  /*async updateUserByNewPassword(req, res) {
+  async updateUserByNewPassword(req, res) {
     const userId = req.params.id; // Obtener el ID del usuario de la solicitud
     const { newPassword } = req.body; // Obtener la nueva contraseña del cuerpo de la solicitud
 
@@ -206,7 +230,7 @@ async getUserByEmail(email) {
         console.error(error);
         res.status(500).send('Error actualizando contraseña del usuario');
     }
-}*/
+}
 
 }
 

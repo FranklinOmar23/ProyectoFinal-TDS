@@ -12,7 +12,7 @@ function NmOtroCon({ onFormDataChange }) {
     };
 
     useEffect(() => {
-        switch (setSelectedRazon) {
+        switch (selectedRazon) {
             case 'Sin licencia (ART 29)':
                 setMonto('RD$1,000.00');
                 break;
@@ -161,7 +161,17 @@ function NmOtroCon({ onFormDataChange }) {
         console.log("Guardando en local:", formData); // Depuración
         onFormDataChange(formData);
     };
+    const resetValues = () => {
+        setSelectedRazon('');
+        setMonto('RD$0.00');
+    };
     
+    useEffect(() => {
+        return () => {
+            resetValues();
+        };
+    }, []);
+
     return (
         <>
             <div className="card shadow">
@@ -186,7 +196,7 @@ function NmOtroCon({ onFormDataChange }) {
                             <div className="col"></div>
                         </div>
                         <div className="mb-3">
-                            <button className="btn btn-success btn-sm link-light" type="button" onClick={handleSaveToLocal}>Guardar en Local</button>
+                            <button className="btn btn-success btn-sm link-light" type="button" onClick={handleSaveToLocal}>Guardar configuracion</button>
                         </div>
                     </form>
                 </div>
