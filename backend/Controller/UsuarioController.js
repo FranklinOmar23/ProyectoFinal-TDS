@@ -127,6 +127,5 @@ class UsuarioController {
       res.status(500).json({ error: 'Error al obtener el nombre del usuario' });
     }
   }
-}
-;
+};
 export { UsuarioController };

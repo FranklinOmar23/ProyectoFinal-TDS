@@ -9,27 +9,43 @@ import '../Css/adicciones.css';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 import BurbujasAnim from './Comp_Helpers/BurbujasAnim';
-
+import { useAuth } from '../context/provider';
 
 const Login = () => {
   const navigate = useNavigate();
+  const { loginUser } = useAuth();
+  
   const handleLogin = async (userData) => {
     try {
-      // Validar que los campos no estén vacíos y que la cédula tenga al menos 11 caracteres
-      /*if (!userData.cedula || !userData.contrasena || userData.cedula.length < 11) {
-        throw new Error('Por favor, completa todos los campos y asegúrate de que la cédula tenga al menos 11 caracteres');
-      }*/
-
       const response = await axios.post('http://localhost:4000/login', userData);
       console.log(response.data);
-      navigate('/home');
+
+      // Obtener el rol del usuario desde la respuesta del backend
+      const { role } = response.data.user;
+
+      // Redirigir al usuario según su rol
+      switch (role) {
+        case 'USUARIO':
+          navigate('/home-user');
+          break;
+        case 'AGENTE':
+          navigate('/home-agente');
+          break;
+        case 'ADMINISTRADOR':
+          navigate('/home-adm');
+          break;
+        default:
+          // Redirigir a una vista por defecto en caso de un rol desconocido
+          navigate('/');
+      }
+        //CARGARE EL CONTEXT
+        loginUser(response.data);
+        console.log('Usuario después de iniciar sesión:', response.data);
     } catch (error) {
       console.error('Error al iniciar sesión:', error);
-      // Mostrar el mensaje de error al usuario
-      toast.error(error.message);
+      toast.error("Error al iniciar sesión, por favor verifica tus credenciales e intenta de nuevo.");
     }
   };
-
   return (
 <div className="login-background">
       <div class="bubbles">
