@@ -1,6 +1,7 @@
 
 import { UsuarioRepository } from '../Repository/UsuarioRepository.js';  // Ajusta la ruta según tu estructura
 import { generarContraseñaTemporal } from '../logic/genrarContraseña.js';
+import bcrypt from 'bcryptjs';
 
 class UsuarioController {
   constructor() {
@@ -57,11 +58,54 @@ class UsuarioController {
     const { cedula, contrasena } = req.body;
 
     try {
-      const user = await this.usuarioRepository.loginUser(cedula, contrasena);
-      res.json({ message: 'Inicio de sesión exitoso', user });
+        console.log("Cédula recibida:", cedula);
+        console.log("Contraseña recibida:", contrasena);
+
+        const user = await this.usuarioRepository.loginUser(cedula, contrasena);
+        console.log("Usuario encontrado en la base de datos:", user);
+
+        res.json({ message: 'Inicio de sesión exitoso', user });
+    } catch (error) {
+        console.error("Error al iniciar sesión:", error);
+        res.status(401).send('Credenciales inválidas');
+    }
+}
+
+  async registerUser(req, res) {
+    const {nombre, apellido, cedula, correo, telefono, contrasena, estado, horario_entrada, horario_salida, salario} = req.body;
+
+    try {
+
+      const existingUserByCedula = await this.usuarioRepository.getUserByCedula(cedula);
+      if (existingUserByCedula) {
+        return res.status(400).json({ message: "Ya existe un usuario con esta cédula." });
+      }
+      
+      const existingUser = await this.usuarioRepository.getUserByEmail(correo); 
+      if (existingUser) {
+        return res.status(400).json({ message: "El correo electrónico ya está en uso." });
+      }
+
+      const hashedPassword = await bcrypt.hash(contrasena, 10);
+
+      const newUser = await this.usuarioRepository.createUser ({
+        nombre,
+        apellido,
+        cedula, 
+        correo,
+        estado,
+        horario_entrada,
+        horario_salida,
+        salario,
+        role: 'USUARIO',
+        telefono,
+        contrasena: hashedPassword
+      });
+
+      return res.status(201).json({message:`Usuario ${newUser.nombre} registrado correctamente`, user: newUser}); 
     } catch (error) {
       console.error(error);
-      res.status(401).send('Credenciales inválidas');
+      return res.status(500).json({message:"Error al registrar el usuario", error: error.message})
     }
   }
   async getUserNameByCedula(req, res) {
@@ -83,6 +127,5 @@ class UsuarioController {
       res.status(500).json({ error: 'Error al obtener el nombre del usuario' });
     }
   }
-}
-;
+};
 export { UsuarioController };

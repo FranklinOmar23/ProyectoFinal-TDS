@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import NmRazon from "./nuevamultaRazones";
+import { toast } from 'react-hot-toast';
 import useLocalStorage from "../../helpers/localStorage"; // Asegúrate de importar el Hook correctamente
 
 function NmOtroCon({ onFormDataChange }) {
@@ -12,7 +13,7 @@ function NmOtroCon({ onFormDataChange }) {
     };
 
     useEffect(() => {
-        switch (setSelectedRazon) {
+        switch (selectedRazon) {
             case 'Sin licencia (ART 29)':
                 setMonto('RD$1,000.00');
                 break;
@@ -154,6 +155,12 @@ function NmOtroCon({ onFormDataChange }) {
     }, [selectedRazon]);
 
     const handleSaveToLocal = () => {
+        // Validación: verifica si la razón seleccionada está vacía
+        if (!selectedRazon) {
+            toast.error('Por favor, seleccione una razón.'); // Muestra un mensaje de error con toast
+            return;
+        }
+    
         const formData = {
             razon: selectedRazon,
             monto: monto,
@@ -161,7 +168,17 @@ function NmOtroCon({ onFormDataChange }) {
         console.log("Guardando en local:", formData); // Depuración
         onFormDataChange(formData);
     };
+    const resetValues = () => {
+        setSelectedRazon('');
+        setMonto('RD$0.00');
+    };
     
+    useEffect(() => {
+        return () => {
+            resetValues();
+        };
+    }, []);
+
     return (
         <>
             <div className="card shadow">
@@ -186,7 +203,7 @@ function NmOtroCon({ onFormDataChange }) {
                             <div className="col"></div>
                         </div>
                         <div className="mb-3">
-                            <button className="btn btn-success btn-sm link-light" type="button" onClick={handleSaveToLocal}>Guardar en Local</button>
+                            <button className="btn btn-success btn-sm link-light" type="button" onClick={handleSaveToLocal}>Guardar configuracion</button>
                         </div>
                     </form>
                 </div>
