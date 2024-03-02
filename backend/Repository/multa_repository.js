@@ -17,7 +17,8 @@ class MultaRepository {
         data.placa,
         data.razon,
         new Date().toISOString(),
-        data.monto
+        data.monto,
+        data.id_angente
       );
     }
   
@@ -38,6 +39,16 @@ class MultaRepository {
         if (error) throw error;
   
         return data.length > 0 ? this.mapToMultaInstance(data[0]) : null;
+      } catch (error) {
+        throw error;
+      }
+    }
+    async getMultaByIDAgent(id_angente){
+      try {
+        const { data, error } = await this.supabase.from(this.tableName).select('*').eq('id_angente', id_angente);
+        if (error) throw error;
+    
+        return data.length > 0 ? data.map(this.mapToMultaInstance) : null;
       } catch (error) {
         throw error;
       }

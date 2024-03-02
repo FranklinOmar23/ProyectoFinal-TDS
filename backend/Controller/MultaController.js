@@ -6,9 +6,9 @@ class MultaController {
     }
 
     async createMulta(req, res) {
-      const { cedula_usuario, nombre_multado, matricula, placa, razon, monto } = req.body;
+      const { cedula_usuario, nombre_multado, matricula, placa, razon, monto,id_angente } = req.body;
       const fecha = new Date(); // Obtener la fecha actual
-      const multaData = { cedula_usuario, nombre_multado, matricula, placa, razon, fecha, monto };
+      const multaData = { cedula_usuario, nombre_multado, matricula, placa, razon, fecha, monto,id_angente };
 
       try {
           const multa = await this.multaRepository.createMulta(multaData);
@@ -17,6 +17,18 @@ class MultaController {
           console.error('Error al crear la multa:', error);
           res.status(500).json({ error: 'Error al crear la multa' });
       }
+  }
+  async getMultaByUser(req, res) {
+    const id_angente ='136'
+    try {
+        const multasDelAgente = await this.multaRepository.getMultaByIDAgent(id_angente);
+        res.status(201).json({ message: 'Multas del Agente: ', multasDelAgente });
+    } catch (error) {
+        console.error('Error al buscar las multas:', error);
+        res.status(500).json({ error: 'Error al buscar las multa' });
+        
+    }
+   
   }
 
 }

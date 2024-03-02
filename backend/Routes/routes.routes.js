@@ -24,5 +24,7 @@ router.post('/createMulta', (req, res) => multa.createMulta(req, res));
 /*router.get("/newpassword",(rq,rs)=>{
     usuario.updateUserByNewPassword(rq,rs)
 })*/
+
+router.get('/multaAgente', (req, res) => multa.getMultaByUser(req, res));
   
 export default router;
