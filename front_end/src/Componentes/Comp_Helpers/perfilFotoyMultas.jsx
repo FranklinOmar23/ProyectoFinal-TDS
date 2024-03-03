@@ -1,30 +1,65 @@
 import React, { useState, useRef } from "react";
 import "../../Css/FotoMulta.css";
+import { Button } from "react-bootstrap";
 
 function FotoMulta() {
   const [profileImage, setProfileImage] = useState(null);
   const [vehicleImage, setVehicleImage] = useState(null);
 
-  const handleProfileImageChange = (event) => {
-    const selectedImage = event.target.files[0];
-    setProfileImage(URL.createObjectURL(selectedImage));
-  };
-
-  const handleVehicleImageChange = (event) => {
-    const selectedImage = event.target.files[0];
-    setVehicleImage(URL.createObjectURL(selectedImage));
+  const handleImageChange = (event, setImage) => {
+    const selectedImage = event.target.files ? event.target.files[0] : null;
+    if (selectedImage) {
+        setImage(URL.createObjectURL(selectedImage));
+    } else {
+        console.error('No se seleccionó ninguna imagen.');
+    }
   };
 
   const profileInputRef = useRef(null);
   const vehicleInputRef = useRef(null);
 
   const handleProfileImageUploadClick = () => {
-    profileInputRef.current.click();
+      profileInputRef.current.click();
   };
 
   const handleVehicleImageUploadClick = () => {
-    vehicleInputRef.current.click();
+      vehicleInputRef.current.click();
   };
+
+  const uploadImages = async () => {
+    try {
+      const formData = new FormData();
+
+      // Agrega la imagen de perfil al FormData si está definida
+      if (profileImage) {
+          formData.append('foto', profileImage);
+      }
+
+      // Agrega la imagen del vehículo al FormData si está definida
+      if (vehicleImage) {
+          formData.append('foto_Vehiculo', vehicleImage);
+      }
+
+      const response = await fetch('http://localhost:4000/user', {
+          method: 'POST',
+          body: formData
+      });
+
+      if (!response.ok) {
+          throw new Error('Error al cargar las imágenes');
+      }
+
+      const data = await response.json();
+      console.log(data.message);
+  } catch (error) {
+      console.error('Error:', error.message);
+  }
+  };
+
+   const handleUploadButtonClick = () => {
+    uploadImages();
+   };
+
 
   return (
     <div className="row">
@@ -58,8 +93,8 @@ function FotoMulta() {
                 ref={profileInputRef}
                 type="file"
                 id="profileImage"
-                accept="image/*"
-                onChange={handleProfileImageChange}
+                accept="image/png"
+                onChange={ (e) => handleImageChange (e, setProfileImage)}
                 style={{ display: "none" }}
               />
             </div>
@@ -72,6 +107,7 @@ function FotoMulta() {
               }
               alt="User"
             />
+            <Button type="submit" Button variant="light" style={{ color: "white", backgroundColor: "#1cc88a" }} onClick={handleUploadButtonClick}>Guardar Imagen</Button>
           </div>
         </div>
       </div>
@@ -105,8 +141,8 @@ function FotoMulta() {
                 ref={vehicleInputRef}
                 type="file"
                 id="vehicleImage"
-                accept="image/*"
-                onChange={handleVehicleImageChange}
+                accept="image/png"
+                onChange={ (e) => handleImageChange (e, setVehicleImage)}
                 style={{ display: "none" }}
               />
             </div>
@@ -116,6 +152,7 @@ function FotoMulta() {
               src={vehicleImage || "https://via.placeholder.com/300"}
               alt="Vehicle"
             />
+            <Button type="submit" Button variant="light" style={{ color: "white", backgroundColor: "#1cc88a" }} onClick={handleUploadButtonClick}>Guardar Imagen</Button>
           </div>
         </div>
       </div>

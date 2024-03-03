@@ -53,7 +53,7 @@ class UsuarioController {
       res.status(500).json({ error: 'Error al actualizar contraseña del usuario' });
     }
   }
-  //optener los datos del front
+  //obtener los datos del front
   async login(req, res) {
     const { cedula, contrasena } = req.body;
 
@@ -102,6 +102,7 @@ class UsuarioController {
       return res.status(500).json({message:"Error al registrar el usuario", error: error.message})
     }
   }
+
   async getUserNameByCedula(req, res) {
     const { cedula } = req.body;
 
@@ -121,6 +122,47 @@ class UsuarioController {
       res.status(500).json({ error: 'Error al obtener el nombre del usuario' });
     }
   }
-}
-;
+
+  async updateUser(req, res) {
+    const userId = req.params.id; // Obtener el ID del usuario de la solicitud
+    const {telefono, contrasena} = req.body; // Obtener los datos actualizados del cuerpo de la solicitud
+  
+    try {
+
+      const currentUser = await this.usuarioRepository.getUserById(userId);
+      const hashedPassword = await bcrypt.hash(contrasena, 10);
+
+      const updatedUserData = {
+        telefono,
+        contrasena: hashedPassword
+      }
+
+      await this.usuarioRepository.updateUser({id: userId, ...updatedUserData});
+  
+      res.status(200).json({ message: 'Los datos fueron actualizados exitosamente!' });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Se produjo un error al actualizar los datos del usuario' });
+    }
+
+  }
+
+  async uploadImage (req, res) {
+    const { foto, foto_Vehiculo } = req.body;
+
+    try {
+
+        
+        const { fotoUrl, foto_VehiculoUrl } = await this.usuarioRepository.uploadImage(foto, foto_Vehiculo);
+
+        res.status(200).json({ message: 'Las imágenes se cargaron correctamente', fotoUrl, foto_VehiculoUrl });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ error: 'Error al cargar las imágenes' });
+    }
+  }
+  
+  
+
+};
 export { UsuarioController };

@@ -1,6 +1,7 @@
 
 import { SupabaseClientSingleton } from '../data/dbContection.js';
 import { Usuario } from '../Models/Usuario.js'; 
+import { v4 as uuidv4 } from 'uuid';
 
 class UsuarioRepository {
   constructor() {
@@ -86,20 +87,62 @@ class UsuarioRepository {
     }
   }
 
-  async updateUser(userId, updatedUserData) {
+  async updateUser({id, telefono, contrasena}) {
+
+
     try {
-      const { data, error } = await this.supabase.from(this.tableName).upsert([
-        {
-          id: userId,
-          ...updatedUserData,
-        },
-      ]);
-      if (error) throw error;
-      return this.mapToUserInstance(data[0]);
-    } catch (error) {
+     
+      const existingUser = await this.getUserById(id);
+
+      // Construir el objeto con los datos actualizados del usuario
+      const updatedUserData = {
+          telefono,
+          contrasena
+      };
+
+      // Realizar la actualización en la base de datos utilizando el ID del usuario
+      const { data, error } = await this.supabase
+          .from(this.tableName)
+          .update(updatedUserData)
+          .eq('id', id);
+
+      if (error) {
+          throw error;
+      }
+      // Devolver el usuario actualizado
+      return this.mapToUserInstance(data);
+  } catch (error) {
       throw error;
-    }
   }
+  }
+
+  async uploadImage(foto, foto_Vehiculo) {
+    try {
+      const fotoFileName = uuidv4();
+      const foto_VehiculoFileName = uuidv4();
+
+      const { data: fotoData, error: fotoError } = await this.supabase.storage.from('imagenesUsuarios').upload(`${fotoFileName}.png`, foto, {
+          contentType: 'image/png'
+      });
+
+      const { data: foto_VehiculoData, error: foto_VehiculoError } = await this.supabase.storage.from('imagenesUsuarios').upload(`${foto_VehiculoFileName}.png`, foto_Vehiculo, {
+          contentType: 'image/png'
+      });
+
+      if (fotoError || foto_VehiculoError) {
+          throw fotoError || foto_VehiculoError;
+      }
+
+      return {
+          fotoUrl: fotoData[0].url,
+          foto_VehiculoUrl: foto_VehiculoData[0].url
+      };
+  } catch (error) {
+      throw error;
+  }
+  }
+  
+  
 
   async deleteUser(userId) {
     try {

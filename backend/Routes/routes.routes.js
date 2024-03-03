@@ -1,7 +1,7 @@
 import express from "express";
 import { obtenerDatosConexion } from "../Controller/prueba.js";
-import {UsuarioController} from "../Controller/UsuarioController.js"
-import {MultaController} from "../Controller/MultaController.js"
+import {UsuarioController} from "../Controller/UsuarioController.js";
+import {MultaController} from "../Controller/MultaController.js";
 
 
 const router = express.Router();
@@ -26,6 +26,14 @@ router.post('/createMulta', (req, res) => multa.createMulta(req, res));
 })*/
 router.post("/register", (req, res) => {
     usuario.registerUser(req, res);
+});
+
+router.put("/user/:id", (req, res) => { 
+    usuario.updateUser(req, res);
+});
+
+router.post("/user/:id", (req, res) => { 
+    usuario.uploadImage(req, res);
 });
   
 export default router;

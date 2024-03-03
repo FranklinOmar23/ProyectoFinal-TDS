@@ -26,7 +26,8 @@ function PerfilOtrosD() {
     setErrors({}); // Limpiar los errores al cerrar el modal
   };
 
-  const handleSaveChanges = () => {
+  const handleSaveChanges = async (e) => {
+    e.preventDefault();
     // Validaciones
     const newErrors = {};
   
@@ -64,12 +65,29 @@ function PerfilOtrosD() {
       toast.error(newErrors.telefono);
       return; 
     }
-  
-    // Si no hay errores, continuar con la lógica de actualización
-    toast.success("Los datos fueron actualizados exitosamente.");
-    setTimeout(() => {
+
+    try {
+      const response = await fetch('http://localhost:4000/user', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al actualizar los datos del usuario');
+      }
+
+      toast.success("Los datos fueron actualizados exitosamente!");
+      setTimeout(() => {
       handleModalClose();
     }, 2000);
+    console.log(formData)
+    } catch (error) {
+      console.error('Error:', error.message);
+      toast.error('Error al actualizar los datos del usuario');
+    }
   };  
 
   return (
