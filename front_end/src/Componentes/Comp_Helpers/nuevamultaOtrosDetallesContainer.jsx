@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import NmRazon from "./nuevamultaRazones";
+import { toast } from 'react-hot-toast';
 import useLocalStorage from "../../helpers/localStorage"; // Asegúrate de importar el Hook correctamente
 
 function NmOtroCon({ onFormDataChange }) {
@@ -154,6 +155,12 @@ function NmOtroCon({ onFormDataChange }) {
     }, [selectedRazon]);
 
     const handleSaveToLocal = () => {
+        // Validación: verifica si la razón seleccionada está vacía
+        if (!selectedRazon) {
+            toast.error('Por favor, seleccione una razón.'); // Muestra un mensaje de error con toast
+            return;
+        }
+    
         const formData = {
             razon: selectedRazon,
             monto: monto,
