@@ -58,13 +58,19 @@ class UsuarioController {
     const { cedula, contrasena } = req.body;
 
     try {
-      const user = await this.usuarioRepository.loginUser(cedula, contrasena);
-      res.json({ message: 'Inicio de sesión exitoso', user });
+        console.log("Cédula recibida:", cedula);
+        console.log("Contraseña recibida:", contrasena);
+
+        const user = await this.usuarioRepository.loginUser(cedula, contrasena);
+        console.log("Usuario encontrado en la base de datos:", user);
+
+        res.json({ message: 'Inicio de sesión exitoso', user });
     } catch (error) {
-      console.error(error);
-      res.status(401).send('Credenciales inválidas');
+        console.error("Error al iniciar sesión:", error);
+        res.status(401).send('Credenciales inválidas');
     }
-  }
+}
+
   async registerUser(req, res) {
     const {nombre, apellido, cedula, correo, telefono, contrasena, estado, horario_entrada, horario_salida, salario} = req.body;
 
@@ -121,6 +127,5 @@ class UsuarioController {
       res.status(500).json({ error: 'Error al obtener el nombre del usuario' });
     }
   }
-}
-;
+};
 export { UsuarioController };

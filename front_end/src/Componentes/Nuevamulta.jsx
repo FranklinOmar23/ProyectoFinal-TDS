@@ -21,6 +21,11 @@ function Nuevamulta() {
 
     const handleFormSubmit = async (e) => {
         e.preventDefault();
+        // Verificar si matrícula y placa no están vacíos
+        if (!matricula || !placa) {
+            toast.error('Por favor completa los campos de matrícula y placa.');
+            return; // Detener la ejecución de la función si hay campos vacíos
+        }
         try {
             const response = await axios.post('http://localhost:4000/createMulta', {
                 cedula_usuario: cedula,

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from 'axios';
+import { toast } from 'react-hot-toast';
 import NmDatosCon from "./nuevamultaDatosContainer.jsx";
 import carImage from "../../carroprovisionalMulta.jpg";
 import "../../Css/nuevamulta.css"
@@ -11,12 +12,28 @@ function NmCedDes({ setNombre, setCedula }) {
         if (e.key === 'Enter') {
             e.preventDefault();
             const cedulaValue = e.target.value;
+
+            // Validación: verifica si la cédula está vacía
+            if (!cedulaValue) {
+                toast.error('Por favor, ingrese una cédula.');
+                return;
+            }
+
+            // Validación: verifica si la cédula cumple con un patrón específico
+            // Este es un ejemplo, ajusta el patrón según tus necesidades
+            const cedulaPattern = /^\d{11}$/; // Patrón de ejemplo para  10 dígitos
+            if (!cedulaPattern.test(cedulaValue)) {
+                toast.error('La cédula ingresada no es válida.');
+                return;
+            }
+
             try {
                 const response = await axios.post('http://localhost:4000/getUserNameByCedula', { cedula: cedulaValue });
                 setNombre(response.data.nombre);
                 setCedula(cedulaValue); // Actualiza el estado de la cédula
             } catch (error) {
                 console.error('Error al obtener el nombre del usuario:', error);
+                toast.error('Hubo un error al obtener el nombre del usuario.');
             }
         }
     };
