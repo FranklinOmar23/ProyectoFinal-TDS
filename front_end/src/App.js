@@ -7,7 +7,9 @@ import Login from './Componentes/login';
 import Home from './Componentes/Home';
 import Nuevamulta from './Componentes/Nuevamulta';
 import Perfil from './Componentes/perfil';
-
+import HomeAdm from './Componentes/home-adm';
+import HomeUser from './Componentes/home-usuario';
+import Historial from './Componentes/Historial';
 
 function App() {
 
@@ -18,9 +20,12 @@ function App() {
             <Route path="/olvidocontrasena" element={<Olvidocontrase />}/>
             <Route path="/registro" element={<Registro />}/>
             <Route path="/" element={<Login />}/>
-            <Route path="/home" element={<Home />}/>
+            <Route path="/home-agente" element={<Home />}/>
             <Route path="/nuevamulta" element={<Nuevamulta />}/>
             <Route path="/perfil" element={<Perfil />}/>
+            <Route path="/home-adm" element={<HomeAdm />}/>
+            <Route path="/home-user" element={<HomeUser />}/>
+            <Route path="/historial" element={<Historial />}/>
           </Routes>
         </BrowserRouter>
     </div>

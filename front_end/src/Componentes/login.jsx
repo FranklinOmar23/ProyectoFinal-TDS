@@ -11,7 +11,6 @@ import toast, { Toaster } from 'react-hot-toast';
 import BurbujasAnim from './Comp_Helpers/BurbujasAnim';
 import { useAuth } from '../context/provider';
 
-
 const Login = () => {
   const navigate = useNavigate();
   const { loginUser,cargarMultas } = useAuth();
@@ -41,11 +40,9 @@ const Login = () => {
       }
     } catch (error) {
       console.error('Error al iniciar sesión:', error);
-      // Mostrar el mensaje de error al usuario
-      toast.error(error.message);
+      toast.error("Error al iniciar sesión, por favor verifica tus credenciales e intenta de nuevo.");
     }
   };
-
   return (
 <div className="login-background">
       <div class="bubbles">
