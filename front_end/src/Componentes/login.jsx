@@ -14,23 +14,31 @@ import { useAuth } from '../context/provider';
 
 const Login = () => {
   const navigate = useNavigate();
-  const { loginUser } = useAuth();
-  const handleLogin = async (userData) => {
+  const { loginUser,cargarMultas } = useAuth();
+  const handleLogin = async (userData, multaData) => {
     try {
-      // Validar que los campos no estén vacíos y que la cédula tenga al menos 11 caracteres
-      /*if (!userData.cedula || !userData.contrasena || userData.cedula.length < 11) {
-        throw new Error('Por favor, completa todos los campos y asegúrate de que la cédula tenga al menos 11 caracteres');
-      }*/
-
       const response = await axios.post('http://localhost:4000/login', userData);
       console.log(response.data);
-
-//CARGARE EL CONTEXT
+  
+      // CARGAR EL CONTEXTO
       loginUser(response.data);
       console.log('Usuario después de iniciar sesión:', response.data);
-
-
-      navigate('/home');
+  
+      // Verificar si el usuario tiene un ID antes de realizar la solicitud de multas
+      if (response.data.user && response.data.user.id) {
+        // Multas
+        console.log('USuario id',response.data.user.id)
+        const multaRespuesta = await axios.post('http://localhost:4000/multaAgente', { id_agente: response.data.user.id });
+        console.log(multaRespuesta.data);
+  
+        cargarMultas(multaRespuesta.data);
+        console.log('Multa después de iniciar sesión:', multaRespuesta.data);
+  
+        navigate('/home');
+      } else {
+        console.error('ID del usuario indefinido');
+        toast.error('Error al obtener el ID del usuario');
+      }
     } catch (error) {
       console.error('Error al iniciar sesión:', error);
       // Mostrar el mensaje de error al usuario

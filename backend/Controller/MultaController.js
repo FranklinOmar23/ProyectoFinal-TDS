@@ -18,18 +18,20 @@ class MultaController {
           res.status(500).json({ error: 'Error al crear la multa' });
       }
   }
+  // En tu MultaController
   async getMultaByUser(req, res) {
-    const id_angente ='136'
+    const { id_agente } = req.body;
     try {
-        const multasDelAgente = await this.multaRepository.getMultaByIDAgent(id_angente);
-        res.status(201).json({ message: 'Multas del Agente: ', multasDelAgente });
+        console.log('ID del agente en getMultaByUser:', id_agente);
+        const multasDelAgente = await this.multaRepository.getMultaByIDAgent(id_agente);
+        res.status(200).json({ message: 'Multas del agente obtenidas correctamente', multasDelAgente });
     } catch (error) {
-        console.error('Error al buscar las multas:', error);
-        res.status(500).json({ error: 'Error al buscar las multa' });
-        
+        console.error('Error al buscar las multas:', error.message);
+        res.status(500).json({ error: 'Error interno del servidor al obtener las multas del agente', details: error.message });
     }
-   
-  }
+}
+
+
 
 }
 
