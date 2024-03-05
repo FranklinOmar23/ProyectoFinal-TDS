@@ -73,14 +73,29 @@ function NmCedDes({ setNombre, setCedula }) {
                                 <div className="multas-scroll">
                                     <div className="multas">
                                     {historialMultas
-                                        .filter((m) => m.id_agente === multa?.id_agente) // Filtrar por ID del agente
-                                        .sort((a, b) => new Date(b.fecha) - new Date(a.fecha)) // Ordenar por fecha, más reciente primero
-                                        .slice(0, 3) // Obtener las últimas 3 multas
-                                        .map((m, index) => (
-                                            <div key={index} className="mb-3 multa">
-                                                <strong>Razón:</strong> {m.razon} - <strong>Monto:</strong> ${m.monto}
-                                            </div>
-                                        ))}
+                                            .filter((m) => m.id_agente === multa?.id_agente) // Filtrar por ID del agente
+                                            .sort((a, b) => new Date(b.fecha) - new Date(a.fecha)) // Ordenar por fecha, más reciente primero
+                                            .slice(0, 3) // Obtener las últimas 3 multas
+                                            .map((m, index) => (
+                                                <div key={index} className="mb-4 multa-card">
+                                                    <h6 className="fs-6 fw-bolder text-success mb-3">Multa #{index + 1}</h6>
+                                                    <div className="razon">
+                                                        <strong>Razón:</strong> {m.razon}
+                                                    </div>
+                                                    <div className="monto">
+                                                        <strong>Monto:</strong> ${m.monto}
+                                                    </div>
+                                                    <div className="cedula-usuario">
+                                                        <strong>Cédula del conductor:</strong> {m.cedula_usuario}
+                                                    </div>
+                                                    <div className="matricula">
+                                                        <strong>Matricular:</strong> {m.matricula}
+                                                    </div>
+                                                    <div className="fecha">
+                                                        <strong>Fecha:</strong> {m.fecha}
+                                                    </div>
+                                                </div>
+                                            ))}
                                     </div>
                                 </div>
                             </div>
