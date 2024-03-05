@@ -13,34 +13,31 @@ import { useAuth } from '../context/provider';
 
 const Login = () => {
   const navigate = useNavigate();
-  const { loginUser } = useAuth();
-  
-  const handleLogin = async (userData) => {
+  const { loginUser,cargarMultas } = useAuth();
+  const handleLogin = async (userData, multaData) => {
     try {
       const response = await axios.post('http://localhost:4000/login', userData);
       console.log(response.data);
-
-      // Obtener el rol del usuario desde la respuesta del backend
-      const { role } = response.data.user;
-
-      // Redirigir al usuario según su rol
-      switch (role) {
-        case 'USUARIO':
-          navigate('/home-user');
-          break;
-        case 'AGENTE':
-          navigate('/home-agente');
-          break;
-        case 'ADMINISTRADOR':
-          navigate('/home-adm');
-          break;
-        default:
-          // Redirigir a una vista por defecto en caso de un rol desconocido
-          navigate('/');
+  
+      // CARGAR EL CONTEXTO
+      loginUser(response.data);
+      console.log('Usuario después de iniciar sesión:', response.data);
+  
+      // Verificar si el usuario tiene un ID antes de realizar la solicitud de multas
+      if (response.data.user && response.data.user.id) {
+        // Multas
+        console.log('USuario id',response.data.user.id)
+        const multaRespuesta = await axios.post('http://localhost:4000/multaAgente', { id_agente: response.data.user.id });
+        console.log(multaRespuesta.data);
+  
+        cargarMultas(multaRespuesta.data);
+        console.log('Multa después de iniciar sesión:', multaRespuesta.data);
+  
+        navigate('/home');
+      } else {
+        console.error('ID del usuario indefinido');
+        toast.error('Error al obtener el ID del usuario');
       }
-        //CARGARE EL CONTEXT
-        loginUser(response.data);
-        console.log('Usuario después de iniciar sesión:', response.data);
     } catch (error) {
       console.error('Error al iniciar sesión:', error);
       toast.error("Error al iniciar sesión, por favor verifica tus credenciales e intenta de nuevo.");

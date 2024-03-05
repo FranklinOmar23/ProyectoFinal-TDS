@@ -17,7 +17,8 @@ class MultaRepository {
         data.placa,
         data.razon,
         new Date().toISOString(),
-        data.monto
+        data.monto,
+        data.id_angente
       );
     }
   
@@ -42,6 +43,25 @@ class MultaRepository {
         throw error;
       }
     }
+  // En tu MultaRepository
+  async getMultaByIDAgent(id_agente) {
+    try {
+        console.log('ID del agente:', id_agente);
+        const { data, error } = await this.supabase
+            .from(this.tableName)
+            .select('*')
+            .eq('id_angente', id_agente);
+        console.log('Resultados de la consulta:', data);
+        if (error) {
+            console.error('Error al buscar las multas en el repositorio:', error);
+            throw error;
+        }
+        return data.length > 0 ? data.map(this.mapToMultaInstance) : null;
+    } catch (error) {
+        console.error('Error al traer las multas en el repositorio:', error);
+        throw error;
+    }
+}
   
     async createMulta(multaData) {
       try {
