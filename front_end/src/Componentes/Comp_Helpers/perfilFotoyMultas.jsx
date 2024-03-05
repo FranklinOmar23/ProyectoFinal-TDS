@@ -40,7 +40,7 @@ function FotoMulta() {
           formData.append('foto_Vehiculo', vehicleImage);
       }
 
-      const response = await fetch('http://localhost:4000/user', {
+      const response = await fetch('http://localhost:4000/user',  {
           method: 'POST',
           body: formData
       });

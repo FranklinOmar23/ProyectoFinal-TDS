@@ -89,16 +89,23 @@ class UsuarioRepository {
 
   async updateUser({id, telefono, contrasena}) {
 
-
     try {
-     
+      // Verificar la existencia del usuario
       const existingUser = await this.getUserById(id);
+      if (!existingUser) {
+          throw new Error('Usuario no encontrado');
+      }
 
       // Construir el objeto con los datos actualizados del usuario
-      const updatedUserData = {
-          telefono,
-          contrasena
-      };
+      const updatedUserData = {};
+      if (telefono) {
+          updatedUserData.telefono = telefono;
+      }
+      if (contrasena) {
+          const salt = await bcrypt.genSalt(10);
+          const hashedPassword = await bcrypt.hash(contrasena, salt);
+          updatedUserData.contrasena = hashedPassword;
+      }
 
       // Realizar la actualización en la base de datos utilizando el ID del usuario
       const { data, error } = await this.supabase
@@ -109,6 +116,7 @@ class UsuarioRepository {
       if (error) {
           throw error;
       }
+
       // Devolver el usuario actualizado
       return this.mapToUserInstance(data);
   } catch (error) {

@@ -3,6 +3,7 @@ import { UsuarioRepository } from '../Repository/UsuarioRepository.js';  // Ajus
 import { generarContraseñaTemporal } from '../logic/genrarContraseña.js';
 import bcrypt from 'bcryptjs';
 
+
 class UsuarioController {
   constructor() {
     this.usuarioRepository = new UsuarioRepository();
@@ -134,34 +135,36 @@ class UsuarioController {
     const {telefono, contrasena} = req.body; // Obtener los datos actualizados del cuerpo de la solicitud
   
     try {
-
-      const currentUser = await this.usuarioRepository.getUserById(userId);
-      const hashedPassword = await bcrypt.hash(contrasena, 10);
-
-      const updatedUserData = {
-        telefono,
-        contrasena: hashedPassword
+      // Verificar si el usuario existe antes de intentar actualizarlo
+      const updatedUserData = {};
+      if (telefono) {
+          updatedUserData.telefono = telefono;
+      }
+      if (contrasena) {
+          const salt = await bcrypt.genSalt(10);
+          const hashedPassword = await bcrypt.hash(contrasena, salt);
+          updatedUserData.contrasena = hashedPassword;
       }
 
-      await this.usuarioRepository.updateUser({id: userId, ...updatedUserData});
-  
+      // Actualizar el usuario
+      await this.usuarioRepository.updateUser({ id: userId, ...updatedUserData });
+
       res.status(200).json({ message: 'Los datos fueron actualizados exitosamente!' });
-    } catch (error) {
+  } catch (error) {
       console.error(error);
       res.status(500).json({ error: 'Se produjo un error al actualizar los datos del usuario' });
-    }
+  }
 
   }
 
   async uploadImage (req, res) {
-    const { foto, foto_Vehiculo } = req.body;
+    const { foto } = req.file;
 
     try {
-
         
-        const { fotoUrl, foto_VehiculoUrl } = await this.usuarioRepository.uploadImage(foto, foto_Vehiculo);
+        //const { fotoUrl, foto_VehiculoUrl } = await this.usuarioRepository.uploadImage(foto, foto_Vehiculo);
 
-        res.status(200).json({ message: 'Las imágenes se cargaron correctamente', fotoUrl, foto_VehiculoUrl });
+        //res.status(200).json({ message: 'Las imágenes se cargaron correctamente', fotoUrl, foto_VehiculoUrl });
     } catch (error) {
         console.error('Error:', error);
         res.status(500).json({ error: 'Error al cargar las imágenes' });
