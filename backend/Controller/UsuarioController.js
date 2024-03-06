@@ -157,19 +157,33 @@ class UsuarioController {
 
   }
 
-  async uploadImage (req, res) {
-    const { foto } = req.file;
-
+  async uploadImage(req, res) {
+    const { foto, foto_Vehiculo } = req.body;
+  
     try {
-        
-        //const { fotoUrl, foto_VehiculoUrl } = await this.usuarioRepository.uploadImage(foto, foto_Vehiculo);
-
-        //res.status(200).json({ message: 'Las imágenes se cargaron correctamente', fotoUrl, foto_VehiculoUrl });
+      const { fotoUrl, foto_VehiculoUrl } = await this.usuarioRepository.uploadImage(foto, foto_Vehiculo);
+  
+      res.json({ message: 'Imagenes subidas con éxito!', fotoUrl, foto_VehiculoUrl });
     } catch (error) {
-        console.error('Error:', error);
-        res.status(500).json({ error: 'Error al cargar las imágenes' });
+      console.error('Error in uploadImage: ', error);
+      res.status(500).send(error.message);
     }
   }
+
+  async storeImage(req, res) {
+    const { id, fotoUrl, foto_VehiculoUrl } = req.body;
+  
+    try {
+      const data = await this.usuarioRepository.storeImage(id, fotoUrl, foto_VehiculoUrl);
+  
+      res.json({ message: 'Urls guardadas exitosamente!', data });
+    } catch (error) {
+      console.error('Error en storeImage: ', error);
+      res.status(500).send(error.message);
+    }
+  }
+  
+  
   
   
 

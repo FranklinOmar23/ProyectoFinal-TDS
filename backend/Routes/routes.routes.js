@@ -32,9 +32,9 @@ router.put("/user/:id", (req, res) => {
     usuario.updateUser(req, res);
 });
 
-router.post("/user/:id", (req, res) => {
-    usuario.uploadImage(req, res);
-});
+const usuarioController = new UsuarioController();
+router.post('/user/:id', usuarioController.uploadImage.bind(usuarioController));
+router.put('/user/:id', usuarioController.storeImage.bind(usuarioController));
 
 router.get("/user/:id", async (_req, res) => {
     try {

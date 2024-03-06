@@ -26,38 +26,39 @@ function FotoMulta() {
       vehicleInputRef.current.click();
   };
 
-  const uploadImages = async () => {
+  const uploadImage = async () => {
     try {
       const formData = new FormData();
-
-      // Agrega la imagen de perfil al FormData si está definida
+  
       if (profileImage) {
-          formData.append('foto', profileImage);
+        const profileImageFile = await fetch(profileImage).then(res => res.blob());
+        formData.append('foto', profileImageFile, 'profile.png');
       }
-
-      // Agrega la imagen del vehículo al FormData si está definida
+  
       if (vehicleImage) {
-          formData.append('foto_Vehiculo', vehicleImage);
+        const vehicleImageFile = await fetch(vehicleImage).then(res => res.blob());
+        formData.append('foto_Vehiculo', vehicleImageFile, 'vehicle.png');
       }
-
+  
       const response = await fetch('http://localhost:4000/user',  {
-          method: 'POST',
-          body: formData
+        method: 'POST',
+        body: formData
       });
-
+  
       if (!response.ok) {
-          throw new Error('Error al cargar las imágenes');
+        throw new Error('Error al cargar las imagenes');
       }
-
+  
       const data = await response.json();
       console.log(data.message);
-  } catch (error) {
+    } catch (error) {
       console.error('Error:', error.message);
-  }
+    }
   };
+  
 
    const handleUploadButtonClick = () => {
-    uploadImages();
+    uploadImage();
    };
 
 

@@ -128,27 +128,63 @@ class UsuarioRepository {
     try {
       const fotoFileName = uuidv4();
       const foto_VehiculoFileName = uuidv4();
-
+  
       const { data: fotoData, error: fotoError } = await this.supabase.storage.from('imagenesUsuarios').upload(`${fotoFileName}.png`, foto, {
           contentType: 'image/png'
       });
-
-      const { data: foto_VehiculoData, error: foto_VehiculoError } = await this.supabase.storage.from('imagenesUsuarios').upload(`${foto_VehiculoFileName}.png`, foto_Vehiculo, {
-          contentType: 'image/png'
-      });
-
-      if (fotoError || foto_VehiculoError) {
-          throw fotoError || foto_VehiculoError;
+      console.log(fotoData)
+  
+      if (fotoError) {
+        console.error('Error cargando la imagen del usuario: ', fotoError);
+        throw new Error('Error cargando la imagen del usuario');
       }
+  
+      const { data: foto_VehiculoData, error: foto_VehiculoError } = await this.supabase.storage.from('imagenesUsuarios').upload(`${foto_VehiculoFileName}.png`, foto_Vehiculo, {
+        contentType: 'image/png'
+    });
+    console.log(foto_VehiculoData)
 
-      return {
-          fotoUrl: fotoData[0].url,
-          foto_VehiculoUrl: foto_VehiculoData[0].url
-      };
-  } catch (error) {
+    if (foto_VehiculoError) {
+      console.error('Error cargando la imagen del vehiculo: ', foto_VehiculoError);
+      throw new Error('Error cargando la imagen del vehiculo');
+    }
+
+    const fotoUrl = `https://supabase.com/dashboard/project/inmfmanpaarrwhoyyctn/storage/buckets/imagenesUsuarios/${fotoFileName}.png`;
+    const foto_VehiculoUrl = `https://supabase.com/dashboard/project/inmfmanpaarrwhoyyctn/storage/buckets/imagenesUsuarios/${foto_VehiculoFileName}.png`;
+  
+      return { fotoUrl, foto_VehiculoUrl };
+      
+    } catch (error) {
+      console.error('Error en uploadImage: ', error);
+    throw error;
+    }
+  }
+
+  
+  async storeImage(id, fotoUrl, foto_VehiculoUrl) {
+    console.log(`Guardando URLs de las imágenes para el usuario ${id}: ${fotoUrl}, ${foto_VehiculoUrl}`);
+    
+    try {
+      const { data, error } = await supabase
+        .from('usuario')
+        .update({ foto: fotoUrl, foto_Vehiculo: foto_VehiculoUrl })
+        .match({ id: id });
+  
+      if (error) {
+        console.error('Error al guardar la URL de la imagen: ', error);
+        throw new Error('Error al guardar la URL de la imagen');
+      }
+  
+      console.log('URLs de las imágenes guardadas con éxito: ', data);
+      return data;
+    } catch (error) {
+      console.error('Error en storeImage: ', error);
       throw error;
-  }
-  }
+      }
+    }
+    
+
+  
   
   
 
