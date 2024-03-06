@@ -10,6 +10,7 @@ import { IconoTop } from "../Componentes/Comp_Helpers/Iconos.jsx"
 import Footer from './Comp_Helpers/Footer.jsx';
 import Navbar from './Comp_Helpers/Navbar.jsx';
 import Topbar from './Comp_Helpers/Topbar.jsx';
+import { useAuth } from '../context/provider.jsx';
 
 import toast, { Toaster } from 'react-hot-toast';
 
@@ -157,56 +158,69 @@ function MultasRecientesCard() {
 
 
 function Reloj() {
-    const [tiempo, setTiempo] = useState({ horas: 0, minutos: 0, segundos: 0 });
-
+    const { user } = useAuth(); // Obtén el objeto user del contexto
+    const [tiempoTranscurrido, setTiempoTranscurrido] = useState({ horas: 0, minutos: 0, segundos: 0 });
+   
     useEffect(() => {
-        const horasAFuturo = 5; 
-        const fechaFinalizacion = new Date();
-        fechaFinalizacion.setHours(fechaFinalizacion.getHours() + horasAFuturo);
+       const calcularTiempoTranscurrido = () => {
+         if (user && user.user && user.user.horario_entrada) {
+           const ahora = new Date();
+           // Convertir el horario de entrada a un objeto Date
+           const entrada = new Date(ahora.getFullYear(), ahora.getMonth(), ahora.getDate(), ...user.user.horario_entrada.split(':'));
+   
+           // Calcular el tiempo transcurrido desde la entrada hasta el momento actual
+           const tiempoTranscurrido = ahora - entrada;
+   
+           // Convertir milisegundos a horas, minutos y segundos
+           const horas = Math.floor(tiempoTranscurrido / 3600000);
+           const minutos = Math.floor((tiempoTranscurrido % 3600000) / 60000);
+           const segundos = Math.floor((tiempoTranscurrido % 60000) / 1000);
+   
+           setTiempoTranscurrido({ horas, minutos, segundos });
+         } else {
+           setTiempoTranscurrido({ horas: 0, minutos: 0, segundos: 0 });
+         }
+       };
+   
+       // Llamar a la función inicialmente para establecer el tiempo transcurrido
+       calcularTiempoTranscurrido();
+   
+       // Establecer un intervalo para actualizar el tiempo transcurrido cada segundo
+       const intervalId = setInterval(() => {
+         calcularTiempoTranscurrido();
+       }, 1000); // 1000 milisegundos = 1 segundo
+   
+       // Limpiar el intervalo cuando el componente se desmonte
+       return () => clearInterval(intervalId);
+    }, [user]); // Dependencia del efecto: se ejecuta cada vez que cambia el objeto user
+   
 
-        const intervalo = setInterval(() => {
-            const ahora = new Date().getTime();
-            const diferencia = fechaFinalizacion - ahora;
-
-            const horas = Math.floor((diferencia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutos = Math.floor((diferencia % (1000 * 60 * 60)) / (1000 * 60));
-            const segundos = Math.floor((diferencia % (1000 * 60)) / 1000);
-
-            setTiempo({ horas, minutos, segundos });
-
-            if (diferencia < 0) {
-                clearInterval(intervalo);
-            }
-        }, 1000);
-
-        return () => clearInterval(intervalo);
-    }, []);
-
+   
     return (
-        <div className="col-md-6">
-            <div className="card shadow mb-4">
-                <div className="card-header py-3">
-                    <h6 className="text-success fw-bold m-0">Tiempo de finalización</h6>
-                </div>
-                <div className="body-card">
-                    <div className='reloj-item'>
-                        <div className='horas'>{tiempo.horas}</div> 
-                        <p>Hora</p>
-                    </div>
-                    <div className='reloj-item'>
-                        <div className='minutos'>{tiempo.minutos}</div>
-                        <p>Minutos</p>
-                    </div>
-                    <div className='reloj-item'>
-                        <div className='segundos'>{tiempo.segundos}</div>
-                        <p>Segundos</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+       <div className="col-md-6">
+         <div className="card shadow mb-4">
+           <div className="card-header py-3">
+             <h6 className="text-success fw-bold m-0">Tiempo transcurrido desde la entrada</h6>
+           </div>
+           <div className="body-card">
+             <div className='reloj-item'>
+               <div className='horas'>{tiempoTranscurrido.horas}</div> 
+               <p>Hora</p>
+             </div>
+             <div className='reloj-item'>
+               <div className='minutos'>{tiempoTranscurrido.minutos}</div>
+               <p>Minutos</p>
+             </div>
+             <div className='reloj-item'>
+               <div className='segundos'>{tiempoTranscurrido.segundos}</div>
+               <p>Segundos</p>
+             </div>
+           </div>
+         </div>
+       </div>
     );
-}
-
+   };
+   
 
 
 
