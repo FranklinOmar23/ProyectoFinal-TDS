@@ -3,13 +3,15 @@ import "../Css/Footer-Dark-icons.css";
 import "../Css/sidebar-menu.css";
 import "../Css/bootstrap.min.css";
 import "../Css/animate.min.css";
-import "../Css/adicciones.css"
+import "../Css/adicciones.css";
 import "../Css/relojestilo.css";
-import "../Css/graficopastel.css";
+
 import { IconoTop } from "../Componentes/Comp_Helpers/Iconos.jsx"
 import Footer from './Comp_Helpers/Footer.jsx';
 import Navbar from './Comp_Helpers/Navbar.jsx';
 import Topbar from './Comp_Helpers/Topbar.jsx';
+import Chart from "chart.js/auto";
+import { useAuth } from '../context/provider.jsx';
 
 import toast, { Toaster } from 'react-hot-toast';
 
@@ -107,45 +109,61 @@ function InformacionesCard() {
 }
 
 function MultasRecientesCard() {
+    const canvasRef = useRef(null);
+    const [chartInstance, setChartInstance] = useState(null);
+
+    useEffect(() => {
+        if (!canvasRef.current) return;
+
+        const datos = {
+            labels: ['Uso del Celular', 'Sin matrícula', 'Sin cinturón', 'Obstrucción al peatón'],
+            datasets: [{
+                data: [45, 30, 60, 80],
+                backgroundColor: [
+                    'rgb(122, 187, 139)',
+                    'rgb(147, 199, 89)',
+                    'rgb(180, 123, 91)',
+                    'rgb(199, 191, 115)'
+                ]
+            }]
+        };
+
+        const opciones = {
+            responsive: true,
+            maintainAspectRatio: false
+        };
+
+        const contexto = canvasRef.current.getContext('2d');
+        const newChartInstance = new Chart(contexto, {
+            type: 'pie',
+            data: datos,
+            options: opciones
+        });
+        setChartInstance(newChartInstance);
+
+        // Obtener los elementos de la leyenda y asignarles el color correspondiente
+        const legendItems = document.querySelectorAll('.legend li');
+        legendItems.forEach((item, index) => {
+            const color = newChartInstance.data.datasets[0].backgroundColor[index];
+            const dot = item.querySelector('.dot');
+            dot.style.background = color;
+        });
+
+        return () => {
+            if (newChartInstance) {
+                newChartInstance.destroy();
+            }
+        };
+    }, []);
+
     return (
         <div className="col-md-6">
             <div className="card shadow mb-4">
                 <div className="card-header py-3">
                     <h6 className="text-success fw-bold m-0">Multas Recientes</h6>
                 </div>
-                <div className="card-body" style={{ minHeight: '250px', position: 'relative' }}>
-                    <div className="pie-chart" style={{ width: '200px', height: '200px', margin: '60px auto 20px' }}>
-                        <div className="slice" style={{ '--value': 45 }}>
-                            <span className="value-label">45%</span>
-                        </div>
-                        <div className="slice" style={{ '--value': 30 }}>
-                            <span className="value-label">30%</span>
-                        </div>
-                        <div className="slice" style={{ '--value': 15 }}>
-                            <span className="value-label">15%</span>
-                        </div>
-                        <div className="slice" style={{ '--value': 10 }}>
-                            <span className="value-label">10%</span>
-                        </div>
-                    </div>
-                    <ul className="legend" style={{  }}>
-                        <li>
-                            <span className="dot" style={{ background: 'rgb(122, 187, 139)' }}></span>
-                            Uso del Celular
-                        </li>
-                        <li>
-                            <span className="dot" style={{ background: 'rgb(147, 199, 89)' }}></span>
-                            Sin matrícula
-                        </li>
-                        <li>
-                            <span className="dot" style={{ background: 'rgb(180, 123, 91)' }}></span>
-                            Sin cinturón
-                        </li>
-                        <li>
-                            <span className="dot" style={{ background: 'rgb(199, 191, 115)' }}></span>
-                            Obstrución al peatón
-                        </li>
-                    </ul>
+                <div className="card-body"> 
+                    <canvas ref={canvasRef} width="300px" height="300px"></canvas>
                 </div>
             </div>
         </div>
@@ -156,49 +174,69 @@ function MultasRecientesCard() {
 
 
 
+
 function Reloj() {
-    const [tiempo, setTiempo] = useState({ horas: 0, minutos: 0, segundos: 0 });
+    const [tiempoTranscurrido, setTiempoTranscurrido] = useState({ horas: 0, minutos: 0, segundos: 0 });
+    const horarioEntrada = "09:00:00"; // Establecer el horario de entrada manualmente
+    const horarioSalida = "18:00:00";  // Establecer el horario de salida manualmente
 
     useEffect(() => {
-        const horasAFuturo = 5; 
-        const fechaFinalizacion = new Date();
-        fechaFinalizacion.setHours(fechaFinalizacion.getHours() + horasAFuturo);
+        const calcularTiempoTranscurrido = () => {
+            const ahora = new Date();
+            const horaActual = ahora.getHours();
+            const minutosActual = ahora.getMinutes();
+            const segundosActual = ahora.getSeconds();
 
-        const intervalo = setInterval(() => {
-            const ahora = new Date().getTime();
-            const diferencia = fechaFinalizacion - ahora;
+            const [horaEntradaH, minutosEntradaH, segundosEntradaH] = horarioEntrada.split(':').map(Number);
+            const [horaSalidaH, minutosSalidaH, segundosSalidaH] = horarioSalida.split(':').map(Number);
 
-            const horas = Math.floor((diferencia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutos = Math.floor((diferencia % (1000 * 60 * 60)) / (1000 * 60));
-            const segundos = Math.floor((diferencia % (1000 * 60)) / 1000);
-
-            setTiempo({ horas, minutos, segundos });
-
-            if (diferencia < 0) {
-                clearInterval(intervalo);
+            let diferenciaSegundos;
+            
+            // Si es antes del horario de entrada
+            if (horaActual < horaEntradaH || (horaActual === horaEntradaH && minutosActual < minutosEntradaH) || (horaActual === horaEntradaH && minutosActual === minutosEntradaH && segundosActual < segundosEntradaH)) {
+                diferenciaSegundos = (horaEntradaH - horaActual) * 3600 + (minutosEntradaH - minutosActual) * 60 + (segundosEntradaH - segundosActual);
             }
-        }, 1000);
+            // Si es después del horario de salida
+            else if (horaActual > horaSalidaH || (horaActual === horaSalidaH && minutosActual > minutosSalidaH) || (horaActual === horaSalidaH && minutosActual === minutosSalidaH && segundosActual > segundosSalidaH)) {
+                diferenciaSegundos = 0;
+            }
+            // Si es dentro del horario laboral
+            else {
+                diferenciaSegundos = (horaActual - horaEntradaH) * 3600 + (minutosActual - minutosEntradaH) * 60 + (segundosActual - segundosEntradaH);
+            }
 
+            const horas = Math.floor(diferenciaSegundos / 3600);
+            const minutos = Math.floor((diferenciaSegundos % 3600) / 60);
+            const segundos = diferenciaSegundos % 60;
+
+            setTiempoTranscurrido({ horas, minutos, segundos });
+        };
+
+        // Calcular el tiempo transcurrido cada segundo
+        const intervalo = setInterval(calcularTiempoTranscurrido, 1000);
+
+        // Limpiar el intervalo cuando el componente se desmonta
         return () => clearInterval(intervalo);
     }, []);
+
 
     return (
         <div className="col-md-6">
             <div className="card shadow mb-4">
                 <div className="card-header py-3">
-                    <h6 className="text-success fw-bold m-0">Tiempo de finalización</h6>
+                    <h6 className="text-success fw-bold m-0">Tiempo transcurrido desde la entrada</h6>
                 </div>
                 <div className="body-card">
                     <div className='reloj-item'>
-                        <div className='horas'>{tiempo.horas}</div> 
+                        <div className='horas'>{tiempoTranscurrido.horas}</div> 
                         <p>Hora</p>
                     </div>
                     <div className='reloj-item'>
-                        <div className='minutos'>{tiempo.minutos}</div>
+                        <div className='minutos'>{tiempoTranscurrido.minutos}</div>
                         <p>Minutos</p>
                     </div>
                     <div className='reloj-item'>
-                        <div className='segundos'>{tiempo.segundos}</div>
+                        <div className='segundos'>{tiempoTranscurrido.segundos}</div>
                         <p>Segundos</p>
                     </div>
                 </div>
@@ -206,6 +244,9 @@ function Reloj() {
         </div>
     );
 }
+
+
+
 
 
 

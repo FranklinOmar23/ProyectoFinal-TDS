@@ -7,7 +7,7 @@ export const IconoXD = ({ width, height }) => {
                 src="https://cdn.lordicon.com/kthelypq.json"
                 trigger="hover"
                 colors="primary:#ffffff"
-                style={{ width: `${width}px`, height: `${height}px` }}
+                style={{ width: `${width}px`, height: `${height}px`, top: '-3px' }}
             >
             </lord-icon>
         </>
@@ -21,7 +21,7 @@ export const IconoHome = ({ width, height }) => {
                src="https://cdn.lordicon.com/cnpvyndp.json"
                trigger="hover"
                colors="primary:#ffffff"
-               style={{ width: `${width}px`, height: `${height}px` }} 
+               style={{ width: `${width}px`, height: `${height}px`, top: '-3px' }} 
             >
             </lord-icon>
         </>
@@ -35,7 +35,7 @@ export const IconoMultas = ({ width, height }) => {
                src="https://cdn.lordicon.com/jkzgajyr.json"
                trigger="hover"
                colors="primary:#ffffff"
-               style={{ width: `${width}px`, height: `${height}px` }} 
+               style={{ width: `${width}px`, height: `${height}px`, top: '-3px' }} 
             >
             </lord-icon>
         </>
@@ -49,7 +49,7 @@ export const IconoHistorial = ({ width, height }) => {
                src="https://cdn.lordicon.com/whrxobsb.json"
                trigger="hover"
                colors="primary:#ffffff"
-               style={{ width: `${width}px`, height: `${height}px` }} 
+               style={{ width: `${width}px`, height: `${height}px`, top: '-3px' }} 
             >
             </lord-icon>
         </>
@@ -67,8 +67,8 @@ export const Icono = ({ width, height }) => {
                     width: `${width}px`,
                     height: `${height}px`,
                     position: 'relative',
-                    right: '12px',
-                    top: '-6px',
+                    
+                    top: '-1px',
                     transform: 'rotate(90deg)'
                 }}
             >

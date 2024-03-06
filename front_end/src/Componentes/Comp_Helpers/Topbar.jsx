@@ -12,8 +12,6 @@ function Topbar({titulo}) {
         }
     }, [user]);
 
-    console.log('Usuario en Topbar:', user);
-
     return (
         <nav className="navbar navbar-expand bg-white shadow mb-4 topbar static-top navbar-light">
             <div className="container-fluid">
