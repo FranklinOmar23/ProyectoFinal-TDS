@@ -4,7 +4,7 @@ import Topbar from "./Comp_Helpers/Topbar";
 import Footer from './Comp_Helpers/Footer.jsx';
 import toast, { Toaster } from 'react-hot-toast';
 import HisDescr from "./Comp_Helpers/historialDescr.jsx";
-import HisUltNotif from "./Comp_Helpers/historialUltNotif.jsx";
+//import HisUltNotif from "./Comp_Helpers/historialUltNotif.jsx";
 import { IconoTop } from "../Componentes/Comp_Helpers/Iconos.jsx"
 
 
@@ -30,7 +30,6 @@ function Historial (){
                         <div className="container-fluid">
                             <h3 className="text-dark mb-4">Multas previas</h3>
                             <div className="row mb-3">
-                            <HisUltNotif />
                             <HisDescr />
 
                             </div>
