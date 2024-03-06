@@ -34,13 +34,13 @@ function Topbar({titulo}) {
                                 </form>
                             </div>
                         </li>
-                        <li className="nav-item dropdown no-arrow">
+                        {/*<li className="nav-item dropdown no-arrow">
                         <div className="nav-item dropdown no-arrow"><a className="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#"><span className="d-none d-lg-inline me-2 text-gray-600 small">  {userNombre}</span><img className="border rounded-circle img-profile" src="../avatar1.jpeg" /></a>
                                 <div className="dropdown-menu shadow dropdown-menu-end animated--grow-in"><a className="dropdown-item" href="#"><i className="fas fa-user fa-sm fa-fw me-2 text-gray-400"></i>&nbsp;Perfil</a><a className="dropdown-item" href="#"><i className="fas fa-cogs fa-sm fa-fw me-2 text-gray-400"></i>Ajustes</a>
                                     <div className="dropdown-divider"></div><a className="dropdown-item" href="#"><strong><span style={{ color: 'rgb(209, 211, 226)' }}>Cerrar Sesión</span></strong></a>
                                 </div>
                             </div>
-                        </li>
+    </li>*/}
                     </ul>
                 </div>
             </div>

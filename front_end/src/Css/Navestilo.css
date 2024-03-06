@@ -17,18 +17,18 @@ body{
 
 .sidebar{
     position: sticky;
-    width: 90px;
+    width: 90px !important;
     top: 0;
     bottom: 0;
     background: rgb(4, 131, 55);
     transition: 0.9s;
-    padding-left: 18px;
+    padding-left: 15px;
     overflow: hidden;
     
 }
 
 .sidebar.active{
-    width: 300px;
+    width: 300px !important;
     transition: 0.9s;
 }
 
@@ -54,41 +54,39 @@ body{
     display: flex;
     white-space: nowrap;
     text-decoration: none;
-    margin-left: -50px;
 }
 
 .sidebar ul li.active{
-    background: var(--clr);
+    background: gainsboro;
     border-top-left-radius: 50px;
     border-bottom-left-radius: 50px;
-    margin-left: -50px;
 }
 
 .sidebar ul li.active::before{
     content: "";
     position: absolute;
     top: -20px;
-    right: -50px;
+    right: 0;
     width: 20px;
     height: 20px;
     border-bottom-right-radius: 20px;
-    box-shadow: 5px 5px 0 5px var(--clr);
+    box-shadow: 5px 5px 0 5px gainsboro;
     background: transparent;
 }
 .sidebar ul li.active::after{
     content: "";
     position: absolute;
     bottom: -20px;
-    right: -50px;
+    right: 0;
     width: 20px;
     height: 20px;
     border-top-right-radius: 20px;
-    box-shadow: 5px -5px 0 5px var(--clr);
+    box-shadow: 5px -5px 0 5px gainsboro;
     background: transparent;
 }
 
 
-.sidebar ul li a .icon{
+.sidebar ul li a .icon2{
     position: relative;
     display: flex;
     justify-content: center;
@@ -117,16 +115,16 @@ body{
     color: var(--bg);
 }
 
-.sidebar ul li:hover a .icon,
+.sidebar ul li:hover a .icon2,
 .sidebar ul li:hover a p {
     color: var(--bg);
 }
-.sidebar ul li.active a .icon {
+.sidebar ul li.active a .icon2 {
     color: #000 !important;
     z-index: 1;
 }
 
-.sidebar ul li.active a .icon::before {
+.sidebar ul li.active a .icon2::before {
     content: "";
     position: absolute;
     inset: 5px;
@@ -138,7 +136,7 @@ body{
 }
 
 /* Ajuste para mejorar la especificidad */
-.sidebar ul li.active:hover a .icon::before {
+.sidebar ul li.active:hover a .icon2::before {
     background: rgb(4, 131, 55);
 }
 
@@ -167,7 +165,7 @@ body{
 
 .menuTogle{
     position: absolute;
-    top: 20px;
+    top: 7px;
     right: 20px;
     width: 50px;
     height: 50px;
@@ -209,3 +207,19 @@ body{
     transform: translateY(0px ) rotate(-45deg);
 }
 
+a.navbar-brand{
+    display: flex;
+    justify-content: center;
+}
+
+img.img-fluid {
+    width: 159px;
+}
+
+ol, ul {
+    padding-left: 0; 
+}
+p {
+    margin-top: 0;
+    margin-bottom: 0;
+}
