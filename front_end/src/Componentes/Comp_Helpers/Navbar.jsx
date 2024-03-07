@@ -1,10 +1,12 @@
-import React, { useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { useAuth } from '../../context/provider.jsx';
 import "../../Css/Navestilo.css";
 
 function Navbar() {
     const { user } = useAuth();
     const [userNombre, setUserNombre] = useState('Usuario no encontrado');
+    const [isOpen, setIsOpen] = useState(false);
+    const [activeMenuItem, setActiveMenuItem] = useState('home-agente');
 
     useEffect(() => {
         if (user && user.user && user.user.nombre) {
@@ -12,21 +14,20 @@ function Navbar() {
         }
     }, [user]);
 
-    const [isOpen, setIsOpen] = useState(false);
+    useEffect(() => {
+        const storedActiveMenuItem = sessionStorage.getItem('activeMenuItem');
+        if (storedActiveMenuItem) {
+            setActiveMenuItem(storedActiveMenuItem);
+        }
+    }, []);
+
+    const handleLinkClick = (e, pageName) => {
+        setActiveMenuItem(pageName);
+        sessionStorage.setItem('activeMenuItem', pageName);
+    };
 
     const toggleSidebar = () => {
         setIsOpen(!isOpen);
-    };
-
-    const handleLinkClick = (e) => {
-        const clickedItem = e.target.parentNode.parentNode;
-        const menuTogle = document.querySelector('.menuTogle');
-        const sidebar = document.querySelector('.sidebar');
-        menuTogle.classList.toggle('active');
-        sidebar.classList.toggle('active');
-        const listItems = document.querySelectorAll('.MenuList li');
-        listItems.forEach(item => item.classList.remove('active'));
-        clickedItem.classList.add('active');
     };
 
     return (
@@ -40,34 +41,34 @@ function Navbar() {
                         </a>
                     </li>
                     <div className="MenuList">
-                        <li style={{ '--bg': '#ffe600' }} className="active">
-                            <a href="/home-agente" onClick={handleLinkClick}>
+                        <li style={{ '--bg': '#cbb910' }} className={activeMenuItem === 'home-agente' ? 'active' : ''}>
+                            <a href="/home-agente" onClick={(e) => handleLinkClick(e, 'home-agente')}>
                                 <div className="icon2">
                                     <i className="fas fa-home"></i>
                                 </div>
                                 <p>Inicio</p>
                             </a>
                         </li>
-                        <li style={{ '--bg': '#2bff00' }}>
-                            <a href="/perfil" onClick={handleLinkClick}>
+                        <li style={{ '--bg': '#D5670C' }} className={activeMenuItem === 'perfil' ? 'active' : ''}>
+                            <a href="/perfil" onClick={(e) => handleLinkClick(e, 'perfil')}>
                                 <div className="icon2">
                                     <i className="fa-solid fa-user"></i>
                                 </div>
                                 <p>Perfil</p>
                             </a>
                         </li>
-                        <li style={{ '--bg': '#81760d' }}>
-                            <a href="/nuevamulta" onClick={handleLinkClick}>
+                        <li style={{ '--bg': '#107E72 ' }} className={activeMenuItem === 'nuevamulta' ? 'active' : ''}>
+                            <a href="/nuevamulta" onClick={(e) => handleLinkClick(e, 'nuevamulta')}>
                                 <div className="icon2">
-                                <i class="fa-solid fa-folder-open"></i>
+                                    <i className="fa-solid fa-folder-open"></i>
                                 </div>
                                 <p>Nuevas Multas</p>
                             </a>
                         </li>
-                        <li style={{ '--bg': '#4d0000' }}>
-                            <a href="/historial" onClick={handleLinkClick}>
+                        <li style={{ '--bg': '#67436A' }} className={activeMenuItem === 'historial' ? 'active' : ''}>
+                            <a href="/historial" onClick={(e) => handleLinkClick(e, 'historial')}>
                                 <div className="icon2">
-                                    <i class="fa-solid fa-chart-simple"></i>   
+                                    <i className="fa-solid fa-chart-simple"></i>   
                                 </div>
                                 <p>Historial</p>
                             </a>
@@ -82,10 +83,8 @@ function Navbar() {
                                     </div>
                                 </div>
                                 <p>{userNombre}</p>
-
                             </a>
                         </li>
-
                         <li style={{ '--bg': '#7c2121' }}>
                             <a href="/">
                                 <div className="icon2">
