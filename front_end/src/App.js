@@ -9,6 +9,7 @@ import Nuevamulta from './Componentes/Nuevamulta';
 import Perfil from './Componentes/perfil';
 import HomeAdm from './Componentes/home-adm';
 import HomeUser from './Componentes/home-usuario';
+import Eror404 from './Componentes/Error404';
 
 function App() {
 
@@ -24,6 +25,7 @@ function App() {
             <Route path="/perfil" element={<Perfil />}/>
             <Route path="/home-adm" element={<HomeAdm />}/>
             <Route path="/home-user" element={<HomeUser />}/>
+            <Route path="*" element={<Eror404 />}/>
           </Routes>
         </BrowserRouter>
     </div>

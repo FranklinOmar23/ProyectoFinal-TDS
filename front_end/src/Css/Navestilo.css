@@ -57,7 +57,7 @@ body{
 }
 
 .sidebar ul li.active{
-    background: gainsboro;
+    background: #f8f9fc;
     border-top-left-radius: 50px;
     border-bottom-left-radius: 50px;
 }
@@ -70,7 +70,7 @@ body{
     width: 20px;
     height: 20px;
     border-bottom-right-radius: 20px;
-    box-shadow: 5px 5px 0 5px gainsboro;
+    box-shadow: 5px 5px 0 5px #f8f9fc;
     background: transparent;
 }
 .sidebar ul li.active::after{
@@ -81,7 +81,7 @@ body{
     width: 20px;
     height: 20px;
     border-top-right-radius: 20px;
-    box-shadow: 5px -5px 0 5px gainsboro;
+    box-shadow: 5px -5px 0 5px #f8f9fc;
     background: transparent;
 }
 
