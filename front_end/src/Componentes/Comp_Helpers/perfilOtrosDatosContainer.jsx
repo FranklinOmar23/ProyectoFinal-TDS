@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import toast, { Toaster } from 'react-hot-toast';
+import { Reloj } from "../Home";
 
 function PerfilOtrosD() {
   const [showModal, setShowModal] = useState(false);
@@ -139,13 +140,10 @@ function PerfilOtrosD() {
         </div>
       </div>
 
-      <div className="card shadow mb-5">
-        <div className="card-header py-3">
-          <p className="text-success m-0 fw-bold">Horario</p>
-        </div>
-        <div className="card-body">
-          <div className="row"></div>
-        </div>
+      <div className="col-md-12">
+        
+          <Reloj fullWidth={true} /> {/* Aquí se pasa la propiedad fullWidth como true */}
+
       </div>
 
       {/* Modal para la edición de datos personales */}

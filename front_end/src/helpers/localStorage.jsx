@@ -23,4 +23,12 @@ function useLocalStorage(key, initialValue) {
 
   return [storedValue, setValue];
 }
+export function limpiarDatosLocalStorage() {
+    // Eliminar los datos del usuario
+    localStorage.removeItem('user');
+    // Eliminar los datos de las multas
+    localStorage.removeItem('multa');
+    // Agrega aquí cualquier otro dato que necesites eliminar
+}
+
 export default useLocalStorage;

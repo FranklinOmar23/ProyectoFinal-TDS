@@ -33,7 +33,8 @@ const Login = () => {
         cargarMultas(multaRespuesta.data);
         console.log('Multa después de iniciar sesión:', multaRespuesta.data);
   
-        navigate('/home');
+        navigate('/home-agente');
+        toast.success('Inicio de sesión exitoso');
       } else {
         console.error('ID del usuario indefinido');
         toast.error('Error al obtener el ID del usuario');

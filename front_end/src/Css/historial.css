@@ -36,3 +36,15 @@
     font-size: 24px; /* Tamaño del icono */
     margin-right: 10px; /* Espacio entre el icono y el texto */
 }
+
+.formulario-oculto {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s, visibility 0.5s;
+}
+
+.formulario-visible {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.5s, visibility 0.5s;
+}

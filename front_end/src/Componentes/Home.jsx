@@ -11,6 +11,7 @@ import Footer from './Comp_Helpers/Footer.jsx';
 import Navbar from './Comp_Helpers/Navbar.jsx';
 import Topbar from './Comp_Helpers/Topbar.jsx';
 import { useAuth } from '../context/provider.jsx';
+import Chart from "chart.js/auto";
 
 import toast, { Toaster } from 'react-hot-toast';
 
@@ -108,45 +109,78 @@ function InformacionesCard() {
 }
 
 function MultasRecientesCard() {
+    const canvasRef = useRef(null);
+    const [chartInstance, setChartInstance] = useState(null);
+    const { multa } = useAuth();
+
+    useEffect(() => {
+        if (!canvasRef.current) return;
+
+        // Filtrar las últimas 5 multas basándote en la fecha
+        const ultimasMultas = multa?.multasDelAgente
+            .sort((a, b) => new Date(b.fecha) - new Date(a.fecha)) // Ordenar por fecha descendente
+            .slice(0, 5); // Seleccionar las últimas 5 multas
+
+        // Procesar los datos de las multas para contar cuántas veces se ha impuesto cada tipo de multa
+        const conteoMultas = ultimasMultas.reduce((acc, multa) => {
+            const razon = multa.razon;
+            acc[razon] = (acc[razon] || 0) + 1;
+            return acc;
+        }, {});
+
+        // Preparar los datos para el gráfico
+        const labels = Object.keys(conteoMultas);
+        const data = Object.values(conteoMultas);
+
+        const datos = {
+            labels: labels,
+            datasets: [{
+                data: data,
+                backgroundColor: [
+                    'rgb(122, 187, 139)',
+                    'rgb(147, 199, 89)',
+                    'rgb(180, 123, 91)',
+                    'rgb(199, 191, 115)'
+                ]
+            }]
+        };
+
+        const opciones = {
+            responsive: true,
+            maintainAspectRatio: false
+        };
+
+        const contexto = canvasRef.current.getContext('2d');
+        const newChartInstance = new Chart(contexto, {
+            type: 'pie',
+            data: datos,
+            options: opciones
+        });
+        setChartInstance(newChartInstance);
+
+        // Obtener los elementos de la leyenda y asignarles el color correspondiente
+        const legendItems = document.querySelectorAll('.legend li');
+        legendItems.forEach((item, index) => {
+            const color = newChartInstance.data.datasets[0].backgroundColor[index];
+            const dot = item.querySelector('.dot');
+            dot.style.background = color;
+        });
+
+        return () => {
+            if (newChartInstance) {
+                newChartInstance.destroy();
+            }
+        };
+    }, [multa]); // Dependencia del efecto: se ejecuta cada vez que cambian los datos de multa
+
     return (
         <div className="col-md-6">
             <div className="card shadow mb-4">
                 <div className="card-header py-3">
                     <h6 className="text-success fw-bold m-0">Multas Recientes</h6>
                 </div>
-                <div className="card-body" style={{ minHeight: '250px', position: 'relative' }}>
-                    <div className="pie-chart" style={{ width: '200px', height: '200px', margin: '60px auto 20px' }}>
-                        <div className="slice" style={{ '--value': 45 }}>
-                            <span className="value-label">45%</span>
-                        </div>
-                        <div className="slice" style={{ '--value': 30 }}>
-                            <span className="value-label">30%</span>
-                        </div>
-                        <div className="slice" style={{ '--value': 15 }}>
-                            <span className="value-label">15%</span>
-                        </div>
-                        <div className="slice" style={{ '--value': 10 }}>
-                            <span className="value-label">10%</span>
-                        </div>
-                    </div>
-                    <ul className="legend" style={{  }}>
-                        <li>
-                            <span className="dot" style={{ background: 'rgb(122, 187, 139)' }}></span>
-                            Uso del Celular
-                        </li>
-                        <li>
-                            <span className="dot" style={{ background: 'rgb(147, 199, 89)' }}></span>
-                            Sin matrícula
-                        </li>
-                        <li>
-                            <span className="dot" style={{ background: 'rgb(180, 123, 91)' }}></span>
-                            Sin cinturón
-                        </li>
-                        <li>
-                            <span className="dot" style={{ background: 'rgb(199, 191, 115)' }}></span>
-                            Obstrución al peatón
-                        </li>
-                    </ul>
+                <div className="card-body"> 
+                    <canvas ref={canvasRef} width="300px" height="300px"></canvas>
                 </div>
             </div>
         </div>
@@ -157,7 +191,7 @@ function MultasRecientesCard() {
 
 
 
-function Reloj() {
+export function Reloj({ fullWidth = false }) {
     const { user } = useAuth(); // Obtén el objeto user del contexto
     const [tiempoTranscurrido, setTiempoTranscurrido] = useState({ horas: 0, minutos: 0, segundos: 0 });
    
@@ -194,10 +228,10 @@ function Reloj() {
        return () => clearInterval(intervalId);
     }, [user]); // Dependencia del efecto: se ejecuta cada vez que cambia el objeto user
    
-
+    const relojClass = fullWidth ? "col-md-12" : "col-md-6";
    
     return (
-       <div className="col-md-6">
+        <div className={`${relojClass} card shadow mb-4`}>
          <div className="card shadow mb-4">
            <div className="card-header py-3">
              <h6 className="text-success fw-bold m-0">Tiempo transcurrido desde la entrada</h6>
