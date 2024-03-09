@@ -1,4 +1,15 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
+body{
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--clr);
+    min-height: 100vh;
+    
+}
 :root{
     --clr: #f8f9fc;
 }
@@ -46,7 +57,7 @@
 }
 
 .sidebar ul li.active{
-    background: gainsboro;
+    background: #f8f9fc;
     border-top-left-radius: 50px;
     border-bottom-left-radius: 50px;
 }
@@ -59,7 +70,7 @@
     width: 20px;
     height: 20px;
     border-bottom-right-radius: 20px;
-    box-shadow: 5px 5px 0 5px gainsboro;
+    box-shadow: 5px 5px 0 5px #f8f9fc;
     background: transparent;
 }
 .sidebar ul li.active::after{
@@ -70,7 +81,7 @@
     width: 20px;
     height: 20px;
     border-top-right-radius: 20px;
-    box-shadow: 5px -5px 0 5px gainsboro;
+    box-shadow: 5px -5px 0 5px #f8f9fc;
     background: transparent;
 }
 

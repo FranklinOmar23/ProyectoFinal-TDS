@@ -3,15 +3,15 @@ import "../Css/Footer-Dark-icons.css";
 import "../Css/sidebar-menu.css";
 import "../Css/bootstrap.min.css";
 import "../Css/animate.min.css";
-import "../Css/adicciones.css"
+import "../Css/adicciones.css";
 import "../Css/relojestilo.css";
-import "../Css/graficopastel.css";
+
 import { IconoTop } from "../Componentes/Comp_Helpers/Iconos.jsx"
 import Footer from './Comp_Helpers/Footer.jsx';
 import Navbar from './Comp_Helpers/Navbar.jsx';
 import Topbar from './Comp_Helpers/Topbar.jsx';
-import { useAuth } from '../context/provider.jsx';
 import Chart from "chart.js/auto";
+import { useAuth } from '../context/provider.jsx';
 
 import toast, { Toaster } from 'react-hot-toast';
 
@@ -111,31 +111,14 @@ function InformacionesCard() {
 function MultasRecientesCard() {
     const canvasRef = useRef(null);
     const [chartInstance, setChartInstance] = useState(null);
-    const { multa } = useAuth();
 
     useEffect(() => {
         if (!canvasRef.current) return;
 
-        // Filtrar las últimas 5 multas basándote en la fecha
-        const ultimasMultas = multa?.multasDelAgente
-            .sort((a, b) => new Date(b.fecha) - new Date(a.fecha)) // Ordenar por fecha descendente
-            .slice(0, 5); // Seleccionar las últimas 5 multas
-
-        // Procesar los datos de las multas para contar cuántas veces se ha impuesto cada tipo de multa
-        const conteoMultas = ultimasMultas.reduce((acc, multa) => {
-            const razon = multa.razon;
-            acc[razon] = (acc[razon] || 0) + 1;
-            return acc;
-        }, {});
-
-        // Preparar los datos para el gráfico
-        const labels = Object.keys(conteoMultas);
-        const data = Object.values(conteoMultas);
-
         const datos = {
-            labels: labels,
+            labels: ['Uso del Celular', 'Sin matrícula', 'Sin cinturón', 'Obstrucción al peatón'],
             datasets: [{
-                data: data,
+                data: [45, 30, 60, 80],
                 backgroundColor: [
                     'rgb(122, 187, 139)',
                     'rgb(147, 199, 89)',
@@ -171,7 +154,7 @@ function MultasRecientesCard() {
                 newChartInstance.destroy();
             }
         };
-    }, [multa]); // Dependencia del efecto: se ejecuta cada vez que cambian los datos de multa
+    }, []);
 
     return (
         <div className="col-md-6">
@@ -191,70 +174,80 @@ function MultasRecientesCard() {
 
 
 
-export function Reloj({ fullWidth = false }) {
-    const { user } = useAuth(); // Obtén el objeto user del contexto
+
+function Reloj() {
     const [tiempoTranscurrido, setTiempoTranscurrido] = useState({ horas: 0, minutos: 0, segundos: 0 });
-   
+    const horarioEntrada = "09:00:00"; // Establecer el horario de entrada manualmente
+    const horarioSalida = "18:00:00";  // Establecer el horario de salida manualmente
+
     useEffect(() => {
-       const calcularTiempoTranscurrido = () => {
-         if (user && user.user && user.user.horario_entrada) {
-           const ahora = new Date();
-           // Convertir el horario de entrada a un objeto Date
-           const entrada = new Date(ahora.getFullYear(), ahora.getMonth(), ahora.getDate(), ...user.user.horario_entrada.split(':'));
-   
-           // Calcular el tiempo transcurrido desde la entrada hasta el momento actual
-           const tiempoTranscurrido = ahora - entrada;
-   
-           // Convertir milisegundos a horas, minutos y segundos
-           const horas = Math.floor(tiempoTranscurrido / 3600000);
-           const minutos = Math.floor((tiempoTranscurrido % 3600000) / 60000);
-           const segundos = Math.floor((tiempoTranscurrido % 60000) / 1000);
-   
-           setTiempoTranscurrido({ horas, minutos, segundos });
-         } else {
-           setTiempoTranscurrido({ horas: 0, minutos: 0, segundos: 0 });
-         }
-       };
-   
-       // Llamar a la función inicialmente para establecer el tiempo transcurrido
-       calcularTiempoTranscurrido();
-   
-       // Establecer un intervalo para actualizar el tiempo transcurrido cada segundo
-       const intervalId = setInterval(() => {
-         calcularTiempoTranscurrido();
-       }, 1000); // 1000 milisegundos = 1 segundo
-   
-       // Limpiar el intervalo cuando el componente se desmonte
-       return () => clearInterval(intervalId);
-    }, [user]); // Dependencia del efecto: se ejecuta cada vez que cambia el objeto user
-   
-    const relojClass = fullWidth ? "col-md-12" : "col-md-6";
-   
+        const calcularTiempoTranscurrido = () => {
+            const ahora = new Date();
+            const horaActual = ahora.getHours();
+            const minutosActual = ahora.getMinutes();
+            const segundosActual = ahora.getSeconds();
+
+            const [horaEntradaH, minutosEntradaH, segundosEntradaH] = horarioEntrada.split(':').map(Number);
+            const [horaSalidaH, minutosSalidaH, segundosSalidaH] = horarioSalida.split(':').map(Number);
+
+            let diferenciaSegundos;
+            
+            // Si es antes del horario de entrada
+            if (horaActual < horaEntradaH || (horaActual === horaEntradaH && minutosActual < minutosEntradaH) || (horaActual === horaEntradaH && minutosActual === minutosEntradaH && segundosActual < segundosEntradaH)) {
+                diferenciaSegundos = (horaEntradaH - horaActual) * 3600 + (minutosEntradaH - minutosActual) * 60 + (segundosEntradaH - segundosActual);
+            }
+            // Si es después del horario de salida
+            else if (horaActual > horaSalidaH || (horaActual === horaSalidaH && minutosActual > minutosSalidaH) || (horaActual === horaSalidaH && minutosActual === minutosSalidaH && segundosActual > segundosSalidaH)) {
+                diferenciaSegundos = 0;
+            }
+            // Si es dentro del horario laboral
+            else {
+                diferenciaSegundos = (horaActual - horaEntradaH) * 3600 + (minutosActual - minutosEntradaH) * 60 + (segundosActual - segundosEntradaH);
+            }
+
+            const horas = Math.floor(diferenciaSegundos / 3600);
+            const minutos = Math.floor((diferenciaSegundos % 3600) / 60);
+            const segundos = diferenciaSegundos % 60;
+
+            setTiempoTranscurrido({ horas, minutos, segundos });
+        };
+
+        // Calcular el tiempo transcurrido cada segundo
+        const intervalo = setInterval(calcularTiempoTranscurrido, 1000);
+
+        // Limpiar el intervalo cuando el componente se desmonta
+        return () => clearInterval(intervalo);
+    }, []);
+
+
     return (
-        <div className={`${relojClass} card shadow mb-4`}>
-         <div className="card shadow mb-4">
-           <div className="card-header py-3">
-             <h6 className="text-success fw-bold m-0">Tiempo transcurrido desde la entrada</h6>
-           </div>
-           <div className="body-card">
-             <div className='reloj-item'>
-               <div className='horas'>{tiempoTranscurrido.horas}</div> 
-               <p>Hora</p>
-             </div>
-             <div className='reloj-item'>
-               <div className='minutos'>{tiempoTranscurrido.minutos}</div>
-               <p>Minutos</p>
-             </div>
-             <div className='reloj-item'>
-               <div className='segundos'>{tiempoTranscurrido.segundos}</div>
-               <p>Segundos</p>
-             </div>
-           </div>
-         </div>
-       </div>
+        <div className="col-md-6">
+            <div className="card shadow mb-4">
+                <div className="card-header py-3">
+                    <h6 className="text-success fw-bold m-0">Tiempo transcurrido desde la entrada</h6>
+                </div>
+                <div className="body-card">
+                    <div className='reloj-item'>
+                        <div className='horas'>{tiempoTranscurrido.horas}</div> 
+                        <p>Hora</p>
+                    </div>
+                    <div className='reloj-item'>
+                        <div className='minutos'>{tiempoTranscurrido.minutos}</div>
+                        <p>Minutos</p>
+                    </div>
+                    <div className='reloj-item'>
+                        <div className='segundos'>{tiempoTranscurrido.segundos}</div>
+                        <p>Segundos</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     );
-   };
-   
+}
+
+
+
+
 
 
 
