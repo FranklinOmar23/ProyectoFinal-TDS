@@ -8,7 +8,7 @@ function Error404() {
     return (
         <div>
             <section className="u-align-center u-clearfix u-palette-1-light-2 u-section-1" id="carousel_7246">
-                <div class="u-clearfix u-sheet u-valign-middle-sm u-valign-middle-xl u-valign-middle-xs u-sheet-1">
+                <div class="u-clearfix u-sheet u-valign-middle-sm u-valign-middle-xl u-valign-middle-xs u-sheet-1 con">
                     <div className="u-clearfix u-sheet u-valign-middle-sm u-valign-middle-xl u-valign-middle-xs u-sheet-1"> </div>
                     <img className="u-expanded-width-xs u-image u-image-contain u-image-default u-image-1" src="../404-erroor.png" alt="" />
                 </div>
