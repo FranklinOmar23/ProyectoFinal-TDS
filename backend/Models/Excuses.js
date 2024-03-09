@@ -1,1 +1,0 @@
-console.log("Modelo de excusas")
