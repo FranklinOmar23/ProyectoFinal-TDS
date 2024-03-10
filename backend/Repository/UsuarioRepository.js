@@ -259,6 +259,39 @@ class UsuarioRepository {
       res.status(500).send('Error actualizando contraseña del usuario');
     }
   }
+/*----------------------------------------------Logica de administrador----------------------------------------------*/
+async getAgents() {
+  try {
+    // Realizar la consulta a la base de datos para obtener los usuarios con el rol de AGENTE
+    const { data, error } = await this.supabase
+      .from(this.usuario)
+      .select('*')
+      .eq('role', 'AGENTE');
+
+    if (error) {
+      throw error;
+    }
+
+    // Mapear los datos de los usuarios a instancias de Usuario y devolverlos
+    return data.map(userData => {
+      return this.mapToUserInstance(
+        userData.id,
+        userData.correo,
+        userData.nombre,
+        userData.apellido,
+        userData.cedula,
+        userData.role,
+        userData.estado,
+        userData.horario_entrada,
+        userData.horario_salida,
+        userData.salario,
+        userData.contrasena
+      );
+    });
+  } catch (error) {
+    throw error;
+  }
+}
 
 }
 

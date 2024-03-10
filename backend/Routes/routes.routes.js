@@ -28,5 +28,14 @@ router.post('/multaAgente', (req, res) => multa.getMultaByUser(req, res));
 router.post("/register", (req, res) => {
     usuario.registerUser(req, res);
 });
-  
+
+router.get("/agents", async (req, res) => {
+    try {
+      const agents = await usuario.getAllAgents();
+      res.json(agents);
+    } catch (error) {
+      console.error('Error obteniendo agentes:', error);
+      res.status(500).json({ error: 'Error obteniendo agentes' });
+    }
+  });
 export default router;

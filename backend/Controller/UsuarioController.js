@@ -127,5 +127,15 @@ class UsuarioController {
       res.status(500).json({ error: 'Error al obtener el nombre del usuario' });
     }
   }
+
+/*------------------------------------Logica de administrador------------------------------------*/
+async getAllAgents() {
+  try {
+    const agents = await this.usuarioRepository.getAgents();
+    return agents;
+  } catch (error) {
+    throw error;
+  }
+}
 };
 export { UsuarioController };

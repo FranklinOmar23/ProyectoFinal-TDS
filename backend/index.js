@@ -1,7 +1,7 @@
-import app from "./app.js";
+import server from "./app.js"; // Importa server en lugar de app
 import { PORT } from "./config.js";
-import "./Data/dbContection.js"
+import "./Data/dbContection.js";
 
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+server.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
