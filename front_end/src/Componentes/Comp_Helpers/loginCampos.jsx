@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import "../../Css/perfil.css";
 
 const LoginCampos = ({ onLogin }) => {
   const [cedula, setCedula] = useState('');
@@ -42,8 +43,10 @@ const LoginCampos = ({ onLogin }) => {
           name="contrasena" // Corrección aquí
           value={password}
           onChange={handleChangePassword}
-        />
+        /><i class="fa-solid fa-eye"></i>
+        <i class="fa-solid fa-eye-slash"></i>
       </div>
+      {/*
       <div className="mb-3">
         <div className="custom-control custom-checkbox small">
           <input
@@ -56,6 +59,7 @@ const LoginCampos = ({ onLogin }) => {
           </label>
         </div>
       </div>
+      */}
       <button
         className="btn btn-primary d-block btn-user w-100"
         type="submit"

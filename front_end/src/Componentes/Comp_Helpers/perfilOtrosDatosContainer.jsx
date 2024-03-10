@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import toast, { Toaster } from 'react-hot-toast';
+import "../../Css/perfil.css";
 
 function PerfilOtrosD() {
   const [showModal, setShowModal] = useState(false);
@@ -130,8 +131,8 @@ function PerfilOtrosD() {
                 </div>
               </div>
             </div>
-            <div className="mb-3">
-            <Button variant="light" style={{ color: "white", backgroundColor: "#1cc88a" }} onClick={handleModalOpen}>
+            <div>
+            <Button className="Button2" onClick={handleModalOpen}>
               Editar Datos Personales
             </Button>
             </div>
@@ -150,13 +151,13 @@ function PerfilOtrosD() {
 
       {/* Modal para la edición de datos personales */}
       <Modal show={showModal} onHide={handleModalClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Editar Datos Personales</Modal.Title>
-        </Modal.Header>
+      <Modal.Header closeButton style={{ background: '#1cc88a', color: 'white', borderBottom: 'none' }}>
+        <Modal.Title style={{ fontWeight: 'bold' }}>Editar Datos Personales</Modal.Title>
+      </Modal.Header>
         <Modal.Body>
           <Form>
             <Form.Group className="mb-3">
-              <Form.Label>Contraseña Antigua</Form.Label>
+              <Form.Label>Contraseña Antigua:</Form.Label>
               <Form.Control
                 className="form-control"
                 type="password"
@@ -166,7 +167,7 @@ function PerfilOtrosD() {
               />
             </Form.Group>
             <Form.Group className="mb-3">
-              <Form.Label>Contraseña Nueva</Form.Label>
+              <Form.Label>Contraseña Nueva:</Form.Label>
               <Form.Control
                 className="form-control"
                 type="password"
@@ -176,7 +177,7 @@ function PerfilOtrosD() {
               />
             </Form.Group>
             <Form.Group className="mb-3">
-              <Form.Label>Confirmar Contraseña</Form.Label>
+              <Form.Label>Confirmar Contraseña:</Form.Label>
               <Form.Control
                 className="form-control"
                 type="password"
@@ -187,7 +188,7 @@ function PerfilOtrosD() {
               {errors && errors.contrasena && <Form.Control.Feedback type="invalid">{errors.contrasena}</Form.Control.Feedback>}
             </Form.Group>
             <Form.Group className="mb-3">
-              <Form.Label>Número de teléfono</Form.Label>
+              <Form.Label>Número de teléfono:</Form.Label>
               <Form.Control
                 className="form-control"
                 type="text"
@@ -203,7 +204,7 @@ function PerfilOtrosD() {
           <Button variant="secondary" onClick={handleModalClose}>
             Cerrar
           </Button>
-          <Button variant="success" style={{ color: "white", backgroundColor: "#1cc88a" }} onClick={handleSaveChanges}>
+          <Button className="Button2" onClick={handleSaveChanges}>
             Guardar Cambios
           </Button>
 

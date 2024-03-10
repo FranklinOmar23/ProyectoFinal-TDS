@@ -203,7 +203,7 @@ function NmOtroCon({ onFormDataChange }) {
                             <div className="col"></div>
                         </div>
                         <div className="mb-3">
-                            <button className="btn btn-success btn-sm link-light" type="button" onClick={handleSaveToLocal}>Guardar configuracion</button>
+                            <button className="Button2" type="button" onClick={handleSaveToLocal}>Guardar configuración</button>
                         </div>
                     </form>
                 </div>

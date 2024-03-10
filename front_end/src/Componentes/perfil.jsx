@@ -23,10 +23,10 @@ function Perfil() {
                         <div className="container-fluid">
                             <h3 className="text-dark mb-4">Usuario</h3>
                             <div className="row mb-3">
-                                <div className="col-lg-4">
+                                <div className="col-lg-5">
                                     <FotoMulta />
                                 </div>
-                                <div className="col-lg-8">
+                                <div className="col-lg-7">
                                     <div className="row">
                                         <div className="col">
                                             <PerfilDatos />

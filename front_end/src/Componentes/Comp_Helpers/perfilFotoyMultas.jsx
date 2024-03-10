@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import "../../Css/FotoMulta.css";
+import "../../Css/perfil.css";
 
 function FotoMulta() {
   const [profileImage, setProfileImage] = useState(null);
@@ -75,7 +75,7 @@ function FotoMulta() {
           </div>
         </div>
       </div>
-      <div className="col-lg-6 mb-4">
+      <div className="col-lg-6 mb-3">
         <div className="card">
           <div className="card-body text-center shadow">
             <div className="d-flex align-items-center justify-content-center flex-column">
