@@ -129,13 +129,18 @@ class UsuarioController {
   }
 
 /*------------------------------------Logica de administrador------------------------------------*/
-async getAllAgents() {
+async getAllAgents(req, res) {
   try {
-    const agents = await this.usuarioRepository.getAgents();
-    return agents;
+     const agents = await this.usuarioRepository.getAgents();
+     // Imprime los datos de los agentes en la consola
+     console.log(agents);
+     // Asegúrate de enviar la respuesta con el código de estado 200 y los datos de los agentes
+     res.status(200).json(agents);
   } catch (error) {
-    throw error;
+     console.error(error);
+     // Envía un mensaje de error con el código de estado 500
+     res.status(500).json({ error: 'Error al obtener los agentes' });
   }
-}
+ }
 };
 export { UsuarioController };

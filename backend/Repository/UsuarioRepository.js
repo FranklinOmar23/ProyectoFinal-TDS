@@ -1,5 +1,5 @@
 
-import { SupabaseClientSingleton } from '../Data/dbContection.js';
+import { SupabaseClientSingleton } from '../data/dbContection.js';
 import { Usuario } from '../Models/Usuario.js';
 import bcrypt from 'bcryptjs';
 
@@ -273,24 +273,29 @@ async getAgents() {
     }
 
     // Mapear los datos de los usuarios a instancias de Usuario y devolverlos
-    return data.map(userData => {
-      return this.mapToUserInstance(
-        userData.id,
-        userData.correo,
-        userData.nombre,
-        userData.apellido,
-        userData.cedula,
-        userData.role,
-        userData.estado,
-        userData.horario_entrada,
-        userData.horario_salida,
-        userData.salario,
-        userData.contrasena
-      );
+    const agents = data.map(userData => {
+      const user = new Usuario();
+      user.id = userData.id;
+      user.correo = userData.correo;
+      user.nombre = userData.nombre;
+      user.apellido = userData.apellido;
+      user.cedula = userData.cedula;
+      user.role = userData.role;
+      user.estado = userData.estado;
+      user.horario_entrada = userData.horario_entrada;
+      user.horario_salida = userData.horario_salida;
+      user.salario = userData.salario;
+      user.telefono = userData.telefono;
+      user.foto = userData.foto;
+      user.foto_Vehiculo = userData.foto_Vehiculo;
+      user.contrasena = userData.contrasena;
+      return user;
     });
-  } catch (error) {
+
+    return agents; // Devolver el array de agentes
+ } catch (error) {
     throw error;
-  }
+ }
 }
 
 }

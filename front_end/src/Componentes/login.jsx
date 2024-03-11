@@ -13,7 +13,8 @@ import { useAuth } from '../context/provider';
 
 const Login = () => {
   const navigate = useNavigate();
-  const { loginUser,cargarMultas } = useAuth();
+  const { loginUser, cargarMultas } = useAuth();
+
   const handleLogin = async (userData, multaData) => {
     try {
       const response = await axios.post('http://localhost:4000/login', userData);
@@ -23,22 +24,29 @@ const Login = () => {
       loginUser(response.data);
       console.log('Usuario después de iniciar sesión:', response.data);
   
-      // Verificar si el usuario tiene un ID antes de realizar la solicitud de multas
-      if (response.data.user && response.data.user.id) {
-        // Multas
-        console.log('USuario id',response.data.user.id)
+      // Redirigir según el rol del usuario
+      switch (response.data.user?.role) {
+        case 'AGENTE':
+          navigate('/home-agente');
+          break;
+        case 'ADMINISTRADOR':
+          navigate('/home-adm');
+          break;
+        default:
+          console.error('Rol de usuario desconocido');
+          toast.error('Error al obtener el rol del usuario');
+      }
+      
+      // Obtener las multas solo si el usuario es agente
+      if (response.data.user?.role === 'AGENTE') {
         const multaRespuesta = await axios.post('http://localhost:4000/multaAgente', { id_agente: response.data.user.id });
         console.log(multaRespuesta.data);
   
         cargarMultas(multaRespuesta.data);
         console.log('Multa después de iniciar sesión:', multaRespuesta.data);
-  
-        navigate('/home-agente');
-        toast.success('Inicio de sesión exitoso');
-      } else {
-        console.error('ID del usuario indefinido');
-        toast.error('Error al obtener el ID del usuario');
       }
+  
+      toast.success('Inicio de sesión exitoso');
     } catch (error) {
       console.error('Error al iniciar sesión:', error);
       toast.error("Error al iniciar sesión, por favor verifica tus credenciales e intenta de nuevo.");
