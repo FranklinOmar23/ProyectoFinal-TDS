@@ -16,6 +16,7 @@
     "force": "^0.0.3",
     "is-root": "^3.0.0",
     "isexe": "^3.1.1",
+    "leaflet": "^1.9.4",
     "react": "^18.2.0",
     "react-bootstrap": "^2.10.1",
     "react-dom": "^18.2.0",

@@ -12,6 +12,11 @@ export const Provider = ({ children }) => {
     const storedMulta = localStorage.getItem('multa');
     return storedMulta ? JSON.parse(storedMulta) : null;
   });
+  const [requerimiento,setRequerimiento]= useState(()=>{
+    const storedRequerimiento = localStorage.getItem('requerimiento');
+    return storedRequerimiento ? JSON.parse(storedRequerimiento): null;
+
+  })
 
   const loginUser = (userData) => {
     setUser(userData);
@@ -22,6 +27,10 @@ export const Provider = ({ children }) => {
     setUser(null);
     localStorage.removeItem('user');
   };
+  const cargarRequerimientos = (requerimientoData)=>{
+    setRequerimiento(requerimientoData);
+    localStorage.setItem('requerimiento',JSON.stringify(requerimientoData))
+  }
 
   const cargarMultas = (multasData) => {
     // Utiliza setMulta para actualizar el estado de multa
@@ -30,7 +39,7 @@ export const Provider = ({ children }) => {
   };
 
   return (
-    <Context.Provider value={{ user, loginUser, logoutUser, multa, cargarMultas }}>
+    <Context.Provider value={{ user, loginUser, logoutUser, multa, cargarMultas, requerimiento, cargarRequerimientos}}>
       {children}
     </Context.Provider>
   );

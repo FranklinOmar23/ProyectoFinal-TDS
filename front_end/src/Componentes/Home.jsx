@@ -11,26 +11,10 @@ import Navbar from './Comp_Helpers/Navbar.jsx';
 import Topbar from './Comp_Helpers/Topbar.jsx';
 import { useAuth } from '../context/provider.jsx';
 import Chart from "chart.js/auto";
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 
 import toast, { Toaster } from 'react-hot-toast';
-
-
-function Map() {
-    const googleMapsUrl = "https://www.google.com/maps/embed/v1/place?key=AIzaSyBIwLAPjCguzhFQCiT4RuILjVdUVVp_dq4&q=Santo+Domingo,Republica+Dominicana";
-
-    return (
-        <div className="col-md-6">
-            <iframe 
-                allowFullScreen 
-                frameBorder="0" 
-                src={googleMapsUrl} 
-                width="100%" 
-                height="400">
-            </iframe>
-        </div>
-    );
-}
-
 
 function InformacionesCard() {
     return (
@@ -116,9 +100,9 @@ function MultasRecientesCard() {
         if (!canvasRef.current) return;
 
         // Filtrar las últimas 5 multas basándote en la fecha
-        const ultimasMultas = multa?.multasDelAgente
-            .sort((a, b) => new Date(b.fecha) - new Date(a.fecha)) // Ordenar por fecha descendente
-            .slice(0, 5); // Seleccionar las últimas 5 multas
+        const ultimasMultas = (multa?.multasDelAgente || [])
+        .sort((a, b) => new Date(b.fecha) - new Date(a.fecha)) // Ordenar por fecha descendente
+        .slice(0, 5); 
 
         // Procesar los datos de las multas para contar cuántas veces se ha impuesto cada tipo de multa
         const conteoMultas = ultimasMultas.reduce((acc, multa) => {
@@ -257,32 +241,93 @@ export function Reloj({ fullWidth = false }) {
 
 
 
-function Home() {
+   function Home() {
+    const [map, setMap] = useState(null);
+  const { requerimiento } = useAuth();
 
+  useEffect(() => {
+    let newMap;
+
+    const initMap = () => {
+      if (newMap) {
+        return; // El mapa ya está inicializado
+      }
+
+      // Crear el mapa si aún no se ha creado
+      newMap = L.map('map').setView([18.4861, -69.9312], 13);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(newMap);
+      setMap(newMap);
+
+      // Agregar círculos para los requerimientos
+      if (requerimiento && requerimiento.requerimientos) {
+        requerimiento.requerimientos.forEach((req) => {
+          const { latitud, longitud, direccion, fecha, requerimiento, nivel } = req;
+
+          // Definir el color del círculo según el nivel
+          let color;
+          switch (nivel) {
+            case 1:
+              color = 'yellow';
+              break;
+            case 2:
+              color = 'orange';
+              break;
+            case 3:
+              color = 'red';
+              break;
+            default:
+              color = 'blue'; // Color predeterminado para otros casos
+          }
+
+          // Crear un círculo con el color determinado
+          const reqCircle = L.circle([latitud, longitud], {
+            color: color,
+            fillColor: color,
+            fillOpacity: 0.5,
+            radius: 300, 
+          }).addTo(newMap);
+
+          reqCircle.bindPopup(`<b> Lugar: ${direccion}</b><br> Fecha: ${fecha}<br> Requerimiento: ${requerimiento}`);
+        });
+      }
+    };
+
+    initMap();
+
+    // Limpiar el mapa al desmontar el componente
+    return () => {
+      if (newMap) {
+        newMap.remove();
+      }
+    };
+  }, [requerimiento]);
     return (
         <>
-        <div id="page-top"></div>
-        <div id="wrapper">
-            <Navbar />
-            <div className="d-flex flex-column" id="content-wrapper">
-                <Topbar titulo="Home"/>
-                <div className="container">
-                    <div className="row">
-                        <Map />
-                        <InformacionesCard />
+            <div id="page-top"></div>
+            <div id="wrapper">
+                <Navbar />
+                <div className="d-flex flex-column" id="content-wrapper">
+                    <Topbar titulo="Home"/>
+                    <div className="container">
+                        <div className="row">
+                            <div className="col-md-6" style={{ height: '400px' }} id="map"></div>
+                            <InformacionesCard />
+                        </div>
                     </div>
-                </div>
-                <div className="container-fluid">
-                    <div className="d-sm-flex justify-content-between align-items-center mb-4"></div>
-                    <div className="row">
-                        <MultasRecientesCard />
-                        <Reloj />
+                    <div className="container-fluid">
+                        <div className="d-sm-flex justify-content-between align-items-center mb-4"></div>
+                        <div className="row">
+                            <MultasRecientesCard />
+                            <Reloj />
+                        </div>
                     </div>
+                    <Footer />
                 </div>
-                <Footer />
+                <a className="border rounded d-inline scroll-to-top" href="#page-top">
+                    <IconoTop width={40} height={40} />
+                    <i className="fas fa-angle-up"> </i>
+                </a>
             </div>
-            <a className="border rounded d-inline scroll-to-top" href="#page-top"> <IconoTop width={40} height={40} /><i className="fas fa-angle-up"> </i></a>
-        </div>
         </>
     );
 }

@@ -1,5 +1,5 @@
 
-import { SupabaseClientSingleton } from '../Data/dbContection.js';
+import { SupabaseClientSingleton } from '../data/dbContection.js';
 import { Multa } from '../Models/Multa.js';
 
 class MultaRepository {

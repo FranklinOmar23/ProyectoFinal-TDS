@@ -14,4 +14,4 @@ class SupabaseClientSingleton {
     }
 }
 
-export { SupabaseClientSingleton };
+export {SupabaseClientSingleton};
