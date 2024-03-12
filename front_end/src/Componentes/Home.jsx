@@ -243,93 +243,129 @@ export function Reloj({ fullWidth = false }) {
 
    function Home() {
     const [map, setMap] = useState(null);
-  const { requerimiento } = useAuth();
-
-  useEffect(() => {
-    let newMap;
-
-    const initMap = () => {
-      if (newMap) {
-        return; // El mapa ya está inicializado
-      }
-
-      // Crear el mapa si aún no se ha creado
-      newMap = L.map('map').setView([18.4861, -69.9312], 13);
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(newMap);
-      setMap(newMap);
-
-      // Agregar círculos para los requerimientos
-      if (requerimiento && requerimiento.requerimientos) {
-        requerimiento.requerimientos.forEach((req) => {
-          const { latitud, longitud, direccion, fecha, requerimiento, nivel } = req;
-
-          // Definir el color del círculo según el nivel
-          let color;
-          switch (nivel) {
-            case 1:
-              color = 'yellow';
-              break;
-            case 2:
-              color = 'orange';
-              break;
-            case 3:
-              color = 'red';
-              break;
-            default:
-              color = 'blue'; // Color predeterminado para otros casos
-          }
-
-          // Crear un círculo con el color determinado
-          const reqCircle = L.circle([latitud, longitud], {
-            color: color,
-            fillColor: color,
+    const { requerimiento } = useAuth();
+    const [userLocation, setUserLocation] = useState(null);
+  
+    useEffect(() => {
+      let newMap;
+  
+      const initMap = async () => {
+        if (newMap) {
+          return;
+        }
+  
+        try {
+          const position = await getCurrentLocation();
+          setUserLocation(position.coords);
+  
+          newMap = L.map('map').setView([position.coords.latitude, position.coords.longitude], 16);
+          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(newMap);
+          setMap(newMap);
+  
+          // Crear círculo de ubicación del usuario
+          const userCircle = L.circle([position.coords.latitude, position.coords.longitude], {
+            color: 'green',
+            fillColor: 'green',
             fillOpacity: 0.5,
-            radius: 300, 
+            radius: 32,
           }).addTo(newMap);
-
-          reqCircle.bindPopup(`<b> Lugar: ${direccion}</b><br> Fecha: ${fecha}<br> Requerimiento: ${requerimiento}`);
-        });
-      }
+          userCircle.bindPopup("Tu ubicación actual");
+  
+          // Agregar círculos para los requerimientos
+          if (requerimiento && requerimiento.requerimientos) {
+            requerimiento.requerimientos.forEach((req) => {
+              const { latitud, longitud, direccion, fecha, requerimiento, nivel } = req;
+  
+              // Definir el color del círculo según el nivel
+              let color;
+              switch (nivel) {
+                case 1:
+                  color = 'yellow';
+                  break;
+                case 2:
+                  color = 'orange';
+                  break;
+                case 3:
+                  color = 'red';
+                  break;
+                default:
+                  color = 'blue'; // Color predeterminado para otros casos
+              }
+  
+              // Crear un círculo con el color determinado
+              const reqCircle = L.circle([latitud, longitud], {
+                color: color,
+                fillColor: color,
+                fillOpacity: 0.5,
+                radius: 300,
+              }).addTo(newMap);
+  
+              reqCircle.bindPopup(`<b> Lugar: ${direccion}</b><br> Fecha: ${fecha}<br> Requerimiento: ${requerimiento}`);
+            });
+          }
+        } catch (error) {
+          console.error('Error al obtener la ubicación del usuario', error);
+          toast.error('No se pudo obtener la ubicación del usuario.');
+        }
+      };
+  
+      initMap();
+  
+      // Limpiar el mapa al desmontar el componente
+      return () => {
+        if (newMap) {
+          newMap.remove();
+        }
+      };
+    }, [requerimiento]);
+  
+    const getCurrentLocation = () => {
+      return new Promise((resolve, reject) => {
+        const options = {
+          enableHighAccuracy: true,
+          maximumAge: 60000, // 60 segundos
+          timeout: 20000, 
+        };
+  
+        navigator.geolocation.getCurrentPosition(
+          resolve,
+          (error) => {
+            reject(`Error al obtener la ubicación del usuario: ${error.message}`);
+          },
+          options
+        );
+      });
     };
-
-    initMap();
-
-    // Limpiar el mapa al desmontar el componente
-    return () => {
-      if (newMap) {
-        newMap.remove();
-      }
-    };
-  }, [requerimiento]);
+  
     return (
-        <>
-            <div id="page-top"></div>
-            <div id="wrapper">
-                <Navbar />
-                <div className="d-flex flex-column" id="content-wrapper">
-                    <Topbar titulo="Home"/>
-                    <div className="container">
-                        <div className="row">
-                            <div className="col-md-6" style={{ height: '400px' }} id="map"></div>
-                            <InformacionesCard />
-                        </div>
-                    </div>
-                    <div className="container-fluid">
-                        <div className="d-sm-flex justify-content-between align-items-center mb-4"></div>
-                        <div className="row">
-                            <MultasRecientesCard />
-                            <Reloj />
-                        </div>
-                    </div>
-                    <Footer />
-                </div>
-                <a className="border rounded d-inline scroll-to-top" href="#page-top">
-                    <IconoTop width={40} height={40} />
-                    <i className="fas fa-angle-up"> </i>
-                </a>
+      <>
+        <div id="page-top"></div>
+        <div id="wrapper">
+          <Navbar />
+          <div className="d-flex flex-column" id="content-wrapper">
+            <Topbar titulo="Home" />
+            <div className="container">
+              <div className="row">
+                <div className="col-md-6" style={{ height: '400px' }} id="map"></div>
+                <InformacionesCard />
+              </div>
             </div>
-        </>
+            <div className="container-fluid">
+              <div className="d-sm-flex justify-content-between align-items-center mb-4"></div>
+              <div className="row">
+                <MultasRecientesCard />
+                <Reloj />
+              </div>
+            </div>
+            <Footer />
+          </div>
+          <a className="border rounded d-inline scroll-to-top" href="#page-top">
+            <IconoTop width={40} height={40} />
+            <i className="fas fa-angle-up"> </i>
+          </a>
+        </div>
+      </>
     );
-}
-
-export default Home;
+  }
+  
+  export default Home;
