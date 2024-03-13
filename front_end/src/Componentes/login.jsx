@@ -13,16 +13,30 @@ import { useAuth } from '../context/provider';
 
 const Login = () => {
   const navigate = useNavigate();
-  const { loginUser,cargarMultas } = useAuth();
-  const handleLogin = async (userData, multaData) => {
+  const { loginUser,cargarMultas,cargarRequerimientos} = useAuth();
+  
+  const handleLogin = async (userData, multaData,requerimientoData) => {
     try {
       const response = await axios.post('http://localhost:4000/login', userData);
       console.log(response.data);
   
       // CARGAR EL CONTEXTO
       loginUser(response.data);
-      console.log('Usuario después de iniciar sesión:', response.data);
-  
+
+
+      //requerimientos
+      if(response.data.user  != null){
+        const multaRespuesta = await axios.get('http://localhost:4000/requerimiento', requerimientoData);
+        cargarRequerimientos(multaRespuesta.data)
+        console.log('requerimientos después de iniciar sesión:',multaRespuesta.data);
+
+      }else{
+        console.error('requerimientosindefinido');
+        toast.error('Error al obtener los requerimientos');
+      }
+
+
+    
       // Verificar si el usuario tiene un ID antes de realizar la solicitud de multas
       if (response.data.user && response.data.user.id) {
         // Multas
