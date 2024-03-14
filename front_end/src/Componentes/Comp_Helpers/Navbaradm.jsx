@@ -75,21 +75,14 @@ function Navbaradm() {
                             </a>
                         </li>
                         <li style={{ '--bg': '#4d0000' }} className={activeMenuItem === 'historial' ? 'active' : ''}>
-                            <a href="/historial" onClick={(e) => handleLinkClick(e, 'historial')}>
+                            <a href="/notificaciones" onClick={(e) => handleLinkClick(e, 'historial')}>
                                 <div className="icon2">
                                 <i class="fa-solid fa-paper-plane"></i>
                                 </div>
                                 <p>Enviar Mensaje</p>
                             </a>
                         </li>
-                        <li style={{ '--bg': '#4d0000' }} className={activeMenuItem === 'historial' ? 'active' : ''}>
-                            <a href="/historial" onClick={(e) => handleLinkClick(e, 'historial')}>
-                                <div className="icon2">
-                                <i class="fa-solid fa-plus"></i>
-                                </div>
-                                <p>Crear Agente</p>
-                            </a>
-                        </li>
+                        
                     </div>
                     <div className="bottom">
                         <li style={{ '--bg': '#ff0000' }}>

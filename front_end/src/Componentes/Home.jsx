@@ -11,20 +11,23 @@ import Navbar from './Comp_Helpers/Navbar.jsx';
 import Topbar from './Comp_Helpers/Topbar.jsx';
 import { useAuth } from '../context/provider.jsx';
 import Chart from "chart.js/auto";
+import socketIOClient from "socket.io-client";
+import "../Css/chat.css"
+import axios from 'axios';
 
 import toast, { Toaster } from 'react-hot-toast';
 
-
-function Map() {
+const ENDPOINT = "http://localhost:5000";
+export function Map() {
     const googleMapsUrl = "https://www.google.com/maps/embed/v1/place?key=AIzaSyBIwLAPjCguzhFQCiT4RuILjVdUVVp_dq4&q=Santo+Domingo,Republica+Dominicana";
 
     return (
         <div className="col-md-6">
-            <iframe 
-                allowFullScreen 
-                frameBorder="0" 
-                src={googleMapsUrl} 
-                width="100%" 
+            <iframe
+                allowFullScreen
+                frameBorder="0"
+                src={googleMapsUrl}
+                width="100%"
                 height="400">
             </iframe>
         </div>
@@ -33,6 +36,26 @@ function Map() {
 
 
 function InformacionesCard() {
+    const { user, messages, addMessage } = useAuth();
+    const [userNombre, setUserNombre] = useState('Usuario no encontrado');
+    const [messageInput, setMessageInput] = useState('');
+    const [selectedOption, setSelectedOption] = useState('1');
+
+    useEffect(() => {
+        const socket = socketIOClient(ENDPOINT);
+    socket.on("message", (message) => {
+        console.log('Mensaje recibido:', message);
+        if (typeof message === 'object' && message.text && message.time && message.user) {
+            const newMessages = [message, ...messages];
+            localStorage.setItem('messages', JSON.stringify(newMessages));
+            addMessage(message);
+        }
+    });
+
+    return () => {
+        socket.disconnect();
+    };
+}, [messages, addMessage]);
     return (
         <div className="col-md-6">
             {/* Contenido de la tarjeta de Informaciones */}
@@ -40,72 +63,31 @@ function InformacionesCard() {
                 <div className="card-header py-3" >
                     <h6 className="text-success fw-bold m-0">Informaciones</h6>
                 </div>
-                <ul className="list-group list-group-flush">
-                    <li className="list-group-item">
-                        <div className="row align-items-center no-gutters">
-                            <div className="col me-2">
-                                <h6 className="mb-0"><strong>Lunch meeting</strong></h6><span className="text-xs">10:30 AM</span>
+                <ul className="list-group list-group-flush ul-chat chat-container">
+                    <div className='contenedor-padre'>
+                        {messages.map((message, index) => (
+                            <div key={index} className="message-container">
+                                <span className="name-user">
+                                    {message.user}
+                                    </span>
+                                <li className="message-item" style={{ backgroundColor: message.color, color: 'white' }}>
+                                    {message.text}
+                                    {message.time &&
+                                        <span className="message-time">
+                                            {new Date(message.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}
+                                        </span>
+                                    }
+                                </li>
                             </div>
-                            <div className="col-auto">
-                                <div className="form-check"><input className="form-check-input" type="checkbox" id="formCheck-1"/><label className="form-check-label" htmlFor="formCheck-1"></label></div>
-                            </div>
-                        </div>
-                    </li>
-                    <li className="list-group-item">
-                        <div className="row align-items-center no-gutters">
-                            <div className="col me-2">
-                                <h6 className="mb-0"><strong>Lunch meeting</strong></h6><span className="text-xs">11:30 AM</span>
-                            </div>
-                            <div className="col-auto">
-                                <div className="form-check"><input className="form-check-input" type="checkbox" id="formCheck-2"/><label className="form-check-label" htmlFor="formCheck-2"></label></div>
-                            </div>
-                        </div>
-                    </li>
-                    <li className="list-group-item">
-                        <div className="row align-items-center no-gutters">
-                            <div className="col me-2">
-                                <h6 className="mb-0"><strong>Lunch meeting</strong></h6><span className="text-xs">12:30 AM</span>
-                            </div>
-                            <div className="col-auto">
-                                <div className="form-check"><input className="form-check-input" type="checkbox" id="formCheck-3"/><label className="form-check-label" htmlFor="formCheck-3"></label></div>
-                            </div>
-                        </div>
-                    </li>
-                    <li className="list-group-item">
-                        <div className="row align-items-center no-gutters">
-                            <div className="col me-2">
-                                <h6 className="mb-0"><strong>Lunch meeting</strong></h6><span className="text-xs">12:30 AM</span>
-                            </div>
-                            <div className="col-auto">
-                                <div className="form-check"><input className="form-check-input" type="checkbox" id="formCheck-4"/><label className="form-check-label" htmlFor="formCheck-4"></label></div>
-                            </div>
-                        </div>
-                    </li>
-                    <li className="list-group-item">
-                        <div className="row align-items-center no-gutters">
-                            <div className="col me-2">
-                                <h6 className="mb-0"><strong>Lunch meeting</strong></h6><span className="text-xs">12:30 AM</span>
-                            </div>
-                            <div className="col-auto">
-                                <div className="form-check"><input className="form-check-input" type="checkbox" id="formCheck-5"/><label className="form-check-label" htmlFor="formCheck-5"></label></div>
-                            </div>
-                        </div>
-                    </li>
-                    <li className="list-group-item">
-                        <div className="row align-items-center no-gutters">
-                            <div className="col me-2">
-                                <h6 className="mb-0"><strong>Lunch meeting</strong></h6><span className="text-xs">12:30 AM</span>
-                            </div>
-                            <div className="col-auto">
-                                <div className="form-check"><input className="form-check-input" type="checkbox" id="formCheck-6"/><label className="form-check-label" htmlFor="formCheck-6"></label></div>
-                            </div>
-                        </div>
-                    </li>
+                        ))}
+                    </div>
                 </ul>
             </div>
         </div>
     );
 }
+
+
 
 function MultasRecientesCard() {
     const canvasRef = useRef(null);
@@ -113,12 +95,20 @@ function MultasRecientesCard() {
     const { multa } = useAuth();
 
     useEffect(() => {
-        if (!canvasRef.current) return;
+        if (!canvasRef.current || !multa) {
+            return; // No renderizar el gráfico si no hay multas
+        }
 
-        // Filtrar las últimas 5 multas basándote en la fecha
-        const ultimasMultas = multa?.multasDelAgente
-            .sort((a, b) => new Date(b.fecha) - new Date(a.fecha)) // Ordenar por fecha descendente
-            .slice(0, 5); // Seleccionar las últimas 5 multas
+        let ultimasMultas = [];
+        if (multa.multasDelAgente.length >= 5) {
+            // Filtrar las últimas 5 multas basándote en la fecha si hay al menos 5 multas
+            ultimasMultas = multa.multasDelAgente
+                .sort((a, b) => new Date(b.fecha) - new Date(a.fecha)) // Ordenar por fecha descendente
+                .slice(0, 5); // Seleccionar las últimas 5 multas
+        } else {
+            // Si hay menos de 5 multas, mostrar todas las multas disponibles
+            ultimasMultas = multa.multasDelAgente;
+        }
 
         // Procesar los datos de las multas para contar cuántas veces se ha impuesto cada tipo de multa
         const conteoMultas = ultimasMultas.reduce((acc, multa) => {
@@ -172,13 +162,17 @@ function MultasRecientesCard() {
         };
     }, [multa]); // Dependencia del efecto: se ejecuta cada vez que cambian los datos de multa
 
+    if (!multa) {
+        return null; // No renderizar el componente si no hay multas
+    }
+
     return (
         <div className="col-md-6">
             <div className="card shadow mb-4">
                 <div className="card-header py-3">
                     <h6 className="text-success fw-bold m-0">Multas Recientes</h6>
                 </div>
-                <div className="card-body"> 
+                <div className="card-body">
                     <canvas ref={canvasRef} width="300px" height="300px"></canvas>
                 </div>
             </div>
@@ -189,71 +183,70 @@ function MultasRecientesCard() {
 
 
 
-
 export function Reloj({ fullWidth = false }) {
     const { user } = useAuth(); // Obtén el objeto user del contexto
     const [tiempoTranscurrido, setTiempoTranscurrido] = useState({ horas: 0, minutos: 0, segundos: 0 });
-   
+
     useEffect(() => {
-       const calcularTiempoTranscurrido = () => {
-         if (user && user.user && user.user.horario_entrada) {
-           const ahora = new Date();
-           // Convertir el horario de entrada a un objeto Date
-           const entrada = new Date(ahora.getFullYear(), ahora.getMonth(), ahora.getDate(), ...user.user.horario_entrada.split(':'));
-   
-           // Calcular el tiempo transcurrido desde la entrada hasta el momento actual
-           const tiempoTranscurrido = ahora - entrada;
-   
-           // Convertir milisegundos a horas, minutos y segundos
-           const horas = Math.floor(tiempoTranscurrido / 3600000);
-           const minutos = Math.floor((tiempoTranscurrido % 3600000) / 60000);
-           const segundos = Math.floor((tiempoTranscurrido % 60000) / 1000);
-   
-           setTiempoTranscurrido({ horas, minutos, segundos });
-         } else {
-           setTiempoTranscurrido({ horas: 0, minutos: 0, segundos: 0 });
-         }
-       };
-   
-       // Llamar a la función inicialmente para establecer el tiempo transcurrido
-       calcularTiempoTranscurrido();
-   
-       // Establecer un intervalo para actualizar el tiempo transcurrido cada segundo
-       const intervalId = setInterval(() => {
-         calcularTiempoTranscurrido();
-       }, 1000); // 1000 milisegundos = 1 segundo
-   
-       // Limpiar el intervalo cuando el componente se desmonte
-       return () => clearInterval(intervalId);
+        const calcularTiempoTranscurrido = () => {
+            if (user && user.user && user.user.horario_entrada) {
+                const ahora = new Date();
+                // Convertir el horario de entrada a un objeto Date
+                const entrada = new Date(ahora.getFullYear(), ahora.getMonth(), ahora.getDate(), ...user.user.horario_entrada.split(':'));
+
+                // Calcular el tiempo transcurrido desde la entrada hasta el momento actual
+                const tiempoTranscurrido = ahora - entrada;
+
+                // Convertir milisegundos a horas, minutos y segundos
+                const horas = Math.floor(tiempoTranscurrido / 3600000);
+                const minutos = Math.floor((tiempoTranscurrido % 3600000) / 60000);
+                const segundos = Math.floor((tiempoTranscurrido % 60000) / 1000);
+
+                setTiempoTranscurrido({ horas, minutos, segundos });
+            } else {
+                setTiempoTranscurrido({ horas: 0, minutos: 0, segundos: 0 });
+            }
+        };
+
+        // Llamar a la función inicialmente para establecer el tiempo transcurrido
+        calcularTiempoTranscurrido();
+
+        // Establecer un intervalo para actualizar el tiempo transcurrido cada segundo
+        const intervalId = setInterval(() => {
+            calcularTiempoTranscurrido();
+        }, 1000); // 1000 milisegundos = 1 segundo
+
+        // Limpiar el intervalo cuando el componente se desmonte
+        return () => clearInterval(intervalId);
     }, [user]); // Dependencia del efecto: se ejecuta cada vez que cambia el objeto user
-   
+
     const relojClass = fullWidth ? "col-md-12" : "col-md-6";
-   
+
     return (
-        <div className={`${relojClass} card shadow mb-4`}>
-         <div className="card shadow mb-4">
-           <div className="card-header py-3">
-             <h6 className="text-success fw-bold m-0">Tiempo transcurrido desde la entrada</h6>
-           </div>
-           <div className="body-card">
-             <div className='reloj-item'>
-               <div className='horas'>{tiempoTranscurrido.horas}</div> 
-               <p>Hora</p>
-             </div>
-             <div className='reloj-item'>
-               <div className='minutos'>{tiempoTranscurrido.minutos}</div>
-               <p>Minutos</p>
-             </div>
-             <div className='reloj-item'>
-               <div className='segundos'>{tiempoTranscurrido.segundos}</div>
-               <p>Segundos</p>
-             </div>
-           </div>
-         </div>
-       </div>
+        <div className={`${relojClass}`}>
+            <div className="card shadow mb-4">
+                <div className="card-header py-3">
+                    <h6 className="text-success fw-bold m-0">Tiempo transcurrido desde la entrada</h6>
+                </div>
+                <div className="body-card">
+                    <div className='reloj-item'>
+                        <div className='horas'>{tiempoTranscurrido.horas}</div>
+                        <p>Hora</p>
+                    </div>
+                    <div className='reloj-item'>
+                        <div className='minutos'>{tiempoTranscurrido.minutos}</div>
+                        <p>Minutos</p>
+                    </div>
+                    <div className='reloj-item'>
+                        <div className='segundos'>{tiempoTranscurrido.segundos}</div>
+                        <p>Segundos</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     );
-   };
-   
+};
+
 
 
 
@@ -261,28 +254,28 @@ function Home() {
 
     return (
         <>
-        <div id="page-top"></div>
-        <div id="wrapper">
-            <Navbar />
-            <div className="d-flex flex-column" id="content-wrapper">
-                <Topbar titulo="Home"/>
-                <div className="container">
-                    <div className="row">
-                        <Map />
-                        <InformacionesCard />
+            <div id="page-top"></div>
+            <div id="wrapper">
+                <Navbar />
+                <div className="d-flex flex-column" id="content-wrapper">
+                    <Topbar titulo="Home" />
+                    <div className="container">
+                        <div className="row">
+                            <Map />
+                            <InformacionesCard />
+                        </div>
                     </div>
-                </div>
-                <div className="container-fluid">
-                    <div className="d-sm-flex justify-content-between align-items-center mb-4"></div>
-                    <div className="row">
-                        <MultasRecientesCard />
-                        <Reloj />
+                    <div className="container-fluid">
+                        <div className="d-sm-flex justify-content-between align-items-center mb-4"></div>
+                        <div className="row">
+                            <MultasRecientesCard />
+                            <Reloj />
+                        </div>
                     </div>
+                    <Footer />
                 </div>
-                <Footer />
+                <a className="border rounded d-inline scroll-to-top" href="#page-top"> <IconoTop width={40} height={40} /><i className="fas fa-angle-up"> </i></a>
             </div>
-            <a className="border rounded d-inline scroll-to-top" href="#page-top"> <IconoTop width={40} height={40} /><i className="fas fa-angle-up"> </i></a>
-        </div>
         </>
     );
 }

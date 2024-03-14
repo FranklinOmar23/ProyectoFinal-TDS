@@ -12,6 +12,7 @@ export const Provider = ({ children }) => {
     const storedMulta = localStorage.getItem('multa');
     return storedMulta ? JSON.parse(storedMulta) : null;
   });
+  
 
   const loginUser = (userData) => {
     setUser(userData);
@@ -28,9 +29,20 @@ export const Provider = ({ children }) => {
     setMulta(multasData);
     localStorage.setItem('multa', JSON.stringify(multasData));
   };
+  const [messages, setMessages] = useState(() => {
+    const storedMessages = localStorage.getItem('messages');
+    return storedMessages ? JSON.parse(storedMessages) : [];
+  });
+
+  const addMessage = (message) => {
+    const newMessages = [...messages, message];
+    setMessages(newMessages);
+    localStorage.setItem('messages', JSON.stringify(newMessages));
+  };
+
 
   return (
-    <Context.Provider value={{ user, loginUser, logoutUser, multa, cargarMultas }}>
+    <Context.Provider value={{ user, loginUser, logoutUser, multa, cargarMultas, messages, addMessage }}>
       {children}
     </Context.Provider>
   );
