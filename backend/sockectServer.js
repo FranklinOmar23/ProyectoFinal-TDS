@@ -16,7 +16,6 @@ io.on("connection", (socket) => {
 
     socket.on("message", (message) => {
         console.log(`Mensaje recibido de ${socket.id}: ${JSON.stringify(message)}`);
-        // Emitir el mensaje de vuelta al cliente
         io.emit("message", message);
         console.log(`Mensaje enviado a ${socket.id}: ${JSON.stringify(message)}`);
     });
