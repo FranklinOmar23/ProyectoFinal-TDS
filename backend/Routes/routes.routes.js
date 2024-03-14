@@ -32,9 +32,14 @@ router.put("/user/:id", (req, res) => {
     usuario.updateUser(req, res);
 });
 
-const usuarioController = new UsuarioController();
-router.post('/user/:id', usuarioController.uploadImage.bind(usuarioController));
-router.put('/user/:id', usuarioController.storeImage.bind(usuarioController));
+router.post('/user/:id', (req, res) => {
+    console.log(req.body)
+    usuario.uploadAndStoreImage(req, res);
+});
+
+/*router.put('/user/:id', (req, res) => {
+    usuario.storeImage(req, res);
+});
 
 router.get("/user/:id", async (_req, res) => {
     try {
@@ -44,7 +49,7 @@ router.get("/user/:id", async (_req, res) => {
       console.error("Error al obtener datos del usuario:", error);
       res.status(500).json({ error: "Error al obtener datos del usuario" });
     }
-});
+});*/
 
   
 export default router;

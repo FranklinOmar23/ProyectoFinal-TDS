@@ -1,11 +1,16 @@
+
+import toast, { Toaster } from 'react-hot-toast';
+import axios from 'axios';
 import React, { useState, useRef } from "react";
 import "../../Css/FotoMulta.css";
 import { Button } from "react-bootstrap";
+import context from 'react-bootstrap/esm/AccordionContext';
 
 function FotoMulta() {
-  const [profileImage, setProfileImage] = useState(null);
-  const [vehicleImage, setVehicleImage] = useState(null);
+  const [foto, setFoto] = useState(null);
+  const [foto_Vehiculo, setFoto_Vehiculo] = useState(null);
 
+  
   const handleImageChange = (event, setImage) => {
     const selectedImage = event.target.files ? event.target.files[0] : null;
     if (selectedImage) {
@@ -26,39 +31,13 @@ function FotoMulta() {
       vehicleInputRef.current.click();
   };
 
-  const uploadImage = async () => {
-    try {
-      const formData = new FormData();
-  
-      if (profileImage) {
-        const profileImageFile = await fetch(profileImage).then(res => res.blob());
-        formData.append('foto', profileImageFile, 'profile.png');
-      }
-  
-      if (vehicleImage) {
-        const vehicleImageFile = await fetch(vehicleImage).then(res => res.blob());
-        formData.append('foto_Vehiculo', vehicleImageFile, 'vehicle.png');
-      }
-  
-      const response = await fetch('http://localhost:4000/user',  {
-        method: 'POST',
-        body: formData
-      });
-  
-      if (!response.ok) {
-        throw new Error('Error al cargar las imagenes');
-      }
-  
-      const data = await response.json();
-      console.log(data.message);
-    } catch (error) {
-      console.error('Error:', error.message);
-    }
+  const uploadAndStoreImage = async () => {
+    
   };
   
 
    const handleUploadButtonClick = () => {
-    uploadImage();
+    uploadAndStoreImage();
    };
 
 
@@ -95,7 +74,8 @@ function FotoMulta() {
                 type="file"
                 id="profileImage"
                 accept="image/png"
-                onChange={ (e) => handleImageChange (e, setProfileImage)}
+                name="foto"
+                onChange={ (e) => handleImageChange (e, setFoto)}
                 style={{ display: "none" }}
               />
             </div>
@@ -103,7 +83,7 @@ function FotoMulta() {
               style={{ width: "170px", height: "170px" }}
               className="img-fluid mb-3 mt-4"
               src={
-                profileImage ||
+                foto ||
                 "https://static.vecteezy.com/system/resources/previews/008/442/086/non_2x/illustration-of-human-icon-user-symbol-icon-modern-design-on-blank-background-free-vector.jpg"
               }
               alt="User"
@@ -143,14 +123,15 @@ function FotoMulta() {
                 type="file"
                 id="vehicleImage"
                 accept="image/png"
-                onChange={ (e) => handleImageChange (e, setVehicleImage)}
+                name="foto_Vehiculo"
+                onChange={ (e) => handleImageChange (e, setFoto_Vehiculo)}
                 style={{ display: "none" }}
               />
             </div>
             <img
               style={{ width: "170px", height: "170px" }}
               className="img-fluid mb-3 mt-4"
-              src={vehicleImage || "https://via.placeholder.com/300"}
+              src={foto_Vehiculo || "https://via.placeholder.com/300"}
               alt="Vehicle"
             />
             <Button type="submit" Button variant="light" style={{ color: "white", backgroundColor: "#1cc88a" }} onClick={handleUploadButtonClick}>Guardar Imagen</Button>

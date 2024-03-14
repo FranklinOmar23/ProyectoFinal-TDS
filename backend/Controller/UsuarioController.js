@@ -1,4 +1,4 @@
-
+import { SupabaseClientSingleton } from "../data/dbContection.js";
 import { UsuarioRepository } from '../Repository/UsuarioRepository.js';  // Ajusta la ruta según tu estructura
 import { generarContraseñaTemporal } from '../logic/genrarContraseña.js';
 import bcrypt from 'bcryptjs';
@@ -7,6 +7,7 @@ import bcrypt from 'bcryptjs';
 class UsuarioController {
   constructor() {
     this.usuarioRepository = new UsuarioRepository();
+    this.supabase = SupabaseClientSingleton.getInstance();
   }
 
 
@@ -157,31 +158,25 @@ class UsuarioController {
 
   }
 
-  async uploadImage(req, res) {
+  async uploadAndStoreImage(req, res) {
     const { foto, foto_Vehiculo } = req.body;
+    const userId = req.params.id;
   
     try {
-      const { fotoUrl, foto_VehiculoUrl } = await this.usuarioRepository.uploadImage(foto, foto_Vehiculo);
+      // Llamada al método para cargar imágenes y obtener las URLs
+      const { fotoUrl, foto_VehiculoUrl } = await this.usuarioRepository.uploadImage(userId, foto, foto_Vehiculo);
   
-      res.json({ message: 'Imagenes subidas con éxito!', fotoUrl, foto_VehiculoUrl });
+      // Llamada al método para almacenar las URLs en el registro del usuario
+      const data = await this.usuarioRepository.storeImage(userId, fotoUrl, foto_VehiculoUrl);
+  
+      res.json({ message: 'Imágenes subidas y URLs guardadas exitosamente!'});
     } catch (error) {
-      console.error('Error in uploadImage: ', error);
+      console.error('Error en uploadAndStoreImage: ', error);
       res.status(500).send(error.message);
     }
   }
-
-  async storeImage(req, res) {
-    const { id, fotoUrl, foto_VehiculoUrl } = req.body;
   
-    try {
-      const data = await this.usuarioRepository.storeImage(id, fotoUrl, foto_VehiculoUrl);
   
-      res.json({ message: 'Urls guardadas exitosamente!', data });
-    } catch (error) {
-      console.error('Error en storeImage: ', error);
-      res.status(500).send(error.message);
-    }
-  }
   
   
   
