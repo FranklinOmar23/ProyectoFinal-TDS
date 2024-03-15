@@ -1,14 +1,16 @@
 
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 import axios from 'axios';
 import React, { useState, useRef } from "react";
 import "../../Css/FotoMulta.css";
 import { Button } from "react-bootstrap";
-import context from 'react-bootstrap/esm/AccordionContext';
+import { useAuth } from '../../context/provider.jsx';
+import { Message } from 'emailjs';
 
 function FotoMulta() {
   const [foto, setFoto] = useState(null);
   const [foto_Vehiculo, setFoto_Vehiculo] = useState(null);
+  const { user } = useAuth();
 
   
   const handleImageChange = (event, setImage) => {
@@ -31,8 +33,22 @@ function FotoMulta() {
       vehicleInputRef.current.click();
   };
 
-  const uploadAndStoreImage = async () => {
-    
+  const uploadAndStoreImage = async (userId) => {
+    try {
+      const response = axios.get('http://localhost:4000/user', {
+          userId,
+          foto,
+          foto_Vehiculo
+        });
+
+      if (response.ok) {
+        toast.success('¡Imagenes cargadas exitosamente!');
+      } else {
+       toast.error(response.message)
+      }
+    } catch (error) {
+      toast.error('Error a cargar las imagenes');
+    }
   };
   
 
