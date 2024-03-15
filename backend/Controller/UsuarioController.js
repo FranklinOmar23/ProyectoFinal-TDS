@@ -1,11 +1,13 @@
-
+import { SupabaseClientSingleton } from "../data/dbContection.js";
 import { UsuarioRepository } from '../Repository/UsuarioRepository.js';  // Ajusta la ruta según tu estructura
 import { generarContraseñaTemporal } from '../logic/genrarContraseña.js';
 import bcrypt from 'bcryptjs';
 
+
 class UsuarioController {
   constructor() {
     this.usuarioRepository = new UsuarioRepository();
+    this.supabase = SupabaseClientSingleton.getInstance();
   }
 
 
@@ -53,7 +55,7 @@ class UsuarioController {
       res.status(500).json({ error: 'Error al actualizar contraseña del usuario' });
     }
   }
-  //optener los datos del front
+  //obtener los datos del front
   async login(req, res) {
     const { cedula, contrasena } = req.body;
 
@@ -108,6 +110,7 @@ class UsuarioController {
       return res.status(500).json({message:"Error al registrar el usuario", error: error.message})
     }
   }
+
   async getUserNameByCedula(req, res) {
     const { cedula } = req.body;
 
@@ -127,5 +130,57 @@ class UsuarioController {
       res.status(500).json({ error: 'Error al obtener el nombre del usuario' });
     }
   }
+
+  async updateUser(req, res) {
+    const userId = req.params.id; // Obtener el ID del usuario de la solicitud
+    const {telefono, contrasena} = req.body; // Obtener los datos actualizados del cuerpo de la solicitud
+  
+    try {
+      // Verificar si el usuario existe antes de intentar actualizarlo
+      const updatedUserData = {};
+      if (telefono) {
+          updatedUserData.telefono = telefono;
+      }
+      if (contrasena) {
+          const salt = await bcrypt.genSalt(10);
+          const hashedPassword = await bcrypt.hash(contrasena, salt);
+          updatedUserData.contrasena = hashedPassword;
+      }
+
+      // Actualizar el usuario
+      await this.usuarioRepository.updateUser({ id: userId, ...updatedUserData });
+
+      res.status(200).json({ message: 'Los datos fueron actualizados exitosamente!' });
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Se produjo un error al actualizar los datos del usuario' });
+  }
+
+  }
+
+  async uploadAndStoreImage(req, res) {
+    const { foto, foto_Vehiculo } = req.body;
+    const userId = req.params.id;
+  
+    try {
+      // Llamada al método para cargar imágenes y obtener las URLs
+      const { fotoUrl, foto_VehiculoUrl } = await this.usuarioRepository.uploadImage(userId, foto, foto_Vehiculo);
+  
+      // Llamada al método para almacenar las URLs en el registro del usuario
+      const data = await this.usuarioRepository.storeImage(userId, fotoUrl, foto_VehiculoUrl);
+  
+      res.json({ message: 'Imágenes subidas y URLs guardadas exitosamente!'});
+    } catch (error) {
+      console.error('Error en uploadAndStoreImage: ', error);
+      res.status(500).send(error.message);
+    }
+  }
+  
+  
+  
+  
+  
+  
+
 };
 export { UsuarioController };

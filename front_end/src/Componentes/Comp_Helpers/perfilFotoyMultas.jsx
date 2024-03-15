@@ -1,30 +1,61 @@
+
+import toast from 'react-hot-toast';
+import axios from 'axios';
 import React, { useState, useRef } from "react";
 import "../../Css/FotoMulta.css";
+import { Button } from "react-bootstrap";
+import { useAuth } from '../../context/provider.jsx';
+import { Message } from 'emailjs';
 
 function FotoMulta() {
-  const [profileImage, setProfileImage] = useState(null);
-  const [vehicleImage, setVehicleImage] = useState(null);
+  const [foto, setFoto] = useState(null);
+  const [foto_Vehiculo, setFoto_Vehiculo] = useState(null);
+  const { user } = useAuth();
 
-  const handleProfileImageChange = (event) => {
-    const selectedImage = event.target.files[0];
-    setProfileImage(URL.createObjectURL(selectedImage));
-  };
-
-  const handleVehicleImageChange = (event) => {
-    const selectedImage = event.target.files[0];
-    setVehicleImage(URL.createObjectURL(selectedImage));
+  
+  const handleImageChange = (event, setImage) => {
+    const selectedImage = event.target.files ? event.target.files[0] : null;
+    if (selectedImage) {
+        setImage(URL.createObjectURL(selectedImage));
+    } else {
+        console.error('No se seleccionó ninguna imagen.');
+    }
   };
 
   const profileInputRef = useRef(null);
   const vehicleInputRef = useRef(null);
 
   const handleProfileImageUploadClick = () => {
-    profileInputRef.current.click();
+      profileInputRef.current.click();
   };
 
   const handleVehicleImageUploadClick = () => {
-    vehicleInputRef.current.click();
+      vehicleInputRef.current.click();
   };
+
+  const uploadAndStoreImage = async (userId) => {
+    try {
+      const response = axios.get('http://localhost:4000/user', {
+          userId,
+          foto,
+          foto_Vehiculo
+        });
+
+      if (response.ok) {
+        toast.success('¡Imagenes cargadas exitosamente!');
+      } else {
+       toast.error(response.message)
+      }
+    } catch (error) {
+      toast.error('Error a cargar las imagenes');
+    }
+  };
+  
+
+   const handleUploadButtonClick = () => {
+    uploadAndStoreImage();
+   };
+
 
   return (
     <div className="row">
@@ -58,8 +89,9 @@ function FotoMulta() {
                 ref={profileInputRef}
                 type="file"
                 id="profileImage"
-                accept="image/*"
-                onChange={handleProfileImageChange}
+                accept="image/png"
+                name="foto"
+                onChange={ (e) => handleImageChange (e, setFoto)}
                 style={{ display: "none" }}
               />
             </div>
@@ -67,11 +99,12 @@ function FotoMulta() {
               style={{ width: "170px", height: "170px" }}
               className="img-fluid mb-3 mt-4"
               src={
-                profileImage ||
+                foto ||
                 "https://static.vecteezy.com/system/resources/previews/008/442/086/non_2x/illustration-of-human-icon-user-symbol-icon-modern-design-on-blank-background-free-vector.jpg"
               }
               alt="User"
             />
+            <Button type="submit" Button variant="light" style={{ color: "white", backgroundColor: "#1cc88a" }} onClick={handleUploadButtonClick}>Guardar Imagen</Button>
           </div>
         </div>
       </div>
@@ -105,17 +138,19 @@ function FotoMulta() {
                 ref={vehicleInputRef}
                 type="file"
                 id="vehicleImage"
-                accept="image/*"
-                onChange={handleVehicleImageChange}
+                accept="image/png"
+                name="foto_Vehiculo"
+                onChange={ (e) => handleImageChange (e, setFoto_Vehiculo)}
                 style={{ display: "none" }}
               />
             </div>
             <img
               style={{ width: "170px", height: "170px" }}
               className="img-fluid mb-3 mt-4"
-              src={vehicleImage || "https://via.placeholder.com/300"}
+              src={foto_Vehiculo || "https://via.placeholder.com/300"}
               alt="Vehicle"
             />
+            <Button type="submit" Button variant="light" style={{ color: "white", backgroundColor: "#1cc88a" }} onClick={handleUploadButtonClick}>Guardar Imagen</Button>
           </div>
         </div>
       </div>
