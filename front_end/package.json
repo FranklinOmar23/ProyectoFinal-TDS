@@ -12,7 +12,7 @@
     "axios": "^1.6.7",
     "bootstrap": "^5.3.3",
     "chart.js": "^4.4.2",
-    "date-fns": "^3.3.1",
+    "date-fns": "^3.4.0",
     "emoji-picker-react": "^4.8.0",
     "force": "^0.0.3",
     "is-root": "^3.0.0",

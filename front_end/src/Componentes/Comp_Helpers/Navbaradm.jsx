@@ -51,7 +51,7 @@ function Navbaradm() {
                     </li>
                     <div className="MenuList">
                         <li style={{ '--bg': '#ffe600' }} className={activeMenuItem === 'home-agente' ? 'active' : ''}>
-                            <a href="/home-agente" onClick={(e) => handleLinkClick(e, 'home-agente')}>
+                            <a href="/home-adm" onClick={(e) => handleLinkClick(e, 'home-agente')}>
                                 <div className="icon2">
                                     <i className="fas fa-home"></i>
                                 </div>
