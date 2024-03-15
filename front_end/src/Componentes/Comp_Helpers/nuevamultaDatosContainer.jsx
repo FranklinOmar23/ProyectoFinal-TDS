@@ -62,7 +62,7 @@ function NmDatosCon({ nombre, placa, matricula, vehiculo, setMatricula, setPlaca
                                 </div>
                             </div>
                         </div>
-                        <div class="mb-3"><button class="btn btn-success btn-sm link-light" type="submit" onClick={(e) => handleFormSubmit(e)}>Guardar</button></div>
+                        <div class="mb-3"><button class="Button2" type="submit" onClick={(e) => handleFormSubmit(e)}>Guardar</button></div>
                     </form>
                 </div>
             </div>
