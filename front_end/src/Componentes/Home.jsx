@@ -13,28 +13,12 @@ import { useAuth } from '../context/provider.jsx';
 import Chart from "chart.js/auto";
 import socketIOClient from "socket.io-client";
 import "../Css/chat.css"
-import axios from 'axios';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
 import toast, { Toaster } from 'react-hot-toast';
 
 const ENDPOINT = "http://localhost:5000";
-export function Map() {
-    const googleMapsUrl = "https://www.google.com/maps/embed/v1/place?key=AIzaSyBIwLAPjCguzhFQCiT4RuILjVdUVVp_dq4&q=Santo+Domingo,Republica+Dominicana";
-
-    return (
-        <div className="col-md-6">
-            <iframe
-                allowFullScreen
-                frameBorder="0"
-                src={googleMapsUrl}
-                width="100%"
-                height="400">
-            </iframe>
-        </div>
-    );
-}
 
 
 function InformacionesCard() {
@@ -252,7 +236,7 @@ export function Reloj({ fullWidth = false }) {
 
 
 
-   function Home() {
+function Home() {
     const [map, setMap] = useState(null);
     const { requerimiento } = useAuth();
     const [userLocation, setUserLocation] = useState(null);

@@ -9,7 +9,6 @@ import Footer from './Comp_Helpers/Footer.jsx';
 import Navbaradm from './Comp_Helpers/Navbaradm.jsx';
 import Topbar from './Comp_Helpers/Topbar.jsx';
 import ChatClient from './Comp_Helpers/cardChat.jsx';
-import { Map } from './Home.jsx';
 
 
 function Nuevomsg(){
@@ -22,7 +21,6 @@ function Nuevomsg(){
                 <Topbar titulo="Crear Notificaciones"/>
                 <div className="container">
                 <div className="row">
-                        <Map />
                         <ChatClient />
                     </div>
                 </div>

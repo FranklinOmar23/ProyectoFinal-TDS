@@ -50,7 +50,7 @@ export const Provider = ({ children }) => {
 
 
   return (
-    <Context.Provider value={{ user, loginUser, logoutUser, multa, cargarMultas, requerimiento, cargarRequerimientos}}>
+    <Context.Provider value={{ user, loginUser, logoutUser, multa, cargarMultas, messages, addMessage, requerimiento, cargarRequerimientos }}>
       {children}
     </Context.Provider>
   );
