@@ -67,7 +67,7 @@ function Navbaradm() {
                             </a>
                         </li>
                         <li style={{ '--bg': '#81760d' }} className={activeMenuItem === 'nuevamulta' ? 'active' : ''}>
-                            <a href="/nuevamulta" onClick={(e) => handleLinkClick(e, 'nuevamulta')}>
+                            <a href="/multas-admin" onClick={(e) => handleLinkClick(e, 'nuevamulta')}>
                                 <div className="icon2">
                                     <i className="fa-solid fa-folder-open"></i>
                                 </div>

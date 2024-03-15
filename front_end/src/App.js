@@ -11,6 +11,7 @@ import HomeAdm from './Componentes/home-adm';
 import HomeUser from './Componentes/home-usuario';
 import Historial from './Componentes/Historial';
 import Eror404 from './Componentes/Error404';
+import MultasAdim from './Componentes/multas-admin';
 
 function App() {
 
@@ -25,6 +26,7 @@ function App() {
             <Route path="/nuevamulta" element={<Nuevamulta />}/>
             <Route path="/perfil" element={<Perfil />}/>
             <Route path="/home-adm" element={<HomeAdm />}/>
+            <Route path="/multas-admin" element={<MultasAdim />}/>
             <Route path="/home-user" element={<HomeUser />}/>
             <Route path="/historial" element={<Historial />}/>
             <Route path="*" element={<Eror404 />}/>

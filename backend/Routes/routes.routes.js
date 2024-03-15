@@ -2,6 +2,7 @@ import express from "express";
 import { obtenerDatosConexion } from "../Controller/prueba.js";
 import {UsuarioController} from "../Controller/UsuarioController.js"
 import {MultaController} from "../Controller/MultaController.js"
+import { Multa } from "../Models/Multa.js";
 
 
 const router = express.Router();
@@ -30,4 +31,6 @@ router.post("/register", (req, res) => {
 });
 
 router.get('/agents', (req, res) => usuario.getAllAgents(req, res));
+router.get('/multa', (req, res ) =>multa.getAllMultas(req, res));
+
 export default router;

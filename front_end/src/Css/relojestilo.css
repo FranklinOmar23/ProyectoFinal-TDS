@@ -9,6 +9,7 @@
     display: flex;
     justify-content: center;
     margin-top: 50px;
+    
 }
 .reloj-item > div {
     margin: -10px auto 10px auto;

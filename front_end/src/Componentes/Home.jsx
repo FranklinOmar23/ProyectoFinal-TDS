@@ -113,10 +113,12 @@ function MultasRecientesCard() {
     const { multa } = useAuth();
 
     useEffect(() => {
-        if (!canvasRef.current) return;
+        if (!canvasRef.current || !multa || !multa.multasDelAgente || multa.multasDelAgente.length < 5) {
+            return; // No renderizar el gráfico si no hay multas o si hay menos de 5 multas
+        }
 
         // Filtrar las últimas 5 multas basándote en la fecha
-        const ultimasMultas = multa?.multasDelAgente
+        const ultimasMultas = multa.multasDelAgente
             .sort((a, b) => new Date(b.fecha) - new Date(a.fecha)) // Ordenar por fecha descendente
             .slice(0, 5); // Seleccionar las últimas 5 multas
 
@@ -171,6 +173,10 @@ function MultasRecientesCard() {
             }
         };
     }, [multa]); // Dependencia del efecto: se ejecuta cada vez que cambian los datos de multa
+
+    if (!multa || !multa.multasDelAgente || multa.multasDelAgente.length < 5) {
+        return null; // No renderizar el componente si no hay multas o si hay menos de 5 multas
+    }
 
     return (
         <div className="col-md-6">
@@ -252,7 +258,7 @@ export function Reloj({ fullWidth = false }) {
          </div>
        </div>
     );
-   };
+};
    
 
 
@@ -276,7 +282,7 @@ function Home() {
                     <div className="d-sm-flex justify-content-between align-items-center mb-4"></div>
                     <div className="row">
                         <MultasRecientesCard />
-                        <Reloj />
+                        <Reloj  />
                     </div>
                 </div>
                 <Footer />
