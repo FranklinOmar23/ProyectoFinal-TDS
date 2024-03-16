@@ -1,7 +1,8 @@
-import { SupabaseClientSingleton } from "../data/dbContection.js";
-import { Usuario } from "../Models/Usuario.js";
+
+import { SupabaseClientSingleton } from '../data/dbContection.js';
+import { Usuario } from '../Models/Usuario.js';
+import bcrypt from 'bcryptjs';
 import { v4 as uuidv4 } from "uuid";
-import bcrypt from "bcryptjs";
 import { decode } from "base64-arraybuffer";
 
 class UsuarioRepository {
@@ -157,8 +158,10 @@ class UsuarioRepository {
     }
   }
 
+
   async uploadImage(userId, foto, foto_Vehiculo) {
     try {
+
       const base64 = foto.split("base64,")[1];
       const fileType = foto.split(";")[0].split("/")[1];
       const fotoFileName = uuidv4() + "." + fileType;
@@ -167,8 +170,7 @@ class UsuarioRepository {
       const fileType_Vehiculo = foto_Vehiculo.split(";")[0].split("/")[1];
       const foto_VehiculoFileName = uuidv4() + "." + fileType_Vehiculo;
 
-      
-    const folderName = `usuario_${userId}`;
+      const folderName = `usuario_${userId}`;
 
       const { data: fotoData, error: fotoError } = await this.supabase.storage
         .from(`imagenesUsuarios/public/${folderName}`)
@@ -226,6 +228,7 @@ class UsuarioRepository {
       throw error;
     }
   }
+
 
   async deleteUser(userId) {
     try {

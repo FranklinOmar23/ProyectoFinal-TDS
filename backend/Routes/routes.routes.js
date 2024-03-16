@@ -25,32 +25,17 @@ router.post('/createMulta', (req, res) => multa.createMulta(req, res));
     usuario.updateUserByNewPassword(rq,rs)
 })*/
 router.post('/multaAgente', (req, res) => multa.getMultaByUser(req, res));
+
 router.post("/register", (req, res) => {
     usuario.registerUser(req, res);
 });
-
 router.put("/user/:id", (req, res) => { 
     usuario.updateUser(req, res);
 });
 
 router.post('/user/:id', (req, res) => {
-    console.log(req.body)
     usuario.uploadAndStoreImage(req, res);
 });
-
-/*router.put('/user/:id', (req, res) => {
-    usuario.storeImage(req, res);
-});
-
-router.get("/user/:id", async (_req, res) => {
-    try {
-      const userData = await this.usuarioController.getUserData();
-      res.json(userData);
-    } catch (error) {
-      console.error("Error al obtener datos del usuario:", error);
-      res.status(500).json({ error: "Error al obtener datos del usuario" });
-    }
-});*/
 
   
 export default router;

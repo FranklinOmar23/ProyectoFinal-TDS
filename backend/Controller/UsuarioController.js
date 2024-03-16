@@ -8,6 +8,7 @@ class UsuarioController {
   constructor() {
     this.usuarioRepository = new UsuarioRepository();
     this.supabase = SupabaseClientSingleton.getInstance();
+    this.supabase = SupabaseClientSingleton.getInstance();
   }
 
 
@@ -55,6 +56,7 @@ class UsuarioController {
       res.status(500).json({ error: 'Error al actualizar contraseña del usuario' });
     }
   }
+  //obtener los datos del front
   //obtener los datos del front
   async login(req, res) {
     const { cedula, contrasena } = req.body;
@@ -110,6 +112,7 @@ class UsuarioController {
       return res.status(500).json({message:"Error al registrar el usuario", error: error.message})
     }
   }
+
 
   async getUserNameByCedula(req, res) {
     const { cedula } = req.body;
@@ -175,12 +178,5 @@ class UsuarioController {
       res.status(500).send(error.message);
     }
   }
-  
-  
-  
-  
-  
-  
-
 };
 export { UsuarioController };
