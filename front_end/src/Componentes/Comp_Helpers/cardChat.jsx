@@ -6,7 +6,7 @@ import { useAuth } from '../../context/provider.jsx';
 const socket = io('http://localhost:5000');
 
 function ChatClient() {
-    const { user, messages, addMessage } = useAuth(); // Utiliza el hook useAuth para obtener el objeto user.
+    const { user, messages, addMessage } = useAuth();
     const [userNombre, setUserNombre] = useState('Usuario no encontrado');
     const [messageInput, setMessageInput] = useState('');
     const [selectedOption, setSelectedOption] = useState('1');
@@ -23,9 +23,10 @@ function ChatClient() {
                 return 'rgb(28, 200, 138)';
         }
     };
+
     useEffect(() => {
         if (user && user.user && user.user.nombre) {
-            setUserNombre(user.user.nombre); // Si el objeto user existe y tiene una propiedad nombre, establece userNombre con ese valor.
+            setUserNombre(user.user.nombre);
         }
     }, [user]); 
 
@@ -33,20 +34,18 @@ function ChatClient() {
         const messageListener = (message) => {
             console.log('Mensaje recibido:', message);
             if (typeof message === 'object' && message.text && message.time) {
-                // Agrega el nombre del usuario al objeto del mensaje.
                 message.user = userNombre;
 
-                const newMessages = [message, ...messages];
-                localStorage.setItem('messages', JSON.stringify(newMessages));
                 addMessage(message);
             }
         };
+
         socket.on('message', messageListener);
 
         return () => {
             socket.off('message', messageListener);
         };
-    }, [userNombre, messages, addMessage]);
+    }, [userNombre, addMessage]); // Removido 'messages' de las dependencias
 
     const sendMessage = () => {
         const newMessage = {
@@ -57,11 +56,7 @@ function ChatClient() {
         };
         addMessage(newMessage);
         setMessageInput('');
-        
-        // Guarda los mensajes en el almacenamiento local.
-        localStorage.setItem('messages', JSON.stringify(messages));
     
-        // Envía el nuevo mensaje al servidor a través de Socket.io.
         socket.emit('message', newMessage);
     };
 
@@ -73,7 +68,7 @@ function ChatClient() {
                 </div>
                 <ul className="list-group list-group-flush ul-chat chat-container">
                     <div className='contenedor-padre'>
-                        {messages.map((message, index) => (
+                    {messages.map((message, index) => (
                             <div key={index} className="message-container">
                                 <span className="name-user">
                                     {userNombre}

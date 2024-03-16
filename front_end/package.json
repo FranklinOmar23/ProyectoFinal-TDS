@@ -18,6 +18,8 @@
     "is-root": "^3.0.0",
     "isexe": "^3.1.1",
     "leaflet": "^1.9.4",
+    "leaflet-geosearch": "^3.11.1",
+    "leaflet-search": "^4.0.0",
     "react": "^18.2.0",
     "react-bootstrap": "^2.10.1",
     "react-dom": "^18.2.0",

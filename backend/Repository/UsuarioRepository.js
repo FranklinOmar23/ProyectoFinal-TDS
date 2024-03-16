@@ -297,6 +297,49 @@ async getAgents() {
     throw error;
  }
 }
+async updateAgentDetails(userId, updatedDetails) {
+  try {
+     // Preparar el objeto de actualización, solo incluyendo los campos que se proporcionaron
+     const updateObject = {};
+     if (updatedDetails.horario_entrada !== undefined) {
+       updateObject.horario_entrada = updatedDetails.horario_entrada;
+     }
+     if (updatedDetails.horario_salida !== undefined) {
+       updateObject.horario_salida = updatedDetails.horario_salida;
+     }
+     if (updatedDetails.estado !== undefined) {
+       updateObject.estado = updatedDetails.estado;
+     }
+     if (updatedDetails.telefono !== undefined) {
+       updateObject.telefono = updatedDetails.telefono;
+     }
+ 
+     // Verificar si hay al menos un campo para actualizar
+     if (Object.keys(updateObject).length === 0) {
+       throw new Error('No se proporcionaron detalles para actualizar el agente');
+     }
+ 
+     // Actualizar los detalles del agente en la base de datos
+     const { data, error } = await this.supabase
+       .from(this.usuario)
+       .update(updateObject)
+       .eq('id', userId);
+ 
+     if (error) {
+       throw error;
+     }
+ 
+     // Mapear los datos actualizados a una instancia de Usuario y devolverlo
+     if (data.length > 0) {
+       return this.mapToUserInstance(data[0]);
+     } else {
+       throw new Error('No se pudo actualizar el agente');
+     }
+  } catch (error) {
+     throw error;
+  }
+ }
+ 
 
 }
 
