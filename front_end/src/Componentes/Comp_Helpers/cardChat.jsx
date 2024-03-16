@@ -3,6 +3,13 @@ import io from 'socket.io-client';
 import Picker from 'emoji-picker-react'
 import "../../Css/chat.css"
 import { useAuth } from '../../context/provider.jsx';
+
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
+import toast, { Toaster } from 'react-hot-toast';
+
+import 'leaflet-geosearch/assets/css/leaflet.css';
 const socket = io('http://localhost:5000');
 
 function ChatClient() {
@@ -60,7 +67,133 @@ function ChatClient() {
         socket.emit('message', newMessage);
     };
 
+    /*mapa*/
+
+    const [map, setMap] = useState(null);
+    const { requerimiento } = useAuth();
+    const [userLocation, setUserLocation] = useState(null);
+    const [clickedCoords, setClickedCoords] = useState(null);
+  
+    
+    useEffect(() => {
+      let newMap;
+  
+      const initMap = async () => {
+        if (newMap) {
+          return;
+        }
+  
+        try {
+          const position = await getCurrentLocation();
+          setUserLocation(position.coords);
+  
+          newMap = L.map('map').setView([position.coords.latitude, position.coords.longitude], 16);
+          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(newMap);
+          setMap(newMap);
+  
+          // Después de inicializar el mapa
+          const provider = new OpenStreetMapProvider();
+          const searchControl = new GeoSearchControl({
+            provider: provider,
+            autoComplete: true,
+            autoCompleteDelay: 250,
+            showMarker: true,
+          });
+  
+          newMap.addControl(searchControl);
+  
+          // Crear círculo de ubicación del usuario
+          const userCircle = L.circle([position.coords.latitude, position.coords.longitude], {
+            color: 'green',
+            fillColor: 'green',
+            fillOpacity: 0.5,
+            radius: 32,
+          }).addTo(newMap);
+          userCircle.bindPopup("Tu ubicación actual");
+  
+          // Agregar círculos para los requerimientos
+          if (requerimiento && requerimiento.requerimientos) {
+            requerimiento.requerimientos.forEach((req) => {
+              const { latitud, longitud, direccion, fecha, requerimiento, nivel } = req;
+  
+              // Definir el color del círculo según el nivel
+              let color;
+              switch (nivel) {
+                case 1:
+                  color = 'yellow';
+                  break;
+                case 2:
+                  color = 'orange';
+                  break;
+                case 3:
+                  color = 'red';
+                  break;
+                default:
+                  color = 'blue'; // Color predeterminado para otros casos
+              }
+  
+              // Crear un círculo con el color determinado
+              const reqCircle = L.circle([latitud, longitud], {
+                color: color,
+                fillColor: color,
+                fillOpacity: 0.5,
+                radius: 300,
+              }).addTo(newMap);
+  
+              reqCircle.bindPopup(`<b> Lugar: ${direccion}</b><br> Fecha: ${fecha}<br> Requerimiento: ${requerimiento}`);
+            });
+          } const onMapClick = (e) => {
+            setClickedCoords(e.latlng);
+          };
+          newMap.on('click', onMapClick);
+        } catch (error) {
+          console.error('Error al obtener la ubicación del usuario', error);
+          toast.error('No se pudo obtener la ubicación del usuario.');
+        }
+      };
+  
+      initMap();
+  
+      // Limpiar el mapa al desmontar el componente
+      return () => {
+        if (newMap) {
+          newMap.remove();
+        }
+      };
+    }, [requerimiento]);
+  
+    const getCurrentLocation = () => {
+      return new Promise((resolve, reject) => {
+        const options = {
+          enableHighAccuracy: true,
+          maximumAge: 60000, // 60 segundos
+          timeout: 20000,
+        };
+  
+        navigator.geolocation.getCurrentPosition(
+          resolve,
+          (error) => {
+            reject(`Error al obtener la ubicación del usuario: ${error.message}`);
+          },
+          options
+        );
+      });
+      
+    };
+
     return (
+        <>
+        <div className="col-md-6" style={{ height: '400px', position: 'relative' }} id="map">
+              <div className='lati'>
+              {clickedCoords && (
+                  <div>
+                    <p className='leaflet-control-coordinates leaflet-control'>
+                      Lat: {clickedCoords.lat.toFixed(6)} Long: {clickedCoords.lng.toFixed(6)}
+                    </p>
+                  </div>
+              )}
+            </div>
+              </div>
         <div className="col-md-6">
             <div className="card shadow mb-4">
                 <div className="card-header py-3">
@@ -115,6 +248,7 @@ function ChatClient() {
                 </ul>
             </div>
         </div>
+        </>
     );
 }
 

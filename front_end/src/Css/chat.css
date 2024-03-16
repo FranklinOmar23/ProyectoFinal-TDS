@@ -245,3 +245,25 @@ select::-ms-expand {
   font-weight: 600;
   letter-spacing: 2px;
 }
+.lati {
+  position: absolute;
+  bottom: 0; /* Posiciona el div en la parte inferior del contenedor del mapa */
+  left: 0; /* Alinea el div a la izquierda del contenedor del mapa */
+  width: 100%;
+  padding: 10px; /* Asegura que el div se extienda a lo ancho del contenedor del mapa */ /* Sombra para darle profundidad */
+ }
+ .leaflet-control-coordinates{
+  background-color: rgba(255, 255, 255, 0.8); /* Fondo semi-transparente para mejor legibilidad */ /* Espacio interno alrededor del texto */
+  border-radius: 5px; /* Bordes redondeados para un aspecto más agradable */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  padding: 5px;
+  color: rgb(4, 131, 55);
+  font-size: 12px;
+  font-weight: 600;
+ }
+ .leaflet-popup-pane, .leaflet-control{
+  cursor: pointer !important;
+ }
+  .leaflet-touch {
+      z-index: 0;
+  }
