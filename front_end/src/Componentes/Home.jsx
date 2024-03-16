@@ -363,17 +363,17 @@ function Home() {
           <Topbar titulo="Home" />
           <div className="container">
             <div className="row">
-            <div className='lati'>
+              <div className="col-md-6" style={{ height: '400px', position: 'relative' }} id="map">
+              <div className='lati'>
               {clickedCoords && (
                   <div>
                     <p className='leaflet-control-coordinates leaflet-control'>
-                      Lat: {clickedCoords.lat.toFixed(6)}
+                      Lat: {clickedCoords.lat.toFixed(6)} Long: {clickedCoords.lng.toFixed(6)}
                     </p>
-                    <p> Long: {clickedCoords.lng.toFixed(6)}</p>
                   </div>
               )}
             </div>
-              <div className="col-md-6" style={{ height: '400px' }} id="map"></div>
+              </div>
               <InformacionesCard />
             </div>
           </div>
