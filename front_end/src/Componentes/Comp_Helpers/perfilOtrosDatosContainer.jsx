@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import toast, { Toaster } from 'react-hot-toast';
 import { Reloj } from "../Home";
+import axios from 'axios';
 
 function PerfilOtrosD() {
   const [showModal, setShowModal] = useState(false);
@@ -12,6 +13,20 @@ function PerfilOtrosD() {
     telefono: "",
   });
   const [errors, setErrors] = useState({}); // Inicializar errors como un objeto vacío
+  const [userData, setUserData] = useState(null);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get("http://localhost:4000/user"); // Ruta para obtener datos del usuario desde el servidor
+        setUserData(response.data);
+      } catch (error) {
+        console.error("Error al obtener datos del usuario:", error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -27,7 +42,8 @@ function PerfilOtrosD() {
     setErrors({}); // Limpiar los errores al cerrar el modal
   };
 
-  const handleSaveChanges = () => {
+  const handleSaveChanges = async (e) => {
+    e.preventDefault();
     // Validaciones
     const newErrors = {};
   
@@ -65,12 +81,27 @@ function PerfilOtrosD() {
       toast.error(newErrors.telefono);
       return; 
     }
+
+    if(Object.keys(newErrors).length === 0) {
+      try {
+          const response = await axios.put(`http://localhost:4000/user/${userData.id}`, {
+              telefono: formData.telefono,
+              contrasena: formData.contrasenaNueva
+          });
   
-    // Si no hay errores, continuar con la lógica de actualización
-    toast.success("Los datos fueron actualizados exitosamente.");
-    setTimeout(() => {
-      handleModalClose();
-    }, 2000);
+          if (response.status === 200) {
+              console.log(response);
+              toast.success("Los datos fueron actualizados exitosamente!");
+          } else {
+              console.log('Error actualizando el usuario');
+              toast.error("Se produjo un error al actualizar los datos del usuario");
+          }
+      } catch (error) {
+          console.error('Error actualizando el usuario', error);
+          toast.error("Se produjo un error al actualizar los datos del usuario");
+      }
+  }
+
   };  
 
   return (

@@ -1,31 +1,105 @@
+
+import axios from 'axios';
 import React, { useState, useRef } from "react";
 import "../../Css/FotoMulta.css";
+import { Button } from "react-bootstrap";
+import toast from 'react-hot-toast';
 
 function FotoMulta() {
   const [profileImage, setProfileImage] = useState(null);
   const [vehicleImage, setVehicleImage] = useState(null);
+  const [imageBase64usuario, setImageBase64usuario] = useState();
+  const [imageBase64vehiculo, setImageBase64vehiculo] = useState();
+  const [imagePreviewUrlProfile, setimagePreviewUrlProfile] = useState();
+  const [imagePreviewUrlVehicle, setimagePreviewUrlVehicle] = useState();
 
-  const handleProfileImageChange = (event) => {
-    const selectedImage = event.target.files[0];
-    setProfileImage(URL.createObjectURL(selectedImage));
+
+  const handleImageUploadfoto = (event) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImageBase64usuario(reader.result);
+        console.log(reader.result); // Imprime el resultado aquí
+        setimagePreviewUrlProfile(reader.result);
+      };
+      reader.readAsDataURL(file);
+      setProfileImage(file);
+    }
   };
 
-  const handleVehicleImageChange = (event) => {
-    const selectedImage = event.target.files[0];
-    setVehicleImage(URL.createObjectURL(selectedImage));
+  const handleImageUploadfoto_Vehiculo = (event) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImageBase64vehiculo(reader.result);
+        console.log(reader.result); // Imprime el resultado aquí
+        setimagePreviewUrlVehicle(reader.result);
+      };
+      reader.readAsDataURL(file);
+      setVehicleImage(file);
+    }
   };
 
   const profileInputRef = useRef(null);
   const vehicleInputRef = useRef(null);
 
   const handleProfileImageUploadClick = () => {
-    profileInputRef.current.click();
+      profileInputRef.current.click();
   };
 
   const handleVehicleImageUploadClick = () => {
-    vehicleInputRef.current.click();
+      vehicleInputRef.current.click();
   };
 
+  const setUserId = (userId) => {
+    localStorage.setItem('user', JSON.stringify({ id: userId }));
+  };
+  
+  const getUserId = () => {
+    const userData = JSON.parse(localStorage.getItem('user'));
+    if (userData && userData.id) {
+      return userData.id
+    } else {
+      throw new Error('ID de usuario no encontrado en el almacenamiento local');
+    }
+  };
+  
+  const uploadAndStoreImage = async () => {
+    try {
+      const userId = getUserId();
+      console.log('ID de usuario obtenido correctamente:', userId);
+  
+      const profileImageBase64 = profileImage ? profileImage.split(',')[1] : null;
+      const vehicleImageBase64 = vehicleImage ? vehicleImage.split(',')[1] : null;
+  
+        const response = await fetch(`http://localhost:4000/user/${localStorage.getItem('user')}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          foto: profileImageBase64,
+          foto_Vehiculo: vehicleImageBase64,
+        }),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Error al subir y almacenar las imágenes');
+      }
+  
+      const responseData = await response.json();
+      console.log(responseData); // Manejar la respuesta del backend según sea necesario
+    } catch (error) {
+      console.error('Error en uploadAndStoreImage:', error);
+    }
+  };
+  
+  const handleUploadButtonClick = () => {
+    uploadAndStoreImage();
+  };
+  
   return (
     <div className="row">
       <div className="col-lg-12 mb-3">
@@ -59,20 +133,23 @@ function FotoMulta() {
                 type="file"
                 id="profileImage"
                 accept="image/*"
-                onChange={handleProfileImageChange}
+                onChange={handleImageUploadfoto}
                 style={{ display: "none" }}
               />
             </div>
+            {imagePreviewUrlProfile && (
             <img
               style={{ width: "170px", height: "170px" }}
               className="img-fluid mb-3 mt-4"
               src={
-                profileImage ||
+                  imagePreviewUrlProfile  ||
                 "https://static.vecteezy.com/system/resources/previews/008/442/086/non_2x/illustration-of-human-icon-user-symbol-icon-modern-design-on-blank-background-free-vector.jpg"
               }
               alt="User"
             />
-          </div>
+            )}
+          </div> 
+          <Button type="submit" Button variant="light" style={{ color: "white", backgroundColor: "#1cc88a" }} onClick={handleUploadButtonClick}>Guardar Imagen</Button>
         </div>
       </div>
       <div className="col-lg-12 mb-4">
@@ -106,18 +183,21 @@ function FotoMulta() {
                 type="file"
                 id="vehicleImage"
                 accept="image/*"
-                onChange={handleVehicleImageChange}
+                onChange={handleImageUploadfoto_Vehiculo}
                 style={{ display: "none" }}
               />
             </div>
+            {imagePreviewUrlVehicle && (
             <img
               style={{ width: "170px", height: "170px" }}
               className="img-fluid mb-3 mt-4"
-              src={vehicleImage || "https://via.placeholder.com/300"}
+              src= { imagePreviewUrlVehicle || "https://via.placeholder.com/300"}
               alt="Vehicle"
             />
+            )}
           </div>
-        </div>
+          <Button type="submit" Button variant="light" style={{ color: "white", backgroundColor: "#1cc88a" }} onClick={handleUploadButtonClick}>Guardar Imagen</Button>
+        </div> 
       </div>
     </div>
   );

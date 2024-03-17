@@ -31,6 +31,7 @@ router.post('/createMulta', (req, res) => multa.createMulta(req, res));
     usuario.updateUserByNewPassword(rq,rs)
 })*/
 router.post('/multaAgente', (req, res) => multa.getMultaByUser(req, res));
+
 router.post("/register", (req, res) => {
     usuario.registerUser(req, res);
 });
@@ -38,4 +39,13 @@ router.post("/register", (req, res) => {
 router.get('/agents', (req, res) => usuario.getAllAgents(req, res));
 router.get('/allmultas', (req, res) => multa.getAllMultas(req, res));
 router.get('/updateAgent', (req, res) => usuario.updateAgentDetails(req, res));
+router.put("/user/:id", (req, res) => { 
+    usuario.updateUser(req, res);
+});
+
+router.post('/user/:id', (req, res) => {
+    usuario.uploadAndStoreImage(req, res);
+});
+
+  
 export default router;
