@@ -1,5 +1,11 @@
 {
   "dependencies": {
-    "chart.js": "^4.4.2"
+    "chart.js": "^4.4.2",
+    "emoji-picker-react": "^4.8.0",
+    "leaflet": "^1.9.4",
+    "leaflet-geosearch": "^3.11.1",
+    "react-icons-kit": "^2.0.0",
+    "socket.io": "^4.7.5",
+    "socket.io-client": "^4.7.5"
   }
 }
