@@ -259,6 +259,87 @@ class UsuarioRepository {
       res.status(500).send('Error actualizando contraseña del usuario');
     }
   }
+/*----------------------------------------------Logica de administrador----------------------------------------------*/
+async getAgents() {
+  try {
+    // Realizar la consulta a la base de datos para obtener los usuarios con el rol de AGENTE
+    const { data, error } = await this.supabase
+      .from(this.usuario)
+      .select('*')
+      .eq('role', 'AGENTE');
+
+    if (error) {
+      throw error;
+    }
+
+    // Mapear los datos de los usuarios a instancias de Usuario y devolverlos
+    const agents = data.map(userData => {
+      const user = new Usuario();
+      user.id = userData.id;
+      user.correo = userData.correo;
+      user.nombre = userData.nombre;
+      user.apellido = userData.apellido;
+      user.cedula = userData.cedula;
+      user.role = userData.role;
+      user.estado = userData.estado;
+      user.horario_entrada = userData.horario_entrada;
+      user.horario_salida = userData.horario_salida;
+      user.salario = userData.salario;
+      user.telefono = userData.telefono;
+      user.foto = userData.foto;
+      user.foto_Vehiculo = userData.foto_Vehiculo;
+      user.contrasena = userData.contrasena;
+      return user;
+    });
+
+    return agents; // Devolver el array de agentes
+ } catch (error) {
+    throw error;
+ }
+}
+async updateAgentDetails(userId, updatedDetails) {
+  try {
+     // Preparar el objeto de actualización, solo incluyendo los campos que se proporcionaron
+     const updateObject = {};
+     if (updatedDetails.horario_entrada !== undefined) {
+       updateObject.horario_entrada = updatedDetails.horario_entrada;
+     }
+     if (updatedDetails.horario_salida !== undefined) {
+       updateObject.horario_salida = updatedDetails.horario_salida;
+     }
+     if (updatedDetails.estado !== undefined) {
+       updateObject.estado = updatedDetails.estado;
+     }
+     if (updatedDetails.telefono !== undefined) {
+       updateObject.telefono = updatedDetails.telefono;
+     }
+ 
+     // Verificar si hay al menos un campo para actualizar
+     if (Object.keys(updateObject).length === 0) {
+       throw new Error('No se proporcionaron detalles para actualizar el agente');
+     }
+ 
+     // Actualizar los detalles del agente en la base de datos
+     const { data, error } = await this.supabase
+       .from(this.usuario)
+       .update(updateObject)
+       .eq('id', userId);
+ 
+     if (error) {
+       throw error;
+     }
+ 
+     // Mapear los datos actualizados a una instancia de Usuario y devolverlo
+     if (data.length > 0) {
+       return this.mapToUserInstance(data[0]);
+     } else {
+       throw new Error('No se pudo actualizar el agente');
+     }
+  } catch (error) {
+     throw error;
+  }
+ }
+ 
 
 }
 

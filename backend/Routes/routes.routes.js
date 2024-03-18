@@ -34,5 +34,8 @@ router.post('/multaAgente', (req, res) => multa.getMultaByUser(req, res));
 router.post("/register", (req, res) => {
     usuario.registerUser(req, res);
 });
-  
+
+router.get('/agents', (req, res) => usuario.getAllAgents(req, res));
+router.get('/allmultas', (req, res) => multa.getAllMultas(req, res));
+router.get('/updateAgent', (req, res) => usuario.updateAgentDetails(req, res));
 export default router;

@@ -3,7 +3,7 @@ import { useAuth } from '../../context/provider.jsx';
 import "../../Css/Navestilo.css";
 import { limpiarDatosLocalStorage } from "../../helpers/localStorage.jsx";
 
-function Navbar() {
+function Navbaradm() {
     const { user } = useAuth();
     const [userNombre, setUserNombre] = useState('Usuario no encontrado');
 
@@ -51,7 +51,7 @@ function Navbar() {
                     </li>
                     <div className="MenuList">
                         <li style={{ '--bg': '#ffe600' }} className={activeMenuItem === 'home-agente' ? 'active' : ''}>
-                            <a href="/home-agente" onClick={(e) => handleLinkClick(e, 'home-agente')}>
+                            <a href="/home-adm" onClick={(e) => handleLinkClick(e, 'home-agente')}>
                                 <div className="icon2">
                                     <i className="fas fa-home"></i>
                                 </div>
@@ -71,17 +71,18 @@ function Navbar() {
                                 <div className="icon2">
                                     <i className="fa-solid fa-folder-open"></i>
                                 </div>
-                                <p>Nuevas Multas</p>
+                                <p>Multas</p>
                             </a>
                         </li>
                         <li style={{ '--bg': '#4d0000' }} className={activeMenuItem === 'historial' ? 'active' : ''}>
-                            <a href="/historial" onClick={(e) => handleLinkClick(e, 'historial')}>
+                            <a href="/notificaciones" onClick={(e) => handleLinkClick(e, 'historial')}>
                                 <div className="icon2">
-                                    <i className="fa-solid fa-chart-simple"></i>
+                                <i class="fa-solid fa-paper-plane"></i>
                                 </div>
-                                <p>Historial</p>
+                                <p>Enviar Mensaje</p>
                             </a>
                         </li>
+                        
                     </div>
                     <div className="bottom">
                         <li style={{ '--bg': '#ff0000' }}>
@@ -109,6 +110,4 @@ function Navbar() {
     );
 }
 
-
-export default Navbar;
-
+export default Navbaradm;
