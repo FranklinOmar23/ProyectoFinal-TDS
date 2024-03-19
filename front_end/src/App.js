@@ -1,6 +1,5 @@
-import React from 'react';
-import {Routes} from "react-router";
-import {BrowserRouter, Route} from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import Olvidocontrase from './Componentes/olvidocontrase';
 import Registro from './Componentes/Registro';
 import Login from './Componentes/login';
@@ -13,28 +12,38 @@ import Historial from './Componentes/Historial';
 import Eror404 from './Componentes/Error404';
 import Nuevomsg from './Componentes/Nuevomensaje';
 import Placeholder from './Componentes/Placeholder';
+import { useAuth } from './context/provider';
 
 function App() {
+  const { user } = useAuth();
+  const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    if (user) {
+      setLoading(false);
+    }
+  }, [user]);
+
+  if (loading) {
+    return <Placeholder />;
+  }
   return (
-    <div>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/olvidocontrasena" element={<Olvidocontrase />}/>
-            <Route path="/registro" element={<Registro />}/>
-            <Route path="/" element={<Login />}/>
-            <Route path="/home-agente" element={<Home />}/>
-            <Route path="/nuevamulta" element={<Nuevamulta />}/>
-            <Route path="/perfil" element={<Perfil />}/>
-            <Route path="/home-adm" element={<HomeAdm />}/>
-            <Route path="/home-user" element={<HomeUser />}/>
-            <Route path="/historial" element={<Historial />}/>
-            <Route path='/notificaciones' element={<Nuevomsg/>}></Route>
-            <Route path="*" element={<Eror404 />}/>
-            <Route path="/ph" element={<Placeholder />}/>
-          </Routes>
-        </BrowserRouter>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/olvidocontrasena" element={<Olvidocontrase />} />
+        <Route path="/registro" element={<Registro />} />
+        <Route path="/" element={<Login />} />
+        {user.user.role === 'AGENTE' && <Route path="/home-agente" element={<Home />} />}
+        {user.user.role === 'ADMINISTRADOR' && <Route path="/home-adm" element={<HomeAdm />} />}
+        {user.user.role === 'USUARIO' && <Route path="/home-user" element={<HomeUser />} />}
+        {user.user.role === 'AGENTE' && <Route path="/nuevamulta" element={<Nuevamulta />} />}
+        {(user.user.role === 'ADMINISTRADOR' || user.user.role === 'AGENTE' || user.user.role === 'USUARIO') && <Route path="/perfil" element={<Perfil />} />}
+        {user.user.role === 'AGENTE' && <Route path="/historial" element={<Historial />} />}
+        {user.user.role === 'ADMINISTRADOR' && <Route path="/notificaciones" element={<Nuevomsg />} />}
+        <Route path="/ph" element={<Placeholder />} />
+        <Route path="*" element={<Eror404 />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
