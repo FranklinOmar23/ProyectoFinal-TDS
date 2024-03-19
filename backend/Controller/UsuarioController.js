@@ -1,11 +1,14 @@
-
+import { SupabaseClientSingleton } from "../data/dbContection.js";
 import { UsuarioRepository } from '../Repository/UsuarioRepository.js';  // Ajusta la ruta según tu estructura
 import { generarContraseñaTemporal } from '../logic/genrarContraseña.js';
 import bcrypt from 'bcryptjs';
 
+
 class UsuarioController {
   constructor() {
     this.usuarioRepository = new UsuarioRepository();
+    this.supabase = SupabaseClientSingleton.getInstance();
+    this.supabase = SupabaseClientSingleton.getInstance();
   }
 
 
@@ -53,7 +56,8 @@ class UsuarioController {
       res.status(500).json({ error: 'Error al actualizar contraseña del usuario' });
     }
   }
-  //optener los datos del front
+  //obtener los datos del front
+  //obtener los datos del front
   async login(req, res) {
     const { cedula, contrasena } = req.body;
 
@@ -108,6 +112,8 @@ class UsuarioController {
       return res.status(500).json({message:"Error al registrar el usuario", error: error.message})
     }
   }
+
+
   async getUserNameByCedula(req, res) {
     const { cedula } = req.body;
 
@@ -142,5 +148,90 @@ async getAllAgents(req, res) {
      res.status(500).json({ error: 'Error al obtener los agentes' });
   }
  }
+
+ async updateAgentDetails(req, res) {
+  const { userId, horario_entrada, horario_salida, estado, telefono } = req.body;
+ 
+  try {
+     // Validar que el ID del usuario no esté vacío y sea un número
+     if (!userId || typeof userId !== 'number') {
+       return res.status(400).json({ error: 'El ID del usuario es requerido y debe ser un número.' });
+     }
+ 
+     // Preparar el objeto de actualización, solo incluyendo los campos que se proporcionaron
+     const updateObject = {};
+     if (horario_entrada !== undefined) {
+       updateObject.horario_entrada = horario_entrada;
+     }
+     if (horario_salida !== undefined) {
+       updateObject.horario_salida = horario_salida;
+     }
+     if (estado !== undefined) {
+       updateObject.estado = estado;
+     }
+     if (telefono !== undefined) {
+       updateObject.telefono = telefono;
+     }
+ 
+     // Verificar si hay al menos un campo para actualizar
+     if (Object.keys(updateObject).length === 0) {
+       return res.status(400).json({ error: 'No se proporcionaron detalles para actualizar el agente.' });
+     }
+ 
+     // Realizar la actualización de los detalles del agente
+     const updatedAgent = await this.usuarioRepository.updateAgentDetails(userId, updateObject);
+ 
+     // Si todo está bien, enviar una respuesta exitosa
+     res.status(200).json({ message: 'Detalles del agente actualizados exitosamente', agent: updatedAgent });
+  } catch (error) {
+     console.error('Error al actualizar los detalles del agente:', error);
+     res.status(500).json({ error: 'Error al actualizar los detalles del agente' });
+  }
+ }
+ 
+  async updateUser(req, res) {
+    const userId = req.params.id; // Obtener el ID del usuario de la solicitud
+    const {telefono, contrasena} = req.body; // Obtener los datos actualizados del cuerpo de la solicitud
+  
+    try {
+      // Verificar si el usuario existe antes de intentar actualizarlo
+      const updatedUserData = {};
+      if (telefono) {
+          updatedUserData.telefono = telefono;
+      }
+      if (contrasena) {
+          const salt = await bcrypt.genSalt(10);
+          const hashedPassword = await bcrypt.hash(contrasena, salt);
+          updatedUserData.contrasena = hashedPassword;
+      }
+
+      // Actualizar el usuario
+      await this.usuarioRepository.updateUser({ id: userId, ...updatedUserData });
+
+      res.status(200).json({ message: 'Los datos fueron actualizados exitosamente!' });
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Se produjo un error al actualizar los datos del usuario' });
+  }
+
+  }
+
+  async uploadAndStoreImage(req, res) {
+    const { foto, foto_Vehiculo } = req.body;
+    const userId = req.params.id;
+  
+    try {
+      // Llamada al método para cargar imágenes y obtener las URLs
+      const { fotoUrl, foto_VehiculoUrl } = await this.usuarioRepository.uploadImage(userId, foto, foto_Vehiculo);
+  
+      // Llamada al método para almacenar las URLs en el registro del usuario
+      const data = await this.usuarioRepository.storeImage(userId, fotoUrl, foto_VehiculoUrl);
+  
+      res.json({ message: 'Imágenes subidas y URLs guardadas exitosamente!'});
+    } catch (error) {
+      console.error('Error en uploadAndStoreImage: ', error);
+      res.status(500).send(error.message);
+    }
+  }
 };
 export { UsuarioController };

@@ -1,12 +1,20 @@
 import React, { useState } from 'react';
+import { Icon } from 'react-icons-kit';
+import { eyeOff } from 'react-icons-kit/feather/eyeOff';
+import { eye } from 'react-icons-kit/feather/eye';
 
 const LoginCampos = ({ onLogin }) => {
   const [cedula, setCedula] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChangeCedula = (e) => {
     setCedula(e.target.value);
   };
+
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+ };
 
   const handleChangePassword = (e) => {
     setPassword(e.target.value);
@@ -37,11 +45,17 @@ const LoginCampos = ({ onLogin }) => {
       <div className="mb-3">
         <input
           className="form-control form-control-user"
-          type="password"
+          type={showPassword ? "text" : "password"}
           placeholder="Introduzca su contraseña"
           name="contrasena" // Corrección aquí
           value={password}
           onChange={handleChangePassword}
+          style={{ paddingRight: '30px' }}
+        />
+         <Icon
+          icon={showPassword ? eyeOff : eye}
+          onClick={toggleShowPassword}
+          style={{ cursor: 'pointer', position: 'absolute', right: '70px', top:'183px'}}
         />
       </div>
       <div className="mb-3">

@@ -11,6 +11,8 @@ import HomeAdm from './Componentes/home-adm';
 import HomeUser from './Componentes/home-usuario';
 import Historial from './Componentes/Historial';
 import Eror404 from './Componentes/Error404';
+import Nuevomsg from './Componentes/Nuevomensaje';
+import Placeholder from './Componentes/Placeholder';
 
 function App() {
 
@@ -27,7 +29,9 @@ function App() {
             <Route path="/home-adm" element={<HomeAdm />}/>
             <Route path="/home-user" element={<HomeUser />}/>
             <Route path="/historial" element={<Historial />}/>
+            <Route path='/notificaciones' element={<Nuevomsg/>}></Route>
             <Route path="*" element={<Eror404 />}/>
+            <Route path="/ph" element={<Placeholder />}/>
           </Routes>
         </BrowserRouter>
     </div>

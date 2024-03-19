@@ -30,9 +30,19 @@ class MultaController {
         res.status(500).json({ error: 'Error interno del servidor al obtener las multas del agente', details: error.message });
     }
 }
-
-
-
-}
+async getAllMultas(req, res) {
+    try {
+       const multas = await this.multaRepository.getAllMultas();
+       // Imprime los datos de los agentes en la consola
+       console.log(multas);
+       // Asegúrate de enviar la respuesta con el código de estado 200 y los datos de los agentes
+       res.status(200).json(multas);
+    } catch (error) {
+       console.error(error);
+       // Envía un mensaje de error con el código de estado 500
+       res.status(500).json({ error: 'Error al obtener los multas' });
+    }
+   }
+  };
 
 export { MultaController };

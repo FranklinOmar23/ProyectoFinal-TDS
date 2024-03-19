@@ -51,7 +51,7 @@ function Navbaradm() {
                     </li>
                     <div className="MenuList">
                         <li style={{ '--bg': '#ffe600' }} className={activeMenuItem === 'home-agente' ? 'active' : ''}>
-                            <a href="/home-agente" onClick={(e) => handleLinkClick(e, 'home-agente')}>
+                            <a href="/home-adm" onClick={(e) => handleLinkClick(e, 'home-agente')}>
                                 <div className="icon2">
                                     <i className="fas fa-home"></i>
                                 </div>
@@ -75,21 +75,14 @@ function Navbaradm() {
                             </a>
                         </li>
                         <li style={{ '--bg': '#4d0000' }} className={activeMenuItem === 'historial' ? 'active' : ''}>
-                            <a href="/historial" onClick={(e) => handleLinkClick(e, 'historial')}>
+                            <a href="/notificaciones" onClick={(e) => handleLinkClick(e, 'historial')}>
                                 <div className="icon2">
                                 <i class="fa-solid fa-paper-plane"></i>
                                 </div>
                                 <p>Enviar Mensaje</p>
                             </a>
                         </li>
-                        <li style={{ '--bg': '#4d0000' }} className={activeMenuItem === 'historial' ? 'active' : ''}>
-                            <a href="/historial" onClick={(e) => handleLinkClick(e, 'historial')}>
-                                <div className="icon2">
-                                <i class="fa-solid fa-plus"></i>
-                                </div>
-                                <p>Crear Agente</p>
-                            </a>
-                        </li>
+                        
                     </div>
                     <div className="bottom">
                         <li style={{ '--bg': '#ff0000' }}>
