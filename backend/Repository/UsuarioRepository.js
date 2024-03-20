@@ -472,6 +472,41 @@ async updateAgentDetails(userId, updatedDetails) {
      throw error;
   }
  }
+
+ async createAgent({
+  nombre,
+  apellido,
+  cedula,
+  correo,
+  role,
+  estado,
+  horario_entrada,
+  horario_salida,
+  salario,
+  contrasena,
+}) {
+  try {
+    const newUser = await this.supabase.from(this.tableName).upsert([
+      {
+        nombre,
+        apellido,
+        cedula,
+        correo,
+        estado,
+        horario_entrada,
+        horario_salida,
+        salario,
+        role: "AGENTE",
+        contrasena,
+      },
+    ]);
+
+    return this.mapToUserInstance(newUser[0]);
+  } catch (error) {
+    throw error;
+  }
+}
+
  
 }
 
