@@ -11,7 +11,12 @@ import HomeAdm from './Componentes/home-adm';
 import HomeUser from './Componentes/home-usuario';
 import Historial from './Componentes/Historial';
 import Eror404 from './Componentes/Error404';
+<<<<<<< HEAD
 import MultasAdim from './Componentes/multas-admin';
+=======
+import Nuevomsg from './Componentes/Nuevomensaje';
+import Placeholder from './Componentes/Placeholder';
+>>>>>>> origin/Omar23
 
 function App() {
 
@@ -29,7 +34,9 @@ function App() {
             <Route path="/multas-admin" element={<MultasAdim />}/>
             <Route path="/home-user" element={<HomeUser />}/>
             <Route path="/historial" element={<Historial />}/>
+            <Route path='/notificaciones' element={<Nuevomsg/>}></Route>
             <Route path="*" element={<Eror404 />}/>
+            <Route path="/ph" element={<Placeholder />}/>
           </Routes>
         </BrowserRouter>
     </div>

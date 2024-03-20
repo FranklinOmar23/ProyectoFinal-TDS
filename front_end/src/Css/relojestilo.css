@@ -25,7 +25,9 @@
     height: 70px;
     border-radius: 5px;
 }
-
+.map{
+    height: 200px;
+}
 .reloj-item p {
     font-size: medium;
     font-weight: bold;
@@ -44,3 +46,4 @@
     min-width: 40px;
     text-align: center;
 }
+

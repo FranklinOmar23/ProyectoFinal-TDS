@@ -1,4 +1,5 @@
 .button {
+<<<<<<< HEAD
   cursor: pointer;
   position: relative;
   padding: 10px 15px;
@@ -95,14 +96,96 @@
 
 .titulo{
   color: #f7f7f7 !important;
+=======
+    cursor: pointer;
+    position: relative;
+    padding: 10px 15px;
+    font-size: 18px;
+    border-radius: 34px;
+    background-color: transparent;
+    font-weight: 600;
+    transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
+    overflow: hidden;
+  }
+  
+  .btn1::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: 50px;
+    height: 50px;
+    border-radius: inherit;
+    scale: 0;
+    z-index: -1;
+    background-color: #19ab54;
+    transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+  }
+  
+  .btn1:hover::before {
+    scale: 3;
+  }
+  
+  .btn1:hover {
+    color: #FFF !important;
+    scale: 1.1;
+    box-shadow: 0 0px 20px rgba(193, 163, 98,0.4);
+  }
+  
+  .btn1:active {
+    scale: 1;
+  }
+  .btn2::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: 50px;
+    height: 50px;
+    border-radius: inherit;
+    scale: 0;
+    z-index: -1;
+    background-color: #E67E22;
+    transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+  }
+  
+  .btn2:hover::before {
+    scale: 3;
+  }
+  
+  .btn2:hover {
+    color: #FFF !important;
+    scale: 1.1;
+    box-shadow: 0 0px 20px rgba(193, 163, 98,0.4);
+  }
+  
+  .btn2:active {
+    scale: 1;
+  }
+.titulo{
+    color: #f7f7f7 !important;
+>>>>>>> origin/Omar23
 
 }
 
 .table th {
+<<<<<<< HEAD
 background-color: #19ab54; 
 color: white;
 padding: 10px; 
 font-weight: bold; 
+=======
+  background-color: #19ab54; /* Color de fondo */
+  color: white;
+  padding: 10px; /* Espaciado interno */
+  font-weight: bold; /* Negrita */
+}
+
+
+#ver{
+    color: #19ab54;
+    border: 2px solid #19ab54;
+>>>>>>> origin/Omar23
 }
 
 
@@ -127,12 +210,18 @@ font-weight: bold;
     object-fit: cover;
 }
 
-  
 
+<<<<<<< HEAD
 #Edit {
     margin-left: 10px;
    color: #EE870C;
    border: 2px solid #EE870C;
+=======
+#Modificar {
+  margin-left: 10px;
+   color: #E67E22;
+   border: 2px solid #E67E22;
+>>>>>>> origin/Omar23
 }
 
 #Delete {
@@ -153,7 +242,7 @@ font-weight: bold;
     background: transparent;
     border-radius: 5px;
     color: #f8f9fc;
-    border: 1px solid rgb(4, 131, 55);
+    border: 1px solid #048337;
     font-size: 1em;
   }
   
@@ -184,8 +273,12 @@ i.fa-solid.fa-magnifying-glass {
   font-size: 21px;
   top: 2px;
   color: hsl(144, 94%, 26%);
+<<<<<<< HEAD
   cursor: pointer;
 }
+=======
+  cursor: pointer;}
+>>>>>>> origin/Omar23
 
 .card-header.py-3{
     display: flex;
@@ -201,6 +294,7 @@ table#dataTable{
   font-weight: bold;
 }
 
+<<<<<<< HEAD
 .modal-details p.title  {
   color: rgb(2, 2, 2);
   font-weight: bold;
@@ -217,6 +311,8 @@ table#dataTable{
 }
 
 
+=======
+>>>>>>> origin/Omar23
 /* Botones Modal Editar*/
 
 .Button2 {
@@ -288,6 +384,10 @@ table#dataTable{
   transform: translateX(-50%) scaleY(1.3) scaleX(0.8);
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/Omar23
 /* Boton de busqueda*/
 .search {
   display: inline-block;
@@ -336,4 +436,10 @@ table#dataTable{
 /* Opciones del filtro */
 .filter-select option {
   font-size: 14px;
+<<<<<<< HEAD
 }
+=======
+}
+
+
+>>>>>>> origin/Omar23

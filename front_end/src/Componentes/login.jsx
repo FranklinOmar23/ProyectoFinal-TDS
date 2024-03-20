@@ -13,17 +13,17 @@ import { useAuth } from '../context/provider';
 
 const Login = () => {
   const navigate = useNavigate();
-  const { loginUser, cargarMultas } = useAuth();
+  const { loginUser, cargarMultas, cargarRequerimientos } = useAuth();
 
-  const handleLogin = async (userData, multaData) => {
+  const handleLogin = async (userData) => {
     try {
       const response = await axios.post('http://localhost:4000/login', userData);
       console.log(response.data);
-  
+
       // CARGAR EL CONTEXTO
       loginUser(response.data);
       console.log('Usuario después de iniciar sesión:', response.data);
-  
+
       // Redirigir según el rol del usuario
       switch (response.data.user?.role) {
         case 'AGENTE':
@@ -36,16 +36,20 @@ const Login = () => {
           console.error('Rol de usuario desconocido');
           toast.error('Error al obtener el rol del usuario');
       }
-      
-      // Obtener las multas solo si el usuario es agente
-      if (response.data.user?.role === 'AGENTE') {
+
+      // Obtener las multas y requerimientos solo si el usuario es agente
+      if (response.data.user?.role === 'AGENTE' && response.data.user.id) {
         const multaRespuesta = await axios.post('http://localhost:4000/multaAgente', { id_agente: response.data.user.id });
         console.log(multaRespuesta.data);
-  
+
         cargarMultas(multaRespuesta.data);
         console.log('Multa después de iniciar sesión:', multaRespuesta.data);
+
+        const requerimientoRespuesta = await axios.get('http://localhost:4000/requerimiento');
+        cargarRequerimientos(requerimientoRespuesta.data);
+        console.log('Requerimientos después de iniciar sesión:', requerimientoRespuesta.data);
       }
-  
+
       toast.success('Inicio de sesión exitoso');
     } catch (error) {
       console.error('Error al iniciar sesión:', error);

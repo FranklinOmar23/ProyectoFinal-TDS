@@ -7,7 +7,7 @@ class MultaController {
     }
 
     async createMulta(req, res) {
-      const { cedula_usuario, nombre_multado, matricula, placa, razon, monto,id_angente } = req.body;
+      const { cedula_usuario, nombre_multado, matricula, placa, razon, monto, id_angente } = req.body;
       const fecha = new Date(); // Obtener la fecha actual
       const multaData = { cedula_usuario, nombre_multado, matricula, placa, razon, fecha, monto,id_angente };
 
@@ -44,6 +44,10 @@ async getAllMultas(req, res) {
        res.status(500).json({ error: 'Error al obtener los multas' });
     }
    }
+<<<<<<< HEAD
 };
+=======
+  };
+>>>>>>> origin/Omar23
 
 export { MultaController };
