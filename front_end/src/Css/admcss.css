@@ -239,10 +239,13 @@ table#dataTable{
 
 /* Boton de busqueda*/
 .search {
-  display: inline-block;
-  position: relative;
-  top: 53px;
-  left: 155px;
+flex: 1;
+margin-right: 10px;
+}
+.filtros{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .search input[type="text"] {
@@ -255,14 +258,6 @@ table#dataTable{
 
 /* Estilos para el filtro */
 
-/* Contenedor principal */
-.filter-container {
-  display: inline-block;
-  position: relative;
-  top: 10px;
-  left: 1047px;
-  margin-bottom: 20px;
-}
 
 /* Etiqueta del filtro */
 .filter-label {
@@ -286,5 +281,14 @@ table#dataTable{
 .filter-select option {
   font-size: 14px;
 }
+
+.add-agent-button {
+  display: inline-block;
+  position: relative;
+  top: 25px;
+  left: 1108px;
+  margin-bottom: 20px;
+}
+
 
 
