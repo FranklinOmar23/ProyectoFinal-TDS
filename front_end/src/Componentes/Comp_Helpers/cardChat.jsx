@@ -10,6 +10,7 @@ import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
 import toast, { Toaster } from 'react-hot-toast';
 
 import 'leaflet-geosearch/assets/css/leaflet.css';
+import FormEmerg from './FormEmerg.jsx';
 const socket = io('http://localhost:5000');
 
 function ChatClient() {
@@ -61,6 +62,10 @@ function ChatClient() {
             time: new Date(),
             user: userNombre
         };
+
+        newMessage.latitud = clickedCoords ? clickedCoords.lat.toFixed(6) : '';
+        newMessage.longitud = clickedCoords ? clickedCoords.lng.toFixed(6) : '';
+
         addMessage(newMessage);
         setMessageInput('');
     
@@ -193,8 +198,12 @@ function ChatClient() {
                   </div>
               )}
             </div>
-              </div>
-        <div className="col-md-6">
+          </div>
+
+        <div className='col-md-6'>
+          <FormEmerg latitud={clickedCoords ? clickedCoords.lat.toFixed(6) : ''} longitud={clickedCoords ? clickedCoords.lng.toFixed(6) : ''}/>
+        </div>
+        {/*<div className="col-md-6">
             <div className="card shadow mb-4">
                 <div className="card-header py-3">
                     <h6 className="text-success fw-bold m-0">Crear Notificacion</h6>
@@ -246,8 +255,8 @@ function ChatClient() {
                         </div>
                     </div>
                 </ul>
-            </div>
-        </div>
+                                  </div>
+        </div>*/}
         </>
     );
 }

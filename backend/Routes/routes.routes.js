@@ -20,6 +20,10 @@ router.get("/user",(rq, rs)=>{
 router.get("/requerimiento",(rq, rs)=>{
     requerimiento.getAllRequerimientos(rq,rs)
 });
+router.post("/createrequerimiento",(rq, rs)=>{
+    requerimiento.createRequerimiento(rq,rs)
+
+});
 
 
 router.post('/login', (req, res) => usuario.login(req, res));

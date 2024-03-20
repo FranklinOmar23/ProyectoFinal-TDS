@@ -55,11 +55,13 @@ class RequerimientoRepository {
 
     async createRequerimiento(requerimientoData) {
         try {
+            console.log('Intentando insertar requerimiento:', requerimientoData);
             const { error } = await this.supabase.from(this.tableName).upsert([requerimientoData]);
             if (error) throw error;
-        } catch (error) {
+            console.log('requerimiento insertado exitosamente');
+          } catch (error) {
             throw error;
-        }
+          }
     }
 
     async updateRequerimiento(requerimientoId, updatedRequerimientoData) {
