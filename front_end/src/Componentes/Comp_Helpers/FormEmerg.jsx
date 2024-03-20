@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import toast, { Toaster } from 'react-hot-toast';
+import { useAuth } from '../../context/provider.jsx';
+import io from 'socket.io-client';
+
+const socket = io('http://localhost:5000');
 
 function FormEmerg({ latitud: propLatitud, longitud: propLongitud }) {
     const [latitud, setLatitud] = useState('');
@@ -10,48 +15,132 @@ function FormEmerg({ latitud: propLatitud, longitud: propLongitud }) {
     const [detalles, setDetalles] = useState('');
     const [requerimiento, setRequerimiento] = useState('');
     const [fecha, setFecha] = useState('');
-    const [nivel, setNivel] = useState('nivel1');
+    const [nivel, setNivel] = useState(1);
     const [error, setError] = useState('');
+    const { user, messages, addMessage  } = useAuth();
+    const [id_agente, setIdAgente] = useState("id del agente no encontrado");
+    const [userNombre, setUserNombre] = useState('Usuario no encontrado');
+    const [selectedOption, setSelectedOption] = useState('1');
 
     useEffect(() => {
         setLatitud(propLatitud);
         setLongitud(propLongitud);
     }, [propLatitud, propLongitud]);
 
-    const obtenerUbicacionActual = () => {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition((position) => {
-                setLatitud(position.coords.latitude);
-                setLongitud(position.coords.longitude);
-            });
-        } else {
-            alert('La geolocalización no es soportada por este navegador.');
+     const getMessageBackgroundColor = () => {
+        switch (selectedOption) {
+            case '2':
+                return 'red';
+            case '3':
+                return '#9d9d00';
+            case '4':
+                return 'blue';
+            default:
+                return 'rgb(28, 200, 138)';
         }
     };
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
+    useEffect(() => {
+        if (user && user.user && user.user.nombre) {
+            setUserNombre(user.user.nombre);
+        }
+    }, [user]); 
+
+    useEffect(() => {
+        const messageListener = (message) => {
+            console.log('Mensaje recibido:', message);
+            if (typeof message === 'object' && message.text && message.time) {
+                message.user = userNombre;
+
+                addMessage(message);
+            }
+        };
+
+        socket.on('message', messageListener);
+
+        return () => {
+            socket.off('message', messageListener);
+        };
+    }, [userNombre, addMessage]);
+
+    const sendMessage = () => {
+        const newMessage = {
+            text: detalles,
+            color: getMessageBackgroundColor(),
+            time: new Date(),
+            user: userNombre,
+            latitud: latitud,
+            longitud: longitud,
+            direccion: direccion,
+            detalles: detalles,
+            requerimiento: requerimiento,
+            fecha: fecha,
+            nivel: nivel
+        };
+    
+        // Emitir el mensaje a través de socket.io
+        socket.emit('message', newMessage);
+    
+        // Limpia el input del mensaje
+        setDetalles('');
+        setDireccion('');
+        setRequerimiento('');
+        setFecha('');
+        setLatitud('');
+        setLongitud('');
+    };
+    
+    useEffect(() => {
+        if (user && user.user && user.user.nombre) {
+            setIdAgente(user.user.id);
+            console.log("ID del agente:", user.user.id); // Agrega esta línea
+        }
+    }, [user]);    
+
+
+    const handleSubmit = async () => {
         // Realizar validaciones
-        if (!direccion.trim() || !detalles.trim() || !requerimiento.trim() || !fecha.trim()) {
+        if (!direccion.trim() || !detalles.trim() || !requerimiento.trim() || !fecha.trim() || !nivel || !latitud.trim() || !longitud.trim()){
             toast.error('Todos los campos son requeridos');
             return;
         }
         // Si todas las validaciones pasan, reseteamos el estado de error
-        //g
+    
         // Aquí puedes enviar los datos a donde sea necesario, como una API o un componente padre
+        try {
+            const response = await axios.post('http://localhost:4000/createrequerimiento', {
+                id_agente,
+                latitud,
+                longitud,
+                direccion,
+                requerimiento,
+                fecha,
+                nivel
+            });
+            toast.success('Requerimiento creado exitosamente');
+        } catch (error) {
+            toast.error('Hubo un error al crear el requerimiento');
+        }
     };
+    
+    const handleButtonClick = (event) => {
+        event.preventDefault();
+        sendMessage(); // Llama a la función sendMessage
+        handleSubmit(); // Llama a handleSubmit sin necesidad de un evento
+    };    
+    
 
     return (
         <>
             <Toaster
-                    toastOptions={{
-                        style: {
-                            height: '90px',
-                            width: '300px',
-                            fontSize: '16px',
-                        },
-                    }}
-                />
+                toastOptions={{
+                    style: {
+                        height: '90px',
+                        width: '300px',
+                        fontSize: '16px',
+                    },
+                }}
+            />
             <div className="container d-flex justify-content-center align-items-center vh-50">
                 <div className="card shadow mb-4">
                     <div className="card-header py-3">
@@ -73,9 +162,6 @@ function FormEmerg({ latitud: propLatitud, longitud: propLongitud }) {
                                                 <label className="form-label" htmlFor="longitud"><strong>Longitud</strong></label>
                                                 <input className="form-control" type="text" id="longitud" placeholder="Longitud" name="longitud" value={longitud} readOnly />
                                             </div>
-                                        </div>
-                                        <div className="col">
-                                            <button className="btn btn-success btn-sm link-light" type="button" onClick={obtenerUbicacionActual}>Añadir ubicación actual</button>
                                         </div>
                                     </div>
                                     <div className="row">
@@ -110,16 +196,16 @@ function FormEmerg({ latitud: propLatitud, longitud: propLongitud }) {
                                         <div className="col">
                                             <div className="mb-3">
                                                 <label className="form-label" htmlFor="nivel"><strong>Nivel</strong></label>
-                                                <select className="form-select" id="nivel" name="nivel" value={nivel} onChange={(e) => setNivel(e.target.value)}>
-                                                    <option value="nivel1">1</option>
-                                                    <option value="nivel2">2</option>
-                                                    <option value="nivel3">3</option>
+                                                <select className="form-select" id="nivel" name="nivel" value={selectedOption} onChange={(e) => setSelectedOption(e.target.value)}>
+                                                    <option value="3">1</option>
+                                                    <option value="1">2</option>
+                                                    <option value="2">3</option>
                                                 </select>
                                             </div>
                                         </div>
                                     </div>
                                     <div className="card-footer">
-                                        <button className="btn btn-success btn-sm link-light float-end" type="submit">Guardar</button>
+                                    <button className="btn btn-success btn-sm link-light float-end" onClick={handleButtonClick}>Guardar</button>
                                     </div>
                                 </form>
                             </div>

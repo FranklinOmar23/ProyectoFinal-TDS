@@ -1,9 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import toast, { Toaster } from 'react-hot-toast';
 import { Reloj } from "../Home";
+import axios from 'axios';
+import { useAuth } from "../../context/provider";
 
 function PerfilOtrosD() {
+  const { user } = useAuth();
+const [userContrasena, setUserContrasena] = useState("Contraseña no encontrada");
+const [userTelefono, setUserTelefono] = useState("Teléfono no encontrado");
+const [userSalario, setUserSalario] = useState("Salario no encontrado");
+const [userID, setUserID] = useState("ID no encontrado");//tomo el id del contexto
+
+useEffect(() => {
+ if (user && user.user && user.user.nombre) {
+    setUserContrasena(user.user.contrasena);
+    setUserTelefono(user.user.telefono);
+    setUserSalario(user.user.salario);
+    setUserID(user.user.id);
+ }
+}, [user]); // Asegúrate de incluir user como dependencia para que el efecto se ejecute cuando user cambie
+
+
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
     contrasenaAntigua: "",
@@ -12,6 +30,7 @@ function PerfilOtrosD() {
     telefono: "",
   });
   const [errors, setErrors] = useState({}); // Inicializar errors como un objeto vacío
+  const [userData, setUserData] = useState(null);
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -27,16 +46,10 @@ function PerfilOtrosD() {
     setErrors({}); // Limpiar los errores al cerrar el modal
   };
 
-  const handleSaveChanges = () => {
+  const handleSaveChanges = async (e) => {
+    e.preventDefault();
     // Validaciones
     const newErrors = {};
-  
-    if (!formData.contrasenaAntigua || !formData.contrasenaNueva || !formData.contrasenaNuevaConfirmacion || !formData.telefono) {
-      newErrors.general = "Todos los campos son obligatorios.";
-      setErrors(newErrors);
-      toast.error(newErrors.general);
-      return; 
-    }
   
     if (formData.contrasenaNueva !== formData.contrasenaNuevaConfirmacion || formData.contrasenaAntigua === formData.contrasenaNueva) {
       newErrors.contrasena = "Las contraseñas no coinciden o son iguales.";
@@ -52,27 +65,39 @@ function PerfilOtrosD() {
       return; 
     }
   
-    if (!/^[A-Z]/.test(formData.contrasenaAntigua) || !/[!@#$%^&*(),.?":{}|<>]/.test(formData.contrasenaAntigua)) {
-      newErrors.contrasenaAntigua = "La contraseña debe comenzar con mayúscula y contener al menos un carácter especial.";
-      setErrors(newErrors);
-      toast.error(newErrors.contrasenaAntigua);
-      return; 
-    }
-  
     if (!/^\d{10}$/.test(formData.telefono)) {
       newErrors.telefono = "El número de teléfono debe contener al menos 10 dígitos.";
       setErrors(newErrors);
       toast.error(newErrors.telefono);
       return; 
     }
-  
-    // Si no hay errores, continuar con la lógica de actualización
-    toast.success("Los datos fueron actualizados exitosamente.");
-    setTimeout(() => {
-      handleModalClose();
-    }, 2000);
-  };  
 
+    if(Object.keys(newErrors).length === 0) {
+      try {
+        // Preparar los datos para la actualización
+        const updateData = {
+          telefono: formData.telefono,
+          contrasena: formData.contrasenaNueva,
+        };
+  
+        // Realizar la solicitud POST para actualizar los datos del usuario
+        const response = await axios.post(`http://localhost:4000/user/${userID}`, updateData); //mando el id del contexto al back
+  
+        if (response.status === 200) {
+          console.log(response);
+          toast.success("Los datos fueron actualizados exitosamente!");
+          // Aquí puedes actualizar el estado del usuario en el frontend si es necesario
+        } else {
+          console.log('Error actualizando el usuario');
+          toast.error("Se produjo un error al actualizar los datos del usuario");
+        }
+      } catch (error) {
+        console.error('Error actualizando el usuario', error);
+        toast.error("Se produjo un error al actualizar los datos del usuario");
+      }
+   }
+  };
+  
   return (
     <>
       <Toaster />
@@ -91,10 +116,11 @@ function PerfilOtrosD() {
                 className="form-control"
                 type="password"
                 id="contrasena"
-                placeholder="********"
+                placeholder={userContrasena}
                 name="contrasena"
                 value={formData.contrasenaNuevaConfirmacion}
                 onChange={handleInputChange}
+                readOnly
               />
             </div>
             <div className="row">
@@ -107,10 +133,11 @@ function PerfilOtrosD() {
                     className="form-control"
                     type="text"
                     id="telefono"
-                    placeholder="123-456-7890"
+                    placeholder={userTelefono}
                     name="telefono"
                     value={formData.telefono}
                     onChange={handleInputChange}
+                    readOnly
                   />
                   {errors && errors.telefono && <div className="text-danger">{errors.telefono}</div>}
                 </div>
@@ -124,7 +151,7 @@ function PerfilOtrosD() {
                     className="form-control"
                     type="text"
                     id="salario"
-                    placeholder="0.00"
+                    placeholder={userSalario}
                     name="salario"
                     readOnly
                   />
@@ -159,8 +186,8 @@ function PerfilOtrosD() {
                 className="form-control"
                 type="password"
                 name="contrasenaAntigua"
-                value={formData.contrasenaAntigua}
-                onChange={handleInputChange}
+                placeholder={userContrasena}
+                readOnly
               />
             </Form.Group>
             <Form.Group className="mb-3">

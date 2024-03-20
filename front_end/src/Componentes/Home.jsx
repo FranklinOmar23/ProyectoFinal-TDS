@@ -26,8 +26,7 @@ const ENDPOINT = "http://localhost:5000";
 
 
 function InformacionesCard() {
-  const { user, messages, addMessage } = useAuth();
-  const [userNombre, setUserNombre] = useState('Usuario no encontrado');
+  const { messages, addMessage } = useAuth();
   const [messageInput, setMessageInput] = useState('');
   const [selectedOption, setSelectedOption] = useState('1');
 
@@ -62,6 +61,7 @@ function InformacionesCard() {
                 </span>
                 <li className="message-item" style={{ backgroundColor: message.color, color: 'white' }}>
                   {message.text}
+                  
                   {message.time &&
                     <span className="message-time">
                       {new Date(message.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}
