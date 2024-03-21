@@ -40,7 +40,6 @@ function App() {
         {(user.user.role === 'ADMINISTRADOR' || user.user.role === 'AGENTE' || user.user.role === 'USUARIO') && <Route path="/perfil" element={<Perfil />} />}
         {user.user.role === 'AGENTE' && <Route path="/historial" element={<Historial />} />}
         {user.user.role === 'ADMINISTRADOR' && <Route path="/notificaciones" element={<Nuevomsg />} />}
-        <Route path="/ph" element={<Placeholder />} />
         <Route path="*" element={<Eror404 />} />
       </Routes>
     </BrowserRouter>

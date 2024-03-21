@@ -443,43 +443,41 @@ function HomeAdm() {
             <Modal.Title style={{ fontWeight: 'bold', textAlign: 'center', width: '100%', margin: '0 auto' }}>Agregar Agente</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <Form onSubmit={handleSubmit}>
+          <Form onSubmit={handleSubmit}>
               <div className="row">
-                <div className="col-md-6">
+                <div className="col-md-4">
                   <Form.Group className="mb-3">
                     <Form.Label className="fw-bold">Nombre:</Form.Label>
                     <Form.Control type="text" name="nombre" value={formData.nombre} onChange={handleChange} />
                   </Form.Group>
                 </div>
-                <div className="col-md-6">
+                <div className="col-md-4">
                   <Form.Group className="mb-3">
                     <Form.Label className="fw-bold">Apellido:</Form.Label>
                     <Form.Control type="text" name="apellido" value={formData.apellido} onChange={handleChange} />
                   </Form.Group>
                 </div>
-              </div>
-              <div className="row">
-                <div className="col-md-6">
+                <div className="col-md-4">
                   <Form.Group className="mb-3">
                     <Form.Label className="fw-bold">Cédula:</Form.Label>
                     <Form.Control type="text" name="cedula" value={formData.cedula} onChange={handleChange} />
                   </Form.Group>
                 </div>
-                <div className="col-md-6">
+              </div>
+              <div className="row">
+                <div className="col-md-4">
                   <Form.Group className="mb-3">
                     <Form.Label className="fw-bold">Teléfono:</Form.Label>
                     <Form.Control type="text" name="telefono" value={formData.telefono} onChange={handleChange} />
                   </Form.Group>
                 </div>
-              </div>
-              <div className="row">
-                <div className="col-md-6">
+                <div className="col-md-4">
                   <Form.Group className="mb-3">
                     <Form.Label className="fw-bold">Contraseña:</Form.Label>
                     <Form.Control type="password" name="contrasena" value={formData.contrasena} onChange={handleChange} />
                   </Form.Group>
                 </div>
-                <div className="col-md-6">
+                <div className="col-md-4">
                   <Form.Group className="mb-3">
                     <Form.Label className="fw-bold">Confirmar Contraseña:</Form.Label>
                     <Form.Control type="password" name="confirmarContrasena" value={formData.confirmarContrasena} onChange={handleChange} />
@@ -487,13 +485,13 @@ function HomeAdm() {
                 </div>
               </div>
               <div className="row">
-                <div className="col-md-6">
+                <div className="col-md-4">
                   <Form.Group className="mb-3">
                     <Form.Label className="fw-bold">Correo:</Form.Label>
                     <Form.Control type="email" name="correo" value={formData.correo} onChange={handleChange} />
                   </Form.Group>
                 </div>
-                <div className="col-md-6">
+                <div className="col-md-4">
                   <Form.Group className="mb-3">
                     <Form.Label className="fw-bold">Estatus:</Form.Label>
                     <Form.Control as="select" name="estatus" value={formData.estatus} onChange={handleChange}>
@@ -502,23 +500,21 @@ function HomeAdm() {
                     </Form.Control>
                   </Form.Group>
                 </div>
-              </div>
-              <div className="row">
-                <div className="col-md-6">
+                <div className="col-md-4">
                   <Form.Group className="mb-3">
                     <Form.Label className="fw-bold">Salario:</Form.Label>
                     <Form.Control type="number" name="salario" value={formData.salario} onChange={handleChange} />
                   </Form.Group>
                 </div>
-                <div className="col-md-6">
+              </div>
+              <div className="row">
+                <div className="col-md-4">
                   <Form.Group className="mb-3">
                     <Form.Label className="fw-bold">Hora de Entrada:</Form.Label>
                     <Form.Control type="time" name="horaEntrada" value={formData.horaEntrada} onChange={handleChange} />
                   </Form.Group>
                 </div>
-              </div>
-              <div className="row">
-                <div className="col-md-6">
+                <div className="col-md-4">
                   <Form.Group className="mb-3">
                     <Form.Label className="fw-bold">Hora de Salida:</Form.Label>
                     <Form.Control type="time" name="horaSalida" value={formData.horaSalida} onChange={handleChange} />
