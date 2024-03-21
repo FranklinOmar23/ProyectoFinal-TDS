@@ -33,7 +33,13 @@
   padding: 10px;
   position: relative;
   border-radius: 5px;
+  word-wrap: break-word; /* Evita el desbordamiento horizontal */
+  margin-bottom: 10px; /* Espacio entre los mensajes */
+  align-items: center; /* Alinea verticalmente los elementos */
+  overflow: hidden;
+
 }
+
 
 .messageBox {
   width: 100%;
@@ -180,6 +186,11 @@
   margin-left: auto;
   /* Empuja el botón de enviar a la derecha */
 }
+.message-item:hover {
+  background-color: #333; /* Cambia el color de fondo al pasar el cursor sobre el mensaje */
+  cursor: pointer; /* Cambia el cursor al puntero */
+}
+
 
 .message-time {
   position: relative;
@@ -187,6 +198,60 @@
   left: 4px;
   font-size: 12px;
 }
+
+.message-time2 {
+  position: relative;
+  top: 10px;
+  left: 4px;
+  font-size: 12px;
+}
+.message-ver {
+  position: flex;
+  top: 14px;
+  left: 12px;
+  right: 1px;
+  font-size: 12px;
+  margin-left: 12px;
+  color: rgb(18, 87, 1); /* Cambiar el color del texto a azul */
+  cursor: pointer; /* Cambiar el cursor al pasar sobre el texto */
+}
+
+.message-ver:hover {
+  text-decoration: underline; /* Subrayar el texto cuando se pasa el cursor sobre él */
+  color: white; /* Cambiar el color al pasar el cursor sobre él */
+}
+
+@keyframes expandMessage {
+  from {
+    max-height: 0;
+    transform: translateY(25%);
+  }
+  to {
+    max-height: 500px; /* Ajusta según sea necesario */
+    transform: translateY(0%);
+  }
+}
+
+
+.expanded {
+  animation: expandMessage 1s ease forwards; /* Detiene la animación al finalizar */
+}
+
+@keyframes closeMessage {
+  from {
+    max-height: 100px; /* Ajusta según sea necesario */
+    transform: translateY(25%);
+  }
+  to {
+    max-height: 500px;
+    transform: translateY(0%);
+  }
+}
+/* Aplica la animación a los elementos que se cierran */
+.collapsed {
+  animation: closeMessage 0.5s ease forwards; /* Detiene la animación al finalizar */
+}
+
 
 select {
   /* Reset Select */
