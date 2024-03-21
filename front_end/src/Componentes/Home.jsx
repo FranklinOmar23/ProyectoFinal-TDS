@@ -84,17 +84,6 @@ function MultasRecientesCard() {
   const [chartInstance, setChartInstance] = useState(null);
   const { multa } = useAuth();
 
-<<<<<<< HEAD
-    useEffect(() => {
-        if (!canvasRef.current || !multa || !multa.multasDelAgente || multa.multasDelAgente.length < 5) {
-            return; // No renderizar el gráfico si no hay multas o si hay menos de 5 multas
-        }
-
-        // Filtrar las últimas 5 multas basándote en la fecha
-        const ultimasMultas = multa.multasDelAgente
-            .sort((a, b) => new Date(b.fecha) - new Date(a.fecha)) // Ordenar por fecha descendente
-            .slice(0, 5); // Seleccionar las últimas 5 multas
-=======
   useEffect(() => {
     if (!canvasRef.current || !multa) {
       return; // No renderizar el gráfico si no hay multas
@@ -110,7 +99,6 @@ function MultasRecientesCard() {
       // Si hay menos de 5 multas, mostrar todas las multas disponibles
       ultimasMultas = multa.multasDelAgente;
     }
->>>>>>> origin/Omar23
 
     // Procesar los datos de las multas para contar cuántas veces se ha impuesto cada tipo de multa
     const conteoMultas = ultimasMultas.reduce((acc, multa) => {
@@ -164,22 +152,6 @@ function MultasRecientesCard() {
     };
   }, [multa]); // Dependencia del efecto: se ejecuta cada vez que cambian los datos de multa
 
-<<<<<<< HEAD
-    if (!multa || !multa.multasDelAgente || multa.multasDelAgente.length < 5) {
-        return null; // No renderizar el componente si no hay multas o si hay menos de 5 multas
-    }
-
-    return (
-        <div className="col-md-6">
-            <div className="card shadow mb-4">
-                <div className="card-header py-3">
-                    <h6 className="text-success fw-bold m-0">Multas Recientes</h6>
-                </div>
-                <div className="card-body"> 
-                    <canvas ref={canvasRef} width="300px" height="300px"></canvas>
-                </div>
-            </div>
-=======
   if (!multa) {
     return null; // No renderizar el componente si no hay multas
   }
@@ -189,7 +161,6 @@ function MultasRecientesCard() {
       <div className="card shadow mb-4">
         <div className="card-header py-3">
           <h6 className="text-success fw-bold m-0">Multas Recientes</h6>
->>>>>>> origin/Omar23
         </div>
         <div className="card-body">
           <canvas ref={canvasRef} width="300px" height="300px"></canvas>
@@ -203,71 +174,6 @@ function MultasRecientesCard() {
 
 
 export function Reloj({ fullWidth = false }) {
-<<<<<<< HEAD
-    const { user } = useAuth(); // Obtén el objeto user del contexto
-    const [tiempoTranscurrido, setTiempoTranscurrido] = useState({ horas: 0, minutos: 0, segundos: 0 });
-   
-    useEffect(() => {
-       const calcularTiempoTranscurrido = () => {
-         if (user && user.user && user.user.horario_entrada) {
-           const ahora = new Date();
-           // Convertir el horario de entrada a un objeto Date
-           const entrada = new Date(ahora.getFullYear(), ahora.getMonth(), ahora.getDate(), ...user.user.horario_entrada.split(':'));
-   
-           // Calcular el tiempo transcurrido desde la entrada hasta el momento actual
-           const tiempoTranscurrido = ahora - entrada;
-   
-           // Convertir milisegundos a horas, minutos y segundos
-           const horas = Math.floor(tiempoTranscurrido / 3600000);
-           const minutos = Math.floor((tiempoTranscurrido % 3600000) / 60000);
-           const segundos = Math.floor((tiempoTranscurrido % 60000) / 1000);
-   
-           setTiempoTranscurrido({ horas, minutos, segundos });
-         } else {
-           setTiempoTranscurrido({ horas: 0, minutos: 0, segundos: 0 });
-         }
-       };
-   
-       // Llamar a la función inicialmente para establecer el tiempo transcurrido
-       calcularTiempoTranscurrido();
-   
-       // Establecer un intervalo para actualizar el tiempo transcurrido cada segundo
-       const intervalId = setInterval(() => {
-         calcularTiempoTranscurrido();
-       }, 1000); // 1000 milisegundos = 1 segundo
-   
-       // Limpiar el intervalo cuando el componente se desmonte
-       return () => clearInterval(intervalId);
-    }, [user]); // Dependencia del efecto: se ejecuta cada vez que cambia el objeto user
-   
-    const relojClass = fullWidth ? "col-md-12" : "col-md-6";
-   
-    return (
-        <div className={`${relojClass} card shadow mb-4`}>
-         <div className="card shadow mb-4">
-           <div className="card-header py-3">
-             <h6 className="text-success fw-bold m-0">Tiempo transcurrido desde la entrada</h6>
-           </div>
-           <div className="body-card">
-             <div className='reloj-item'>
-               <div className='horas'>{tiempoTranscurrido.horas}</div> 
-               <p>Hora</p>
-             </div>
-             <div className='reloj-item'>
-               <div className='minutos'>{tiempoTranscurrido.minutos}</div>
-               <p>Minutos</p>
-             </div>
-             <div className='reloj-item'>
-               <div className='segundos'>{tiempoTranscurrido.segundos}</div>
-               <p>Segundos</p>
-             </div>
-           </div>
-         </div>
-       </div>
-    );
-};
-   
-=======
   const { user } = useAuth(); // Obtén el objeto user del contexto
   const [tiempoTranscurrido, setTiempoTranscurrido] = useState({ horas: 0, minutos: 0, segundos: 0 });
 
@@ -331,7 +237,6 @@ export function Reloj({ fullWidth = false }) {
   );
 };
 
->>>>>>> origin/Omar23
 
 
 
@@ -341,29 +246,6 @@ function Home() {
   const [userLocation, setUserLocation] = useState(null);
   const [clickedCoords, setClickedCoords] = useState(null);
 
-<<<<<<< HEAD
-    return (
-        <>
-        <div id="page-top"></div>
-        <div id="wrapper">
-            <Navbar />
-            <div className="d-flex flex-column" id="content-wrapper">
-                <Topbar titulo="Home"/>
-                <div className="container">
-                    <div className="row">
-                        <Map />
-                        <InformacionesCard />
-                    </div>
-                </div>
-                <div className="container-fluid">
-                    <div className="d-sm-flex justify-content-between align-items-center mb-4"></div>
-                    <div className="row">
-                        <MultasRecientesCard />
-                        <Reloj  />
-                    </div>
-                </div>
-                <Footer />
-=======
   
   useEffect(() => {
     let newMap;
@@ -490,7 +372,6 @@ function Home() {
                     </p>
                   </div>
               )}
->>>>>>> origin/Omar23
             </div>
               </div>
               <InformacionesCard />

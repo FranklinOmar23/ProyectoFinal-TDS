@@ -44,10 +44,6 @@ async getAllMultas(req, res) {
        res.status(500).json({ error: 'Error al obtener los multas' });
     }
    }
-<<<<<<< HEAD
-};
-=======
   };
->>>>>>> origin/Omar23
 
 export { MultaController };

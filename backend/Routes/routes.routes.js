@@ -2,11 +2,7 @@ import express from "express";
 import { obtenerDatosConexion } from "../Controller/prueba.js";
 import {UsuarioController} from "../Controller/UsuarioController.js"
 import {MultaController} from "../Controller/MultaController.js"
-<<<<<<< HEAD
-import { Multa } from "../Models/Multa.js";
-=======
 import {RequerimientoController} from "../Controller/requerimientoController.js";
->>>>>>> origin/Omar23
 
 
 const router = express.Router();
@@ -45,10 +41,8 @@ router.post("/register", (req, res) => {
 });
 
 router.get('/agents', (req, res) => usuario.getAllAgents(req, res));
-<<<<<<< HEAD
 router.get('/multa', (req, res ) =>multa.getAllMultas(req, res));
 
-=======
 router.get('/allmultas', (req, res) => multa.getAllMultas(req, res));
 router.get('/updateAgent', (req, res) => usuario.updateAgentDetails(req, res));
 router.post("/user/:id", (req, res) => { 
@@ -60,5 +54,4 @@ router.post('/userimage/:id', (req, res) => {
 });
 
   
->>>>>>> origin/Omar23
 export default router;
