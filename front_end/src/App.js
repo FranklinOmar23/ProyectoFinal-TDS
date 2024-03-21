@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import Olvidocontrase from './Componentes/olvidocontrase';
 import Registro from './Componentes/Registro';
@@ -16,16 +16,12 @@ import { useAuth } from './context/provider';
 
 function App() {
   const { user } = useAuth();
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    if (user) {
-      setLoading(false);
-    }
-  }, [user]);
-
-  if (loading) {
-    return <Placeholder />;
+  if (user === null || user.user === null) {
+    return (
+      <BrowserRouter>
+        <Login />
+      </BrowserRouter>
+    );
   }
   return (
     <BrowserRouter>

@@ -27,8 +27,8 @@ const ENDPOINT = "http://localhost:5000";
 
 function InformacionesCard() {
   const { messages, addMessage } = useAuth();
-  const [messageInput, setMessageInput] = useState('');
-  const [selectedOption, setSelectedOption] = useState('1');
+  const [expandedMessages, setExpandedMessages] = useState({});
+  const [showFirstTime, setShowFirstTime] = useState(true); // Estado para controlar qué tiempo mostrar
 
   useEffect(() => {
     const socket = socketIOClient(ENDPOINT);
@@ -45,11 +45,20 @@ function InformacionesCard() {
       socket.disconnect();
     };
   }, [messages, addMessage]);
+
+  const handleToggleExpand = (index) => {
+    setExpandedMessages(prevState => ({
+      ...prevState,
+      [index]: !prevState[index]
+    }));
+    setShowFirstTime(prevState => !prevState); // Cambiar el estado para alternar entre los tiempos
+  
+  };
+
   return (
     <div className="col-md-6">
-      {/* Contenido de la tarjeta de Informaciones */}
       <div className="card shadow mb-4">
-        <div className="card-header py-3" >
+        <div className="card-header py-3">
           <h6 className="text-success fw-bold m-0">Informaciones</h6>
         </div>
         <ul className="list-group list-group-flush ul-chat chat-container">
@@ -59,14 +68,35 @@ function InformacionesCard() {
                 <span className="name-user">
                   {message.user}
                 </span>
-                <li className="message-item" style={{ backgroundColor: message.color, color: 'white' }}>
-                  {message.text}
+                <li className={`message-item ${expandedMessages[index] ? 'expanded' : 'collapsed'}`} 
+                    style={{ backgroundColor: message.color, color: 'white' }} 
+                    onClick={() => handleToggleExpand(index)}>
+                  {message.text}  -
+                  <span className="message-ver">
+                      {expandedMessages[index] ? 'Ver menos...' : 'Ver más...'}
+                  </span>
                   
-                  {message.time &&
-                    <span className="message-time">
-                      {new Date(message.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}
-                    </span>
+                  {expandedMessages[index] &&
+                    <div>
+                      <p><strong>Latitud:</strong> {message.latitud}</p>
+                      <p><strong>Longitud:</strong> {message.longitud}</p>
+                      <p><strong>Dirección:</strong> {message.direccion}</p>
+                      <p><strong>Nivel:</strong> {message.nivel}</p>
+                      <p><strong>Fecha:</strong> {message.fecha}</p>
+                    </div>
                   }
+                  {/* Mostrar uno de los tiempos según el estado */}
+                  {showFirstTime ? (
+                    <span className="message-time">
+                      {message.time &&
+                        new Date(message.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}
+                    </span>
+                  ) : (
+                    <span className="message-time2">
+                      {message.time &&
+                        new Date(message.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}
+                    </span>
+                  )}
                 </li>
               </div>
             ))}
@@ -76,6 +106,7 @@ function InformacionesCard() {
     </div>
   );
 }
+
 
 
 
