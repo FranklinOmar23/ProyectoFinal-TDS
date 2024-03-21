@@ -247,12 +247,16 @@ table#dataTable{
   transform: translateX(-50%) scaleY(1.3) scaleX(0.8);
 }
 
+.filtros {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}
 /* Boton de busqueda*/
 .search {
-  display: inline-block;
-  position: relative;
-  top: 53px;
-  left: 155px;
+  flex: 1;
+  margin-left: 19px;
 }
 
 .search input[type="text"] {
@@ -267,11 +271,7 @@ table#dataTable{
 
 /* Contenedor principal */
 .filter-container {
-  display: inline-block;
-  position: relative;
-  top: 10px;
-  left: 1047px;
-  margin-bottom: 20px;
+  margin-right: 22px;
 }
 
 /* Etiqueta del filtro */
@@ -298,3 +298,75 @@ table#dataTable{
 }
 
 
+.add-agent-button {
+  display: flex;
+  justify-content: flex-end;
+  position: relative;
+  /* top: 25px; */
+  /* left: 1108px; */
+  margin-bottom: 20px;
+  margin-right: 24px;
+}
+
+ul {
+  list-style: none;
+}
+
+.example-1 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.example-1 .icon-content {
+  margin: 0 10px;
+  position: relative;
+}
+.example-1 .icon-content .tooltip {
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #000;
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 5px;
+  opacity: 0;
+  visibility: hidden;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+.example-1 .icon-content:hover .tooltip {
+  opacity: 1;
+  visibility: visible;
+  top: -50px;
+}
+.example-1 .icon-content .link {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  color: #4d4d4d;
+  background-color: #fff;
+  transition: all 0.3s ease-in-out;
+}
+.example-1 .icon-content .link:hover {
+  box-shadow: 3px 2px 45px 0px rgb(0 0 0 / 12%);
+}
+.example-1 .icon-content .link svg {
+  width: 30px;
+  height: 30px;
+}
+.example-1 .icon-content .link[data-social="spotify"]:hover {
+  color: #1db954;
+}
+.example-1 .icon-content .link[data-social="pinterest"]:hover {
+  color: #bd081c;
+}
+.example-1 .icon-content .link[data-social="dribbble"]:hover {
+  color: #ea4c89;
+}
+.example-1 .icon-content .link[data-social="telegram"]:hover {
+  color: #0088cc;
+}
