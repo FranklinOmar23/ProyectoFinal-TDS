@@ -236,13 +236,16 @@ table#dataTable{
   transform: translateX(-50%) scaleY(1.3) scaleX(0.8);
 }
 
-
+.filtros {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}
 /* Boton de busqueda*/
 .search {
-  display: inline-block;
-  position: relative;
-  top: 53px;
-  left: 155px;
+  flex: 1;
+  margin-left: 19px;
 }
 
 .search input[type="text"] {
@@ -257,11 +260,7 @@ table#dataTable{
 
 /* Contenedor principal */
 .filter-container {
-  display: inline-block;
-  position: relative;
-  top: 10px;
-  left: 1047px;
-  margin-bottom: 20px;
+  margin-right: 22px;
 }
 
 /* Etiqueta del filtro */
@@ -288,3 +287,12 @@ table#dataTable{
 }
 
 
+.add-agent-button {
+  display: flex;
+  justify-content: flex-end;
+  position: relative;
+  /* top: 25px; */
+  /* left: 1108px; */
+  margin-bottom: 20px;
+  margin-right: 24px;
+}
