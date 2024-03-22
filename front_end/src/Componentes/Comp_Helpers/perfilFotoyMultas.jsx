@@ -1,9 +1,9 @@
-import axios from 'axios';
+import axios from "axios";
 import React, { useState, useRef, useEffect } from "react";
 import "../../Css/FotoMulta.css";
 import { Button } from "react-bootstrap";
-import toast from 'react-hot-toast';
-import { useAuth } from '../../context/provider.jsx';
+import toast from "react-hot-toast";
+import { useAuth } from "../../context/provider.jsx";
 
 function FotoMulta() {
   const [profileImage, setProfileImage] = useState(null);
@@ -16,14 +16,14 @@ function FotoMulta() {
   const [userID, setUserID] = useState("id no encontrado"); // Estado para almacenar el ID del usuario
 
   // Obtener el ID del usuario del contexto de autenticación
-  // Obtener el ID del usuario del contexto de autenticación
   useEffect(() => {
     if (user && user.user && user.user.nombre) {
-       setUserID(user.user.id);
+      setUserID(user.user.id);
+      setProfileImage(user.user.foto);
+      setVehicleImage(user.user.foto_Vehiculo);
+      console.log("fotos", user.user.foto_Vehiculo, user.user.foto);
     }
-   }, [user]);
-
-
+  }, [user]);
 
   const handleImageUploadfoto = (event) => {
     const file = event.target.files?.[0];
@@ -33,9 +33,9 @@ function FotoMulta() {
         setImageBase64usuario(reader.result);
         console.log(reader.result); // Imprime el resultado aquí
         setimagePreviewUrlProfile(reader.result);
+        setProfileImage(file);
       };
       reader.readAsDataURL(file);
-      setProfileImage(file);
     }
   };
 
@@ -46,10 +46,15 @@ function FotoMulta() {
       reader.onloadend = () => {
         setImageBase64vehiculo(reader.result);
         console.log(reader.result); // Imprime el resultado aquí
-        setimagePreviewUrlVehicle(reader.result);
+        const image = event.target.files[0];
+        const imageUrl = URL.createObjectURL(image);
+        if(imageUrl){
+          setimagePreviewUrlVehicle(imageUrl)
+        }
+        console.log(event.target.files[0]);
+        setVehicleImage(file);
       };
       reader.readAsDataURL(file);
-      setVehicleImage(file);
     }
   };
 
@@ -66,25 +71,29 @@ function FotoMulta() {
 
   const uploadAndStoreImage = async () => {
     try {
+      console.log("id", userID);
+      const response = await axios.post(
+        `http://localhost:4000/userimage/${userID}`,
+        {
+          foto: imageBase64usuario,
+          foto_Vehiculo: imageBase64vehiculo,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-      console.log('id', userID)
-      const response = await axios.post(`http://localhost:4000/userimage/${userID}`, {
-      foto: imageBase64usuario,
-      foto_Vehiculo: imageBase64vehiculo,
-    }, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-
-      if (!response.ok) {
-        throw new Error('Error al subir y almacenar las imágenes');
+      console.log(response);
+      if (!response.status == 200) {
+        throw new Error("Error al subir y almacenar las imágenes");
       }
 
-      const responseData = await response.json();
-      console.log(responseData); // Manejar la respuesta del backend según sea necesario
+      // const responseData = await response.json();
+      // console.log(responseData); // Manejar la respuesta del backend según sea necesario
     } catch (error) {
-      console.error('Error en uploadAndStoreImage:', error);
+      console.error("Error en uploadAndStoreImage:", error);
     }
   };
 
@@ -101,7 +110,10 @@ function FotoMulta() {
               <label htmlFor="profileImage" className="form-label mb-2">
                 <strong>Foto de Perfil</strong>
               </label>
-              <div className="input-div" onClick={handleProfileImageUploadClick}>
+              <div
+                className="input-div"
+                onClick={handleProfileImageUploadClick}
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="1em"
@@ -129,19 +141,15 @@ function FotoMulta() {
                 style={{ display: "none" }}
               />
             </div>
-            {imagePreviewUrlProfile && (
-              <img
-                style={{ width: "170px", height: "170px" }}
-                className="img-fluid mb-3 mt-4"
-                src={
-                  imagePreviewUrlProfile ||
-                  "https://static.vecteezy.com/system/resources/previews/008/442/086/non_2x/illustration-of-human-icon-user-symbol-icon-modern-design-on-blank-background-free-vector.jpg"
-                }
-                alt="User"
-              />
-            )}
+            <img
+              style={{ width: "170px", height: "170px" }}
+              className="img-fluid mb-3 mt-4"
+              src={
+                 imagePreviewUrlProfile ? imagePreviewUrlProfile : profileImage ? profileImage: "https://static.vecteezy.com/system/resources/previews/008/442/086/non_2x/illustration-of-human-icon-user-symbol-icon-modern-design-on-blank-background-free-vector.jpg"
+              }
+              alt="Foto de perfil del Usuario"
+            />
           </div>
-          <Button type="submit" Button variant="light" style={{ color: "white", backgroundColor: "#1cc88a" }} onClick={handleUploadButtonClick}>Guardar Imagen</Button>
         </div>
       </div>
       <div className="col-lg-12 mb-4">
@@ -149,9 +157,12 @@ function FotoMulta() {
           <div className="card-body text-center shadow">
             <div className="d-flex align-items-center justify-content-center flex-column">
               <label htmlFor="vehicleImage" className="form-label mb-2">
-                <strong>Foto del Vehículo</strong>
+                <strong>&nbsp;Foto del Vehículo</strong>
               </label>
-              <div className="input-div" onClick={handleVehicleImageUploadClick}>
+              <div
+                className="input-div"
+                onClick={handleVehicleImageUploadClick}
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="1em"
@@ -179,16 +190,30 @@ function FotoMulta() {
                 style={{ display: "none" }}
               />
             </div>
-            {imagePreviewUrlVehicle && (
-              <img
-                style={{ width: "170px", height: "170px" }}
-                className="img-fluid mb-3 mt-4"
-                src={imagePreviewUrlVehicle || "https://via.placeholder.com/300"}
-                alt="Vehicle"
-              />
-            )}
+            <img
+              style={{ width: "170px", height: "170px" }}
+              className="img-fluid mb-3 mt-4"
+              src={ imagePreviewUrlVehicle ? imagePreviewUrlVehicle : vehicleImage ? vehicleImage : "https://via.placeholder.com/300"}
+              alt="Foto del Vehiculo del Usuario"
+            />
           </div>
-          <Button type="submit" Button variant="light" style={{ color: "white", backgroundColor: "#1cc88a" }} onClick={handleUploadButtonClick}>Guardar Imagen</Button>
+        </div>
+        <div className="d-flex align-items-center justify-content-center flex-column">
+        <Button
+          type="submit"
+          
+          variant="light"
+          style={{
+            color: "white",
+            backgroundColor: "#1cc88a",
+            marginTop: "50px",
+            width: "435px",
+            
+          }}
+          onClick={handleUploadButtonClick}
+        >
+          Guardar Imágenes
+        </Button>
         </div>
       </div>
     </div>
