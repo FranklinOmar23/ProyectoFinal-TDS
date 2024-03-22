@@ -197,18 +197,13 @@ function FotoMulta() {
               alt="Foto del Vehiculo del Usuario"
             />
           </div>
-        </div>
-        <div className="d-flex align-items-center justify-content-center flex-column">
-        <Button
+          <Button
           type="submit"
           
           variant="light"
           style={{
             color: "white",
             backgroundColor: "#1cc88a",
-            marginTop: "50px",
-            width: "435px",
-            
           }}
           onClick={handleUploadButtonClick}
         >

@@ -110,25 +110,24 @@ function MultasAdim() {
         <Navbaradm />
         <div className="d-flex flex-column" id="content-wrapper">
           <Topbar titulo="Administración de Multas" />
-          <div className="search">
-            <input placeholder="Buscar..." required="" type="text" />
-            <i className="fa-solid fa-magnifying-glass"></i>
+          <div className="add-agent-button">
+            <button className="Button2">Agregar Agente</button>
           </div>
-          <div className="filter-container">
-            <select id="estadoFilter" className="filter-select">
-              <option value="">Todos</option>
-              <option value="Activo">Activo</option>
-              <option value="Inactivo">Inactivo</option>
-            </select>
-            <label htmlFor="estadoFilter" className="filter-label">Filtrar por Estado</label>
-          </div>
-          <div className="button2">
-            <button className="button-nuevamulta" onClick={() => { window.location.href = '/nuevamulta'; }}>
-              Nueva Multa
-            </button>
-          </div>
-          
           <div className="card-body">
+          <div className="filtros">
+            <div className="search">
+              <input placeholder="Buscar..." required="" type="text" />
+              <i className="fa-solid fa-magnifying-glass"></i>
+            </div>
+            <div className="filter-container">
+              <select id="estadoFilter" className="filter-select">
+                <option value="">Todos</option>
+                <option value="Activo">Activo</option>
+                <option value="Inactivo">Inactivo</option>
+              </select>
+              <label htmlFor="estadoFilter" className="filter-label">Filtrar por Estado</label>
+            </div>
+            </div>
             <div className="table-responsive text-center table mt-2" id="dataTable-1" role="grid" aria-describedby="dataTable_info">
               <table className="table table-striped table-bordered my-0" id="dataTable">
                 <thead>
@@ -154,9 +153,15 @@ function MultasAdim() {
                       <td>{multa.monto}</td>
                       <td>{multa.fecha}</td>
                       <td>
-                        <div className="btn-group">
-                          <button className="button btn1" id='details' onClick={() => handleDetailsModalOpen(multa)}>Detalles</button>
-                          <button className="button btn2" type="button" id="Edit" onClick={() => handleEditModalOpen(multa)}>Editar</button>
+                      <div className="btn-group">
+                        <div class="tooltip-container1">
+                            <span class="text1" onClick={() => handleDetailsModalOpen(multa)}><i class="fa-solid fa-eye"></i></span>
+                            <span class="tooltip1">Detalles</span>
+                          </div>
+                          <div class="tooltip-container1">
+                            <span class="text1" onClick={() => handleEditModalOpen(multa)}><i class="fa-solid fa-pen-to-square"></i></span>
+                            <span class="tooltip1">Editar</span>
+                          </div>
                         </div>
                       </td>
                     </tr>
@@ -197,7 +202,7 @@ function MultasAdim() {
       <Toaster />
       <Modal show={showDetailsModal} onHide={handleDetailsModalClose}>
   <Modal.Header closeButton style={{ background: '#19ab54', color: 'white', borderBottom: 'none' }}>
-    <Modal.Title style={{ fontWeight: 'bold', textAlign: 'center', width: '100%', margin: '0 auto' }}>Detalles del agente</Modal.Title>
+    <Modal.Title style={{ fontWeight: 'bold', textAlign: 'center', width: '100%', margin: '0 auto' }}>Detalles de multa</Modal.Title>
   </Modal.Header>
   <Modal.Body>
     {selectedMulta && (

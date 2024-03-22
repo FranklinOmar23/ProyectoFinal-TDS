@@ -346,3 +346,9 @@ table#dataTable{
   margin-right: 23px;
   margin-bottom: 20px;
 }
+
+.filtros {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
