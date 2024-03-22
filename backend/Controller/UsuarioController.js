@@ -233,5 +233,23 @@ async getAllAgents(req, res) {
       res.status(500).send(error.message);
     }
   }
+
+  async uploadAndStoreImageVehicle(req, res) {
+    const { foto_Vehiculo } = req.body;
+    const userId = req.params.id;
+  
+    try {
+      // Llamada al método para cargar imágenes y obtener las URLs
+      const { foto_VehiculoUrl } = await this.usuarioRepository.uploadImageVehicle(userId, foto_Vehiculo);
+  
+      // Llamada al método para almacenar las URLs en el registro del usuario
+      const data = await this.usuarioRepository.storeImageVehicle(userId, foto_VehiculoUrl);
+  
+      res.json({ message: 'Imágenen vehiculo subidas y URLs guardadas exitosamente!'});
+    } catch (error) {
+      console.error('Error en uploadAndStoreImage: ', error);
+      res.status(500).send(error.message);
+    }
+  }
 };
 export { UsuarioController };

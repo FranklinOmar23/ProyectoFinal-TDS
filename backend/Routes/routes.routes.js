@@ -47,5 +47,9 @@ router.post('/userimage/:id', (req, res) => {
     usuario.uploadAndStoreImage(req, res);
 });
 
+router.post('/vehicleimage/:id', (req, res) => {
+    usuario.uploadAndStoreImageVehicle(req, res);
+});
+
   
 export default router;
