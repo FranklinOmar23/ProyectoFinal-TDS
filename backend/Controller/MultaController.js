@@ -1,5 +1,6 @@
 import { MultaRepository } from "../Repository/multa_repository.js";
 
+
 class MultaController {
     constructor() {
         this.multaRepository = new MultaRepository();
