@@ -135,6 +135,7 @@ class UsuarioRepository {
       if (telefono) {
         updatedUserData.telefono = telefono;
       }
+      
       if (contrasena) {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(contrasena, salt);
