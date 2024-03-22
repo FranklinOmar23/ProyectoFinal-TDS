@@ -122,9 +122,12 @@ function MultasAdim() {
             </select>
             <label htmlFor="estadoFilter" className="filter-label">Filtrar por Estado</label>
           </div>
-          <Link to="/nuevamulta"> 
-            <button className="button-nuevamulta">Nueva Multa</button> 
-          </Link>
+          <div className="button2">
+            <button className="button-nuevamulta" onClick={() => { window.location.href = '/nuevamulta'; }}>
+              Nueva Multa
+            </button>
+          </div>
+          
           <div className="card-body">
             <div className="table-responsive text-center table mt-2" id="dataTable-1" role="grid" aria-describedby="dataTable_info">
               <table className="table table-striped table-bordered my-0" id="dataTable">
