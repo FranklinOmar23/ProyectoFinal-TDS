@@ -241,8 +241,14 @@ function HomeAdm() {
                       <td>{agent.role}</td>
                       <td>
                         <div className="btn-group">
-                          <button className="button btn1" id='ver' onClick={() => handleDetailsModalOpen(agent)}>Detalles</button>
-                          <button className="button btn2" type="button" id="Modificar" onClick={() => handleEditModalOpen(agent)}>Editar</button>
+                        <div class="tooltip-container1">
+                            <span class="text1" onClick={() => handleDetailsModalOpen(agent)}><i class="fa-solid fa-eye"></i></span>
+                            <span class="tooltip1">Detalles</span>
+                          </div>
+                          <div class="tooltip-container1">
+                            <span class="text1" onClick={() => handleEditModalOpen(agent)}><i class="fa-solid fa-pen-to-square"></i></span>
+                            <span class="tooltip1">Editar</span>
+                          </div>
                         </div>
                       </td>
                     </tr>

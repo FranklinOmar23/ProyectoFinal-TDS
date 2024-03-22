@@ -287,75 +287,56 @@ table#dataTable{
 }
 
 
-.add-agent-button {
-  display: flex;
-  justify-content: flex-end;
+.tooltip-container1 {
   position: relative;
-  /* top: 25px; */
-  /* left: 1108px; */
-  margin-bottom: 20px;
-  margin-right: 24px;
+  display: inline-block;
+  margin: 20px;
 }
 
-ul {
-  list-style: none;
+.text1 {
+  color: #333;
+  font-size: 18px;
+  cursor: pointer;
 }
 
-.example-1 {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.example-1 .icon-content {
-  margin: 0 10px;
-  position: relative;
-}
-.example-1 .icon-content .tooltip {
+.tooltip1 {
   position: absolute;
-  top: -30px;
+  top: 100%;
   left: 50%;
   transform: translateX(-50%);
-  background-color: #000;
-  color: #fff;
-  padding: 6px 10px;
-  border-radius: 5px;
   opacity: 0;
   visibility: hidden;
-  font-size: 14px;
-  transition: all 0.3s ease;
+  background: #0b798a;
+  color: #fff;
+  padding: 10px;
+  border-radius: 4px;
+  transition: opacity 0.3s, visibility 0.3s, top 0.3s, background 0.3s;
+  z-index: 1;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
-.example-1 .icon-content:hover .tooltip {
+
+.tooltip1::before {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  border-width: 8px;
+  border-style: solid;
+  border-color: transparent transparent #0b798a transparent;
+  transform: translateX(-50%);
+}
+
+.tooltip-container1:hover .tooltip1 {
+  top: 120%;
   opacity: 1;
   visibility: visible;
-  top: -50px;
+  background: #0e94a0;
+  transform: translate(-50%, -5px);
 }
-.example-1 .icon-content .link {
+
+.add-agent-button {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  color: #4d4d4d;
-  background-color: #fff;
-  transition: all 0.3s ease-in-out;
-}
-.example-1 .icon-content .link:hover {
-  box-shadow: 3px 2px 45px 0px rgb(0 0 0 / 12%);
-}
-.example-1 .icon-content .link svg {
-  width: 30px;
-  height: 30px;
-}
-.example-1 .icon-content .link[data-social="spotify"]:hover {
-  color: #1db954;
-}
-.example-1 .icon-content .link[data-social="pinterest"]:hover {
-  color: #bd081c;
-}
-.example-1 .icon-content .link[data-social="dribbble"]:hover {
-  color: #ea4c89;
-}
-.example-1 .icon-content .link[data-social="telegram"]:hover {
-  color: #0088cc;
+  justify-content: end;
+  margin-right: 23px;
+  margin-bottom: 20px;
 }
