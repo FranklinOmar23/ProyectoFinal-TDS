@@ -7,6 +7,8 @@ import "../Css/animate.min.css";
 import "../Css/admcss.css"
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
+import { Link } from 'react-router-dom';
+
 
 import Footer from './Comp_Helpers/Footer.jsx';
 import Navbaradm from './Comp_Helpers/Navbaradm.jsx';
@@ -120,6 +122,9 @@ function MultasAdim() {
             </select>
             <label htmlFor="estadoFilter" className="filter-label">Filtrar por Estado</label>
           </div>
+          <Link to="/nuevamulta"> 
+            <button className="button-nuevamulta">Nueva Multa</button> 
+          </Link>
           <div className="card-body">
             <div className="table-responsive text-center table mt-2" id="dataTable-1" role="grid" aria-describedby="dataTable_info">
               <table className="table table-striped table-bordered my-0" id="dataTable">

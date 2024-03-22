@@ -247,12 +247,11 @@ table#dataTable{
   transform: translateX(-50%) scaleY(1.3) scaleX(0.8);
 }
 
-.filtros {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  width: 100%;
+.button-nuevamulta{
+
 }
+
+
 /* Boton de busqueda*/
 .search {
   flex: 1;
