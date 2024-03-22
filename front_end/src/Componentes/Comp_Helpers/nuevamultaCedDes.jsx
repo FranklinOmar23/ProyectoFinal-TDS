@@ -54,7 +54,9 @@ function NmCedDes({ setNombre, setCedula }) {
                 <div className="card shadow mb-4">
                     <div className="card-header py-3">
                         <h6 className="text-success fw-bold m-0">Cédula</h6>
-                        <input
+                    </div>
+                    <div className="card-body">
+                    <input
                             className="form-control"
                             type="text"
                             id="cedula"
