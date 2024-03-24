@@ -71,11 +71,37 @@ function FotoMulta() {
 
   const uploadAndStoreImage = async () => {
     try {
-      console.log("id", userID);
+
+      console.log("Id:", userID)
+      
+      if (imagePreviewUrlProfile) {
       const response = await axios.post(
         `http://localhost:4000/userimage/${userID}`,
         {
           foto: imageBase64usuario,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+     
+
+      console.log(response);
+      if(response.status == 200){
+        return
+      }
+      if (!response.status == 200) {
+        throw new Error("Error al subir y almacenar la imagen del usuario");
+      }
+    }
+
+    if(imagePreviewUrlVehicle) {
+      const response = await axios.post(
+        `http://localhost:4000/vehicleimage/${userID}`,
+        {
           foto_Vehiculo: imageBase64vehiculo,
         },
         {
@@ -86,18 +112,21 @@ function FotoMulta() {
       );
 
       console.log(response);
-      if (!response.status == 200) {
-        throw new Error("Error al subir y almacenar las imágenes");
+      if(response.status == 200){
+        return
       }
+      if (!response.status == 200) {
+        throw new Error("Error al subir y almacenar la imagen del vehiculo");
+      }
+    }
 
-      // const responseData = await response.json();
-      // console.log(responseData); // Manejar la respuesta del backend según sea necesario
     } catch (error) {
       console.error("Error en uploadAndStoreImage:", error);
     }
   };
 
-  const handleUploadButtonClick = () => {
+
+  const handleUploadButtonClick = async () => {
     uploadAndStoreImage();
   };
 
