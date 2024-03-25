@@ -111,7 +111,7 @@ function MultasAdim() {
         <div className="d-flex flex-column" id="content-wrapper">
           <Topbar titulo="Administración de Multas" />
           <div className="add-agent-button">
-            <button className="Button2">Agregar Agente</button>
+            <button className="Button2">Agregar multa</button>
           </div>
           <div className="card-body">
           <div className="filtros">
