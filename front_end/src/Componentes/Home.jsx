@@ -120,23 +120,27 @@ function MultasRecientesCard() {
       return; // No renderizar el gráfico si no hay multas
     }
 
-    let ultimasMultas = [];
-    if (multa.multasDelAgente.length >= 5) {
-      // Filtrar las últimas 5 multas basándote en la fecha si hay al menos 5 multas
-      ultimasMultas = multa.multasDelAgente
-        .sort((a, b) => new Date(b.fecha) - new Date(a.fecha)) // Ordenar por fecha descendente
-        .slice(0, 5); // Seleccionar las últimas 5 multas
-    } else {
-      // Si hay menos de 5 multas, mostrar todas las multas disponibles
-      ultimasMultas = multa.multasDelAgente;
-    }
+   // Asegurarse de que multa.multasDelAgente no sea null, asignándole un array vacío si es así
+let multasDelAgente = multa.multasDelAgente || [];
 
-    // Procesar los datos de las multas para contar cuántas veces se ha impuesto cada tipo de multa
-    const conteoMultas = ultimasMultas.reduce((acc, multa) => {
-      const razon = multa.razon;
-      acc[razon] = (acc[razon] || 0) + 1;
-      return acc;
-    }, {});
+let ultimasMultas = [];
+if (multasDelAgente.length >= 5) {
+ // Filtrar las últimas 5 multas basándote en la fecha si hay al menos 5 multas
+ ultimasMultas = multasDelAgente
+    .sort((a, b) => new Date(b.fecha) - new Date(a.fecha)) // Ordenar por fecha descendente
+    .slice(0, 5); // Seleccionar las últimas 5 multas
+} else {
+ // Si hay menos de 5 multas, mostrar todas las multas disponibles
+ ultimasMultas = multasDelAgente;
+}
+
+// Procesar los datos de las multas para contar cuántas veces se ha impuesto cada tipo de multa
+const conteoMultas = ultimasMultas.reduce((acc, multa) => {
+ const razon = multa.razon;
+ acc[razon] = (acc[razon] || 0) + 1;
+ return acc;
+}, {});
+
 
     // Preparar los datos para el gráfico
     const labels = Object.keys(conteoMultas);
