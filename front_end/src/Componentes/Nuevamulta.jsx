@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from 'axios';
 import NmCedDes from "./Comp_Helpers/nuevamultaCedDes.jsx";
 import NmDatosCon from "./Comp_Helpers/nuevamultaDatosContainer.jsx";
@@ -7,8 +7,11 @@ import Navbar from "./Comp_Helpers/Navbar";
 import Topbar from "./Comp_Helpers/Topbar";
 import Footer from './Comp_Helpers/Footer.jsx';
 import toast, { Toaster } from 'react-hot-toast';
+import { useAuth } from '../context/provider.jsx';
 
 function Nuevamulta() {
+    const {actualizarMulta} = useAuth()
+    
     const [nombre, setNombre] = useState('');
     const [cedula, setCedula] = useState('');
     const [matricula, setMatricula] = useState('');
@@ -21,25 +24,34 @@ function Nuevamulta() {
 
     const handleFormSubmit = async (e) => {
         e.preventDefault();
-        // Verificar si matrícula y placa no están vacíos
+        
         if (!matricula || !placa) {
             toast.error('Por favor completa los campos de matrícula y placa.');
-            return; // Detener la ejecución de la función si hay campos vacíos
+            return;
         }
+
         try {
+            const storedUser = localStorage.getItem('user');
+            console.log('Contenido de storedUser:', storedUser);
+            const parsedUser = JSON.parse(storedUser);
+          
+            console.log('Objeto parsedUser:', parsedUser.user.id);
+          
             const response = await axios.post('http://localhost:4000/createMulta', {
                 cedula_usuario: cedula,
                 nombre_multado: nombre,
                 matricula: matricula,
                 placa: placa,
                 razon: formData.razon,
-                monto: formData.monto
+                monto: formData.monto,
+                id_angente: parsedUser.user.id 
             });
+            actualizarMulta();
             toast.success('Multa creada exitosamente');
-            console.log('Multa creada:', response.data);
+            
         } catch (error) {
             toast.error('Error al crear la multa');
-            console.error('Error al crear la multa:', error);
+            console.error('Error al crear la multa:', error);   
         }
     };
 
@@ -48,7 +60,6 @@ function Nuevamulta() {
     };
 
     const handleSaveToLocal = () => {
-        // Almacenar los datos en el estado local
         console.log("Datos guardados en el estado local:", formData);
     };
 
@@ -79,7 +90,7 @@ function Nuevamulta() {
                                         setMatricula={setMatricula}
                                         setPlaca={setPlaca}
                                         setFecha={setFecha}
-                                        handleFormSubmit={handleFormSubmit} // Pasar la función como propiedad
+                                        handleFormSubmit={handleFormSubmit}
                                     />
                                     <NmOtroCon
                                         onFormDataChange={handleFormDataChange}
