@@ -13,6 +13,7 @@ import Eror404 from './Componentes/Error404';
 import Nuevomsg from './Componentes/Nuevomensaje';
 import Placeholder from './Componentes/Placeholder';
 import { useAuth } from './context/provider';
+import MultasAdim from './Componentes/multas-admin';
 
 function App() {
   const { user } = useAuth();
@@ -31,6 +32,7 @@ function App() {
         <Route path="/" element={<Login />} />
         {user.user.role === 'AGENTE' && <Route path="/home-agente" element={<Home />} />}
         {user.user.role === 'ADMINISTRADOR' && <Route path="/home-adm" element={<HomeAdm />} />}
+        {user.user.role === 'ADMINISTRADOR' && <Route path="/multas-admin" element={<MultasAdim />} />}
         {user.user.role === 'USUARIO' && <Route path="/home-user" element={<HomeUser />} />}
         {user.user.role === 'AGENTE' && <Route path="/nuevamulta" element={<Nuevamulta />} />}
         {(user.user.role === 'ADMINISTRADOR' || user.user.role === 'AGENTE' || user.user.role === 'USUARIO') && <Route path="/perfil" element={<Perfil />} />}

@@ -6,10 +6,12 @@ import { limpiarDatosLocalStorage } from "../../helpers/localStorage.jsx";
 function Navbar() {
     const { user } = useAuth();
     const [userNombre, setUserNombre] = useState('Usuario no encontrado');
+    const [imagePreviewUrlProfile, setimagePreviewUrlProfile] = useState();
 
     useEffect(() => {
         if (user && user.user && user.user.nombre) {
             setUserNombre(user.user.nombre);
+            setimagePreviewUrlProfile(user.user.foto);
         }
     }, [user]);
 
@@ -88,7 +90,7 @@ function Navbar() {
                             <a href="#">
                                 <div className="icon2">
                                     <div className="imgbx">
-                                        <img src="../avatar1.jpeg" alt="Avatar" />
+                                        <img src={imagePreviewUrlProfile} alt="Avatar" />
                                     </div>
                                 </div>
                                 <p>{userNombre}</p>

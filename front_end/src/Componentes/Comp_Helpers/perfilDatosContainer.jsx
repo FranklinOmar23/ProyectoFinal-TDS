@@ -13,6 +13,7 @@ function PerfilDatos() {
       setUserNombre(user.user.nombre);
       setUserCedula(user.user.cedula);
       setUserApellido(user.user.apellido);
+      console.log(user)
     }
   })
 

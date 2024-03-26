@@ -40,7 +40,13 @@ router.post("/register", (req, res) => {
     usuario.registerUser(req, res);
 });
 
+router.post("/register", (req, res) => {
+    usuario.registerAgent(req, res);
+});
+
 router.get('/agents', (req, res) => usuario.getAllAgents(req, res));
+router.get('/multa', (req, res ) =>multa.getAllMultas(req, res));
+
 router.get('/allmultas', (req, res) => multa.getAllMultas(req, res));
 router.get('/updateAgent', (req, res) => usuario.updateAgentDetails(req, res));
 router.post("/user/:id", (req, res) => { 
@@ -49,6 +55,10 @@ router.post("/user/:id", (req, res) => {
 
 router.post('/userimage/:id', (req, res) => {
     usuario.uploadAndStoreImage(req, res);
+});
+
+router.post('/vehicleimage/:id', (req, res) => {
+    usuario.uploadAndStoreImageVehicle(req, res);
 });
 
   

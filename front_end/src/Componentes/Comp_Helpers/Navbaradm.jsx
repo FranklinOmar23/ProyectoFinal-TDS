@@ -6,10 +6,12 @@ import { limpiarDatosLocalStorage } from "../../helpers/localStorage.jsx";
 function Navbaradm() {
     const { user } = useAuth();
     const [userNombre, setUserNombre] = useState('Usuario no encontrado');
+    const [imgavatar, setImgavatar] = useState(null);
 
     useEffect(() => {
         if (user && user.user && user.user.nombre) {
             setUserNombre(user.user.nombre);
+            setImgavatar(user.user.foto);
         }
     }, [user]);
 
@@ -50,7 +52,7 @@ function Navbaradm() {
                         </a>
                     </li>
                     <div className="MenuList">
-                        <li style={{ '--bg': '#ffe600' }} className={activeMenuItem === 'home-agente' ? 'active' : ''}>
+                        <li style={{ '--bg': '#6bfaa4' }} className={activeMenuItem === 'home-agente' ? 'active' : ''}>
                             <a href="/home-adm" onClick={(e) => handleLinkClick(e, 'home-agente')}>
                                 <div className="icon2">
                                     <i className="fas fa-home"></i>
@@ -67,7 +69,7 @@ function Navbaradm() {
                             </a>
                         </li>
                         <li style={{ '--bg': '#81760d' }} className={activeMenuItem === 'nuevamulta' ? 'active' : ''}>
-                            <a href="/nuevamulta" onClick={(e) => handleLinkClick(e, 'nuevamulta')}>
+                            <a href="/multas-admin" onClick={(e) => handleLinkClick(e, 'nuevamulta')}>
                                 <div className="icon2">
                                     <i className="fa-solid fa-folder-open"></i>
                                 </div>
@@ -89,7 +91,7 @@ function Navbaradm() {
                             <a href="#">
                                 <div className="icon2">
                                     <div className="imgbx">
-                                        <img src="../avatar1.jpeg" alt="Avatar" />
+                                        <img src={imgavatar} alt="Avatar" />
                                     </div>
                                 </div>
                                 <p>{userNombre}</p>
