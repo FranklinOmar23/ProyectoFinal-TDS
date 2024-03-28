@@ -82,6 +82,11 @@
     border: 2px solid #19ab54;
 }
 
+
+#details{
+  color: #19ab54;
+  border: 2px solid #19ab54;
+}
 .imgbx{
     position: relative;
     width: 40px;
@@ -104,6 +109,12 @@
   margin-left: 10px;
    color: #E67E22;
    border: 2px solid #E67E22;
+}
+
+#Delete {
+  margin-left: 10px;
+ color: #b61515;
+ border: 2px solid #b61515;
 }
 
 .inputBox {
@@ -239,13 +250,8 @@ table#dataTable{
 
 /* Boton de busqueda*/
 .search {
-flex: 1;
-margin-right: 10px;
-}
-.filtros{
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  flex: 1;
+  margin-left: 19px;
 }
 
 .search input[type="text"] {
@@ -258,6 +264,10 @@ margin-right: 10px;
 
 /* Estilos para el filtro */
 
+/* Contenedor principal */
+.filter-container {
+  margin-right: 22px;
+}
 
 /* Etiqueta del filtro */
 .filter-label {
@@ -282,13 +292,63 @@ margin-right: 10px;
   font-size: 14px;
 }
 
-.add-agent-button {
-  display: inline-block;
+
+.tooltip-container1 {
   position: relative;
-  top: 25px;
-  left: 1108px;
+  display: inline-block;
+  margin: 20px;
+}
+
+.text1 {
+  color: #333;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.tooltip1 {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  visibility: hidden;
+  background: #0b798a;
+  color: #fff;
+  padding: 10px;
+  border-radius: 4px;
+  transition: opacity 0.3s, visibility 0.3s, top 0.3s, background 0.3s;
+  z-index: 1;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.tooltip1::before {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  border-width: 8px;
+  border-style: solid;
+  border-color: transparent transparent #0b798a transparent;
+  transform: translateX(-50%);
+}
+
+.tooltip-container1:hover .tooltip1 {
+  top: 120%;
+  opacity: 1;
+  visibility: visible;
+  background: #0e94a0;
+  transform: translate(-50%, -5px);
+}
+
+.add-agent-button {
+  display: flex;
+  justify-content: end;
+  margin-right: 23px;
   margin-bottom: 20px;
 }
 
-
-
+.filtros {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}

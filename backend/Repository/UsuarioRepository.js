@@ -135,6 +135,7 @@ class UsuarioRepository {
       if (telefono) {
         updatedUserData.telefono = telefono;
       }
+      
       if (contrasena) {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(contrasena, salt);
@@ -159,16 +160,12 @@ class UsuarioRepository {
   }
 
 
-  async uploadImage(userId, foto, foto_Vehiculo) {
+  async uploadImage(userId, foto) {
     try {
 
       const base64 = foto.split("base64,")[1];
       const fileType = foto.split(";")[0].split("/")[1];
       const fotoFileName = uuidv4() + "." + fileType;
-
-      const base64_Vehiculo = foto_Vehiculo.split("base64,")[1];
-      const fileType_Vehiculo = foto_Vehiculo.split(";")[0].split("/")[1];
-      const foto_VehiculoFileName = uuidv4() + "." + fileType_Vehiculo;
 
       const folderName = `usuario_${userId}`;
 
@@ -182,6 +179,46 @@ class UsuarioRepository {
         console.error("Error cargando la imagen del usuario: ", fotoError);
         throw new Error("Error cargando la imagen del usuario");
       }
+
+      const fotoUrl = `https://inmfmanpaarrwhoyyctn.supabase.co/storage/v1/object/public/imagenesUsuarios/public/${folderName}/${fotoFileName}`;
+
+      return { fotoUrl };
+    } catch (error) {
+      console.error("Error en uploadImage: ", error);
+      throw error;
+    }
+  }
+
+  async storeImage(userId, fotoUrl) {
+   
+    try {
+
+      const { data, error } = await this.supabase
+        .from("usuario")
+        .update({ foto: fotoUrl })
+        .match({ id: userId });
+
+      if (error) {
+        console.error("Error al guardar la URL de la imagen: ", error);
+        throw new Error("Error al guardar la URL de la imagen");
+      }
+
+      console.log("URLs de las imágenes guardadas con éxito!");
+      return data;
+    } catch (error) {
+      console.error("Error en storeImage: ", error);
+      throw error;
+    }
+  }
+
+  async uploadImageVehicle(userId, foto_Vehiculo) {
+    try {
+
+      const base64_Vehiculo = foto_Vehiculo.split("base64,")[1];
+      const fileType_Vehiculo = foto_Vehiculo.split(";")[0].split("/")[1];
+      const foto_VehiculoFileName = uuidv4() + "." + fileType_Vehiculo;
+
+      const folderName = `usuario_${userId}`;
 
       const { data: foto_VehiculoData, error: foto_VehiculoError } = await this.supabase.storage
       .from(`imagenesUsuarios/public/${folderName}`)
@@ -197,27 +234,26 @@ class UsuarioRepository {
         throw new Error("Error cargando la imagen del vehiculo");
       }
 
-      const fotoUrl = `https://inmfmanpaarrwhoyyctn.supabase.co/storage/v1/object/public/imagenesUsuarios/public/${folderName}/${fotoFileName}`;
       const foto_VehiculoUrl = `https://inmfmanpaarrwhoyyctn.supabase.co/storage/v1/object/public/imagenesUsuarios/public/${folderName}/${foto_VehiculoFileName}`;
 
-      return { fotoUrl, foto_VehiculoUrl};
+      return { foto_VehiculoUrl};
     } catch (error) {
       console.error("Error en uploadImage: ", error);
       throw error;
     }
   }
 
-  async storeImage(userId, fotoUrl, foto_VehiculoUrl) {
+  async storeImageVehicle(userId, foto_VehiculoUrl) {
    
     try {
 
       const { data, error } = await this.supabase
         .from("usuario")
-        .update({ foto: fotoUrl, foto_Vehiculo: foto_VehiculoUrl })
+        .update({ foto_Vehiculo: foto_VehiculoUrl })
         .match({ id: userId});
 
       if (error) {
-        console.error("Error al guardar la URL de la imagen: ", error);
+        console.error("Error al guardar la URL de la imagen vehiculo: ", error);
         throw new Error("Error al guardar la URL de la imagen");
       }
 
@@ -472,6 +508,41 @@ async updateAgentDetails(userId, updatedDetails) {
      throw error;
   }
  }
+
+ async createAgent({
+  nombre,
+  apellido,
+  cedula,
+  correo,
+  role,
+  estado,
+  horario_entrada,
+  horario_salida,
+  salario,
+  contrasena,
+}) {
+  try {
+    const newUser = await this.supabase.from(this.tableName).upsert([
+      {
+        nombre,
+        apellido,
+        cedula,
+        correo,
+        estado,
+        horario_entrada,
+        horario_salida,
+        salario,
+        role: "AGENTE",
+        contrasena,
+      },
+    ]);
+
+    return this.mapToUserInstance(newUser[0]);
+  } catch (error) {
+    throw error;
+  }
+}
+
  
 }
 

@@ -195,20 +195,21 @@ function HomeAdm() {
           <div className="add-agent-button">
             <button className="Button2" onClick={handleShowModal} >Agregar Agente</button>
           </div>
-          <div className="filter-container">
-            <label htmlFor="estadoFilter" className="filter-label">Filtrar por Estado</label>
-          </div>
           <div className="card-body">
-            <div className='filtros'>
+            <div className="filtros">
             <div className="search">
               <input placeholder="Buscar..." required="" type="text" />
               <i className="fa-solid fa-magnifying-glass"></i>
             </div>
-            <select id="estadoFilter" className="filter-select">
-              <option value="">Todos</option>
-              <option value="Activo">Activo</option>
-              <option value="Inactivo">Inactivo</option>
-            </select></div>
+            <div className="filter-container">
+              <select id="estadoFilter" className="filter-select">
+                <option value="">Todos</option>
+                <option value="Activo">Activo</option>
+                <option value="Inactivo">Inactivo</option>
+              </select>
+              <label htmlFor="estadoFilter" className="filter-label">Filtrar por Estado</label>
+            </div>
+            </div>
             <div className="table-responsive text-center table mt-2" id="dataTable-1" role="grid" aria-describedby="dataTable_info">
               <table className="table table-striped table-bordered my-0" id="dataTable">
                 <thead>
@@ -239,8 +240,14 @@ function HomeAdm() {
                       <td>{agent.role}</td>
                       <td>
                         <div className="btn-group">
-                          <button className="button btn1" id='ver' onClick={() => handleDetailsModalOpen(agent)}>Detalles</button>
-                          <button className="button btn2" type="button" id="Modificar" onClick={() => handleEditModalOpen(agent)}>Editar</button>
+                        <div class="tooltip-container1">
+                            <span class="text1" onClick={() => handleDetailsModalOpen(agent)}><i class="fa-solid fa-eye"></i></span>
+                            <span class="tooltip1">Detalles</span>
+                          </div>
+                          <div class="tooltip-container1">
+                            <span class="text1" onClick={() => handleEditModalOpen(agent)}><i class="fa-solid fa-pen-to-square"></i></span>
+                            <span class="tooltip1">Editar</span>
+                          </div>
                         </div>
                       </td>
                     </tr>
@@ -443,43 +450,41 @@ function HomeAdm() {
             <Modal.Title style={{ fontWeight: 'bold', textAlign: 'center', width: '100%', margin: '0 auto' }}>Agregar Agente</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <Form onSubmit={handleSubmit}>
+          <Form onSubmit={handleSubmit}>
               <div className="row">
-                <div className="col-md-6">
+                <div className="col-md-4">
                   <Form.Group className="mb-3">
                     <Form.Label className="fw-bold">Nombre:</Form.Label>
                     <Form.Control type="text" name="nombre" value={formData.nombre} onChange={handleChange} />
                   </Form.Group>
                 </div>
-                <div className="col-md-6">
+                <div className="col-md-4">
                   <Form.Group className="mb-3">
                     <Form.Label className="fw-bold">Apellido:</Form.Label>
                     <Form.Control type="text" name="apellido" value={formData.apellido} onChange={handleChange} />
                   </Form.Group>
                 </div>
-              </div>
-              <div className="row">
-                <div className="col-md-6">
+                <div className="col-md-4">
                   <Form.Group className="mb-3">
                     <Form.Label className="fw-bold">Cédula:</Form.Label>
                     <Form.Control type="text" name="cedula" value={formData.cedula} onChange={handleChange} />
                   </Form.Group>
                 </div>
-                <div className="col-md-6">
+              </div>
+              <div className="row">
+                <div className="col-md-4">
                   <Form.Group className="mb-3">
                     <Form.Label className="fw-bold">Teléfono:</Form.Label>
                     <Form.Control type="text" name="telefono" value={formData.telefono} onChange={handleChange} />
                   </Form.Group>
                 </div>
-              </div>
-              <div className="row">
-                <div className="col-md-6">
+                <div className="col-md-4">
                   <Form.Group className="mb-3">
                     <Form.Label className="fw-bold">Contraseña:</Form.Label>
                     <Form.Control type="password" name="contrasena" value={formData.contrasena} onChange={handleChange} />
                   </Form.Group>
                 </div>
-                <div className="col-md-6">
+                <div className="col-md-4">
                   <Form.Group className="mb-3">
                     <Form.Label className="fw-bold">Confirmar Contraseña:</Form.Label>
                     <Form.Control type="password" name="confirmarContrasena" value={formData.confirmarContrasena} onChange={handleChange} />
@@ -487,13 +492,13 @@ function HomeAdm() {
                 </div>
               </div>
               <div className="row">
-                <div className="col-md-6">
+                <div className="col-md-4">
                   <Form.Group className="mb-3">
                     <Form.Label className="fw-bold">Correo:</Form.Label>
                     <Form.Control type="email" name="correo" value={formData.correo} onChange={handleChange} />
                   </Form.Group>
                 </div>
-                <div className="col-md-6">
+                <div className="col-md-4">
                   <Form.Group className="mb-3">
                     <Form.Label className="fw-bold">Estatus:</Form.Label>
                     <Form.Control as="select" name="estatus" value={formData.estatus} onChange={handleChange}>
@@ -502,23 +507,21 @@ function HomeAdm() {
                     </Form.Control>
                   </Form.Group>
                 </div>
-              </div>
-              <div className="row">
-                <div className="col-md-6">
+                <div className="col-md-4">
                   <Form.Group className="mb-3">
                     <Form.Label className="fw-bold">Salario:</Form.Label>
                     <Form.Control type="number" name="salario" value={formData.salario} onChange={handleChange} />
                   </Form.Group>
                 </div>
-                <div className="col-md-6">
+              </div>
+              <div className="row">
+                <div className="col-md-4">
                   <Form.Group className="mb-3">
                     <Form.Label className="fw-bold">Hora de Entrada:</Form.Label>
                     <Form.Control type="time" name="horaEntrada" value={formData.horaEntrada} onChange={handleChange} />
                   </Form.Group>
                 </div>
-              </div>
-              <div className="row">
-                <div className="col-md-6">
+                <div className="col-md-4">
                   <Form.Group className="mb-3">
                     <Form.Label className="fw-bold">Hora de Salida:</Form.Label>
                     <Form.Control type="time" name="horaSalida" value={formData.horaSalida} onChange={handleChange} />

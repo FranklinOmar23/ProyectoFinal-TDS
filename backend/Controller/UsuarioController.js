@@ -233,5 +233,61 @@ async getAllAgents(req, res) {
       res.status(500).send(error.message);
     }
   }
+
+  async registerAgent(req, res) {
+    const {nombre, apellido, cedula, correo, telefono, contrasena, estado, horario_entrada, horario_salida, salario} = req.body;
+
+    try {
+
+      const existingUserByCedula = await this.usuarioRepository.getUserByCedula(cedula);
+      if (existingUserByCedula) {
+        return res.status(400).json({ message: "Ya existe un usuario con esta cédula." });
+      }
+      
+      const existingUser = await this.usuarioRepository.getUserByEmail(correo); 
+      if (existingUser) {
+        return res.status(400).json({ message: "El correo electrónico ya está en uso." });
+      }
+
+      const hashedPassword = await bcrypt.hash(contrasena, 10);
+
+      const newUser = await this.usuarioRepository.createAgent ({
+        nombre,
+        apellido,
+        cedula, 
+        correo,
+        estado,
+        horario_entrada,
+        horario_salida,
+        salario,
+        role: 'AGENTE',
+        telefono,
+        contrasena: hashedPassword
+      });
+
+      return res.status(201).json({message:`Agente ${newUser.nombre} registrado correctamente`, user: newUser}); 
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({message:"Error al registrar el usuario", error: error.message})
+    }
+  }
+
+  async uploadAndStoreImageVehicle(req, res) {
+    const { foto_Vehiculo } = req.body;
+    const userId = req.params.id;
+  
+    try {
+      // Llamada al método para cargar imágenes y obtener las URLs
+      const { foto_VehiculoUrl } = await this.usuarioRepository.uploadImageVehicle(userId, foto_Vehiculo);
+  
+      // Llamada al método para almacenar las URLs en el registro del usuario
+      const data = await this.usuarioRepository.storeImageVehicle(userId, foto_VehiculoUrl);
+  
+      res.json({ message: 'Imágenen vehiculo subidas y URLs guardadas exitosamente!'});
+    } catch (error) {
+      console.error('Error en uploadAndStoreImage: ', error);
+      res.status(500).send(error.message);
+    }
+  }
 };
 export { UsuarioController };

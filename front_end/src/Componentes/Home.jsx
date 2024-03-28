@@ -26,10 +26,9 @@ const ENDPOINT = "http://localhost:5000";
 
 
 function InformacionesCard() {
-  const { user, messages, addMessage } = useAuth();
-  const [userNombre, setUserNombre] = useState('Usuario no encontrado');
-  const [messageInput, setMessageInput] = useState('');
-  const [selectedOption, setSelectedOption] = useState('1');
+  const { messages, addMessage } = useAuth();
+  const [expandedMessages, setExpandedMessages] = useState({});
+  const [showFirstTime, setShowFirstTime] = useState(true); // Estado para controlar qué tiempo mostrar
 
   useEffect(() => {
     const socket = socketIOClient(ENDPOINT);
@@ -46,11 +45,20 @@ function InformacionesCard() {
       socket.disconnect();
     };
   }, [messages, addMessage]);
+
+  const handleToggleExpand = (index) => {
+    setExpandedMessages(prevState => ({
+      ...prevState,
+      [index]: !prevState[index]
+    }));
+    setShowFirstTime(prevState => !prevState); // Cambiar el estado para alternar entre los tiempos
+  
+  };
+
   return (
     <div className="col-md-6">
-      {/* Contenido de la tarjeta de Informaciones */}
       <div className="card shadow mb-4">
-        <div className="card-header py-3" >
+        <div className="card-header py-3">
           <h6 className="text-success fw-bold m-0">Informaciones</h6>
         </div>
         <ul className="list-group list-group-flush ul-chat chat-container">
@@ -60,13 +68,35 @@ function InformacionesCard() {
                 <span className="name-user">
                   {message.user}
                 </span>
-                <li className="message-item" style={{ backgroundColor: message.color, color: 'white' }}>
-                  {message.text}
-                  {message.time &&
-                    <span className="message-time">
-                      {new Date(message.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}
-                    </span>
+                <li className={`message-item ${expandedMessages[index] ? 'expanded' : 'collapsed'}`} 
+                    style={{ backgroundColor: message.color, color: 'white' }} 
+                    onClick={() => handleToggleExpand(index)}>
+                  {message.text}  -
+                  <span className="message-ver">
+                      {expandedMessages[index] ? 'Ver menos...' : 'Ver más...'}
+                  </span>
+                  
+                  {expandedMessages[index] &&
+                    <div>
+                      <p><strong>Latitud:</strong> {message.latitud}</p>
+                      <p><strong>Longitud:</strong> {message.longitud}</p>
+                      <p><strong>Dirección:</strong> {message.direccion}</p>
+                      <p><strong>Nivel:</strong> {message.nivel}</p>
+                      <p><strong>Fecha:</strong> {message.fecha}</p>
+                    </div>
                   }
+                  {/* Mostrar uno de los tiempos según el estado */}
+                  {showFirstTime ? (
+                    <span className="message-time">
+                      {message.time &&
+                        new Date(message.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}
+                    </span>
+                  ) : (
+                    <span className="message-time2">
+                      {message.time &&
+                        new Date(message.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}
+                    </span>
+                  )}
                 </li>
               </div>
             ))}
@@ -76,6 +106,7 @@ function InformacionesCard() {
     </div>
   );
 }
+
 
 
 
@@ -89,23 +120,27 @@ function MultasRecientesCard() {
       return; // No renderizar el gráfico si no hay multas
     }
 
-    let ultimasMultas = [];
-    if (multa.multasDelAgente.length >= 5) {
-      // Filtrar las últimas 5 multas basándote en la fecha si hay al menos 5 multas
-      ultimasMultas = multa.multasDelAgente
-        .sort((a, b) => new Date(b.fecha) - new Date(a.fecha)) // Ordenar por fecha descendente
-        .slice(0, 5); // Seleccionar las últimas 5 multas
-    } else {
-      // Si hay menos de 5 multas, mostrar todas las multas disponibles
-      ultimasMultas = multa.multasDelAgente;
-    }
+   // Asegurarse de que multa.multasDelAgente no sea null, asignándole un array vacío si es así
+let multasDelAgente = multa.multasDelAgente || [];
 
-    // Procesar los datos de las multas para contar cuántas veces se ha impuesto cada tipo de multa
-    const conteoMultas = ultimasMultas.reduce((acc, multa) => {
-      const razon = multa.razon;
-      acc[razon] = (acc[razon] || 0) + 1;
-      return acc;
-    }, {});
+let ultimasMultas = [];
+if (multasDelAgente.length >= 5) {
+ // Filtrar las últimas 5 multas basándote en la fecha si hay al menos 5 multas
+ ultimasMultas = multasDelAgente
+    .sort((a, b) => new Date(b.fecha) - new Date(a.fecha)) // Ordenar por fecha descendente
+    .slice(0, 5); // Seleccionar las últimas 5 multas
+} else {
+ // Si hay menos de 5 multas, mostrar todas las multas disponibles
+ ultimasMultas = multasDelAgente;
+}
+
+// Procesar los datos de las multas para contar cuántas veces se ha impuesto cada tipo de multa
+const conteoMultas = ultimasMultas.reduce((acc, multa) => {
+ const razon = multa.razon;
+ acc[razon] = (acc[razon] || 0) + 1;
+ return acc;
+}, {});
+
 
     // Preparar los datos para el gráfico
     const labels = Object.keys(conteoMultas);
@@ -174,43 +209,164 @@ function MultasRecientesCard() {
 
 
 export function Reloj({ fullWidth = false }) {
-  const { user } = useAuth(); // Obtén el objeto user del contexto
+  const { user } = useAuth();
   const [tiempoTranscurrido, setTiempoTranscurrido] = useState({ horas: 0, minutos: 0, segundos: 0 });
+  const [flipClasses, setFlipClasses] = useState(Array(3).fill(''));
 
   useEffect(() => {
     const calcularTiempoTranscurrido = () => {
       if (user && user.user && user.user.horario_entrada) {
         const ahora = new Date();
-        // Convertir el horario de entrada a un objeto Date
         const entrada = new Date(ahora.getFullYear(), ahora.getMonth(), ahora.getDate(), ...user.user.horario_entrada.split(':'));
-
-        // Calcular el tiempo transcurrido desde la entrada hasta el momento actual
         const tiempoTranscurrido = ahora - entrada;
-
-        // Convertir milisegundos a horas, minutos y segundos
         const horas = Math.floor(tiempoTranscurrido / 3600000);
         const minutos = Math.floor((tiempoTranscurrido % 3600000) / 60000);
         const segundos = Math.floor((tiempoTranscurrido % 60000) / 1000);
-
         setTiempoTranscurrido({ horas, minutos, segundos });
       } else {
         setTiempoTranscurrido({ horas: 0, minutos: 0, segundos: 0 });
       }
     };
 
-    // Llamar a la función inicialmente para establecer el tiempo transcurrido
     calcularTiempoTranscurrido();
 
-    // Establecer un intervalo para actualizar el tiempo transcurrido cada segundo
     const intervalId = setInterval(() => {
       calcularTiempoTranscurrido();
-    }, 1000); // 1000 milisegundos = 1 segundo
+    }, 1000);
 
-    // Limpiar el intervalo cuando el componente se desmonte
     return () => clearInterval(intervalId);
-  }, [user]); // Dependencia del efecto: se ejecuta cada vez que cambia el objeto user
+  }, [user]);
+
+  useEffect(() => {
+    setFlipClasses(Array(3).fill('flip'));
+    const timeoutIds = Array.from({ length: 3 }, (_, index) => {
+      return setTimeout(() => {
+        setFlipClasses(prevClasses => {
+          const newClasses = [...prevClasses];
+          newClasses[index] = '';
+          return newClasses;
+        });
+      }, 800 );
+    });
+
+    return () => timeoutIds.forEach(clearTimeout);
+  }, [tiempoTranscurrido]);
 
   const relojClass = fullWidth ? "col-md-12" : "col-md-6";
+
+  const getTimeRemaining = (targetDateTime) => {
+    const nowTime = Date.now();
+    const complete = nowTime >= targetDateTime;
+
+    if (complete) {
+      return {
+        complete,
+        seconds: 0,
+        minutes: 0,
+        hours: 0,
+      };
+    }
+
+    const secondsRemaining = Math.floor((targetDateTime - nowTime) / 1000);
+    const hours = Math.floor(secondsRemaining / 60 / 60);
+    const minutes = Math.floor(secondsRemaining / 60) - hours * 60;
+    const seconds = secondsRemaining % 60;
+
+    return {
+      complete,
+      seconds,
+      minutes,
+      hours,
+    };
+  };
+
+  const updateTimeSection = (sectionID, timeValue) => {
+    const firstNumber = Math.floor(timeValue / 10) || 0;
+    const secondNumber = timeValue % 10 || 0;
+    const sectionElement = document.getElementById(sectionID);
+    if (!sectionElement) return; // Verificar si el elemento existe
+    const timeSegments = sectionElement.querySelectorAll('.time-segment');
+
+    updateTimeSegment(timeSegments[0], firstNumber);
+    updateTimeSegment(timeSegments[1], secondNumber);
+  };
+
+  const updateTimeSegment = (segmentElement, timeValue) => {
+    const segmentElements = getTimeSegmentElements(segmentElement);
+
+    if (parseInt(segmentElements.segmentDisplayTop.textContent, 10) === timeValue) {
+      return;
+    }
+
+    segmentElements.segmentOverlay.classList.add('flip');
+
+    updateSegmentValues(
+      segmentElements.segmentDisplayTop,
+      segmentElements.segmentOverlayBottom,
+      timeValue
+    );
+
+    const finishAnimation = () => {
+      segmentElements.segmentOverlay.classList.remove('flip');
+      updateSegmentValues(
+        segmentElements.segmentDisplayBottom,
+        segmentElements.segmentOverlayTop,
+        timeValue
+      );
+
+      segmentElements.segmentOverlay.removeEventListener('animationend', finishAnimation);
+    };
+
+    segmentElements.segmentOverlay.addEventListener('animationend', finishAnimation);
+  };
+
+  const getTimeSegmentElements = (segmentElement) => {
+    const segmentDisplay = segmentElement.querySelector('.segment-display');
+    const segmentDisplayTop = segmentDisplay.querySelector('.segment-display__top');
+    const segmentDisplayBottom = segmentDisplay.querySelector('.segment-display__bottom');
+    const segmentOverlay = segmentDisplay.querySelector('.segment-overlay');
+    const segmentOverlayTop = segmentOverlay.querySelector('.segment-overlay__top');
+    const segmentOverlayBottom = segmentOverlay.querySelector('.segment-overlay__bottom');
+
+    return {
+      segmentDisplayTop,
+      segmentDisplayBottom,
+      segmentOverlay,
+      segmentOverlayTop,
+      segmentOverlayBottom,
+    };
+  };
+
+  const updateSegmentValues = (displayElement, overlayElement, value) => {
+    displayElement.textContent = value;
+    overlayElement.textContent = value;
+  };
+
+  useEffect(() => {
+    const timeRemainingBits = getTimeRemaining(new Date().getTime());
+    updateTimeSection('seconds', timeRemainingBits.seconds);
+    updateTimeSection('minutes', timeRemainingBits.minutes);
+    updateTimeSection('hours', timeRemainingBits.hours);
+
+    const countdownTimer = setInterval(() => {
+      const isComplete = updateAllSegments();
+
+      if (isComplete) {
+        clearInterval(countdownTimer);
+      }
+    }, 1000);
+
+    return () => clearInterval(countdownTimer);
+  }, []);
+
+  const updateAllSegments = () => {
+    const timeRemainingBits = getTimeRemaining(new Date().getTime());
+    updateTimeSection('seconds', timeRemainingBits.seconds);
+    updateTimeSection('minutes', timeRemainingBits.minutes);
+    updateTimeSection('hours', timeRemainingBits.hours);
+
+    return timeRemainingBits.complete;
+  };
 
   return (
     <div className={`${relojClass}`}>
@@ -219,23 +375,31 @@ export function Reloj({ fullWidth = false }) {
           <h6 className="text-success fw-bold m-0">Tiempo transcurrido desde la entrada</h6>
         </div>
         <div className="body-card">
-          <div className='reloj-item'>
-            <div className='horas'>{tiempoTranscurrido.horas}</div>
-            <p>Hora</p>
-          </div>
-          <div className='reloj-item'>
-            <div className='minutos'>{tiempoTranscurrido.minutos}</div>
-            <p>Minutos</p>
-          </div>
-          <div className='reloj-item'>
-            <div className='segundos'>{tiempoTranscurrido.segundos}</div>
-            <p>Segundos</p>
+          <div className="countdown">
+            {Object.entries(tiempoTranscurrido).map(([key, value], index) => (
+              <div className="time-section" key={key}>
+                <div className="time-group">
+                  <div className="time-segment">
+                    <div className="segment-display">
+                      <div className={`segment-display__top ${flipClasses[index]}`}>{value.toString().padStart(2, '0')}</div>
+                      <div className={`segment-display__bottom ${flipClasses[index]}`}>{value.toString().padStart(2, '0')}</div>
+                      <div className={`segment-overlay ${flipClasses[index]}`}>
+                        <div className="segment-overlay__top"></div>
+                        <div className="segment-overlay__bottom"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <p>{key}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
     </div>
   );
-};
+}
+
 
 
 

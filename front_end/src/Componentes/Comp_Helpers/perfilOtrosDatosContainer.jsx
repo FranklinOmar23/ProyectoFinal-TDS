@@ -4,6 +4,9 @@ import toast, { Toaster } from 'react-hot-toast';
 import { Reloj } from "../Home";
 import axios from 'axios';
 import { useAuth } from "../../context/provider";
+import { Icon } from 'react-icons-kit';
+import { eyeOff } from 'react-icons-kit/feather/eyeOff';
+import { eye } from 'react-icons-kit/feather/eye';
 
 function PerfilOtrosD() {
   const { user } = useAuth();
@@ -11,6 +14,7 @@ const [userContrasena, setUserContrasena] = useState("Contraseña no encontrada"
 const [userTelefono, setUserTelefono] = useState("Teléfono no encontrado");
 const [userSalario, setUserSalario] = useState("Salario no encontrado");
 const [userID, setUserID] = useState("ID no encontrado");//tomo el id del contexto
+const [showPassword, setShowPassword] = useState(false);
 
 useEffect(() => {
  if (user && user.user && user.user.nombre) {
@@ -45,6 +49,14 @@ useEffect(() => {
     setShowModal(false);
     setErrors({}); // Limpiar los errores al cerrar el modal
   };
+
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+ };
+
+ const getPlaceholderDots = (length) => {
+  return '•'.repeat(length); 
+};
 
   const handleSaveChanges = async (e) => {
     e.preventDefault();
@@ -109,19 +121,24 @@ useEffect(() => {
         <div className="card-body">
           <form>
             <div className="mb-3">
-              <label className="form-label" htmlFor="contrasena">
+              {/* <label className="form-label" htmlFor="contrasena">
                 <strong>Contraseña</strong>
               </label>
               <input
                 className="form-control"
                 type="password"
                 id="contrasena"
-                placeholder={userContrasena}
+                placeholder={showPassword ? userContrasena: getPlaceholderDots(userContrasena.length)}
                 name="contrasena"
                 value={formData.contrasenaNuevaConfirmacion}
                 onChange={handleInputChange}
                 readOnly
               />
+              <Icon
+               icon={showPassword ? eyeOff : eye}
+               onClick={toggleShowPassword}
+                style={{ cursor: 'pointer', position: 'absolute', right: '30px', top:"110px"}}
+               /> */}
             </div>
             <div className="row">
               <div className="col">
@@ -181,14 +198,19 @@ useEffect(() => {
         <Modal.Body>
           <Form>
             <Form.Group className="mb-3">
-              <Form.Label>Contraseña Antigua:</Form.Label>
+              {/* <Form.Label>Contraseña Antigua:</Form.Label>
               <Form.Control
                 className="form-control"
                 type="password"
                 name="contrasenaAntigua"
-                placeholder={userContrasena}
+                placeholder={showPassword ? userContrasena: getPlaceholderDots(userContrasena.length)}
                 readOnly
               />
+              <Icon
+               icon={showPassword ? eyeOff : eye}
+               onClick={toggleShowPassword}
+                style={{ cursor: 'pointer', position: 'absolute', right: '30px', top:"53px"}}
+               /> */}
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label>Contraseña Nueva:</Form.Label>
