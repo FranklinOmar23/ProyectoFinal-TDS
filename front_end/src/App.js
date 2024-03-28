@@ -14,6 +14,7 @@ import Nuevomsg from './Componentes/Nuevomensaje';
 import Placeholder from './Componentes/Placeholder';
 import { useAuth } from './context/provider';
 import MultasAdim from './Componentes/multas-admin';
+import HomeUsuario from './Componentes/home-usuario';
 
 function App() {
   const { user } = useAuth();
@@ -31,6 +32,7 @@ function App() {
         <Route path="/registro" element={<Registro />} />
         <Route path="/" element={<Login />} />
         {user.user.role === 'AGENTE' && <Route path="/home-agente" element={<Home />} />}
+        {user.user.role === 'USUARIO' && <Route path="/home-usuario" element={<HomeUsuario />} />}
         {user.user.role === 'ADMINISTRADOR' && <Route path="/home-adm" element={<HomeAdm />} />}
         {user.user.role === 'ADMINISTRADOR' && <Route path="/multas-admin" element={<MultasAdim />} />}
         {user.user.role === 'USUARIO' && <Route path="/home-user" element={<HomeUser />} />}

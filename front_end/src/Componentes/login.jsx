@@ -32,6 +32,9 @@ const Login = () => {
         case 'ADMINISTRADOR':
           navigate('/home-adm');
           break;
+        case 'USUARIO':
+          navigate('/home-usuario');
+          break;
         default:
           console.error('Rol de usuario desconocido');
           toast.error('Error al obtener el rol del usuario');
